@@ -22,4 +22,5 @@ public class Endereco {
     @Column(name = "numero", nullable = false)
     private int numero;
 
+
 }
