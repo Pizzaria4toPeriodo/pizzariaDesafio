@@ -18,7 +18,8 @@ public class Funcionario {
     @Column(name = " nome", nullable = false, length = 30)
     private String nome;
 
-
+    @Getter @Setter
+    @Column(name = "cargo", nullable = false, length = 30)
     private String cargo;
 
 }
