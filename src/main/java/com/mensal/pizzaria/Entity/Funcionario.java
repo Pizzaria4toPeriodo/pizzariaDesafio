@@ -14,6 +14,11 @@ public class Funcionario {
     @Column(name = "id", nullable = false, unique = true)
     private Long id;
 
+    @Getter @Setter
+    @Column(name = " nome", nullable = false, length = 30)
+    private String nome;
 
+
+    private String cargo;
 
 }
