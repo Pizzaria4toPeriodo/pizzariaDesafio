@@ -1,14 +1,15 @@
 package com.mensal.pizzaria.Entity;
 
 
-import  com.mensal.pizzaria.Entity.Endereco;
+
+
+import  com.mensal.pizzaria.Entity.Funcionario;
+import  com.mensal.pizzaria.Entity.Pedido;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -16,22 +17,27 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "cliente_table", schema = "pizzaria")
-public class Cliente {
+public class Entrega {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false,  unique = true)
-    private Long id;
-
-    private String nome;
+    private  Long id;
 
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_endereco", nullable = false)
-    private List<Endereco> id_endereco;
 
-    private String telefone;
+    @OneToOne
+    private Funcionario entregador;
 
 
+    @OneToOne
+    private  Pedido pedido;
+
+    private String statusPedido;
+
+    private  String formaPagamento;
+
+    private int valorEntrega;
 
 
 

@@ -26,7 +26,7 @@ public class Pedido {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_cliente", nullable = false)
-    private int id_cliente;
+    private Long id_cliente;
 
     @Column(name = "delivery", nullable = false)
     private boolean delivery;
