@@ -23,9 +23,21 @@ public class ProdutoService {
         return this.repository.save(produto);
     }
 
+    @Transactional
+    public void atualizar(final Long id, ProdutoDTO produtoDTO) {
+        final Produto produtoBanco = this.repository.findById(id).orElse(null);
+        if (produtoBanco != null || !produtoBanco.getId().equals(produtoDTO.getId())) {
+            throw new RuntimeException("não foi possível encontrar o registro informado");
+        }
+        Produto produto = toPessoaDTO(produtoDTO);
+        this.repository.save(produto);
+    }
+
     public Produto toPessoaDTO(ProdutoDTO produtoDTO){
         Produto produtoTemp = new Produto();
         produtoTemp.setNome(produtoDTO.getNome());
+        produtoTemp.setTipo(produtoDTO.getTipo());
+        produtoTemp.setPreco(produtoDTO.getPreco());
         return produtoTemp;
     }
 }

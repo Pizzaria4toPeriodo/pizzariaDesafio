@@ -3,7 +3,7 @@ package com.mensal.pizzaria.Controller;
 import com.mensal.pizzaria.DTO.ProdutoDTO;
 import com.mensal.pizzaria.Entity.Produto;
 import com.mensal.pizzaria.Repository.ProdutoRepository;
-import com.mensal.pizzaria.Service.EnderecoService;
+import com.mensal.pizzaria.Service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/produtos")
 public class ProdutoController {
     @Autowired
-    private EnderecoService service;
+    private ProdutoService service;
     @Autowired
     private ProdutoRepository repository;
 
