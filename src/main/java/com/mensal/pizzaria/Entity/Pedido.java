@@ -24,7 +24,8 @@ public class Pedido {
     )
     private Produto id_produto;
 
-    @Column(name = "id_cliente", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_cliente", nullable = false)
     private int id_cliente;
 
     @Column(name = "delivery", nullable = false)
