@@ -23,7 +23,19 @@ public class FuncionarioService {
 
     @Transactional
     public void atualizaFuncionario(FuncionarioDto funcionarioDto){
-
+        Funcionario funcionario;
+        if (funcionarioDto.getId() != null) {
+        funcionario = funcionarioRepository.findById(funcionarioDto.getId()).orElse(null);
+        if (funcionario == null){
+            throw new RuntimeException("Id do funcionario nao existe!");
+        }
+        else {
+            funcionario = new Funcionario();
+        }
+        funcionario.setNome(funcionarioDto.getNome());
+        funcionario.setCargo(funcionarioDto.getCargo());
+        funcionarioRepository.save(funcionario);
+        }
     }
 
 }
