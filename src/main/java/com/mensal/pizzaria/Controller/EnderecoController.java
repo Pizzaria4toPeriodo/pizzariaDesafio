@@ -64,4 +64,16 @@ public class EnderecoController {
         }
         return ResponseEntity.ok("Registro atualizado com sucesso");
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletar(@PathVariable("id") final Long id){
+        final Endereco endereco = this.enderecoRepository.findById(id).orElse(null);
+        try{
+            this.enderecoRepository.delete(endereco);
+            return ResponseEntity.ok("Registro deletado");
+        }
+        catch(RuntimeException e){
+            return ResponseEntity.badRequest().body("ID nao encontrado nao pode excluir");
+        }
+    }
 }
