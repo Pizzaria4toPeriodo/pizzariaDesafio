@@ -1,15 +1,14 @@
 package com.mensal.pizzaria.Controller;
 
+import com.mensal.pizzaria.DTO.EnderecoDto;
+import com.mensal.pizzaria.DTO.FuncionarioDto;
 import com.mensal.pizzaria.Entity.Endereco;
 import com.mensal.pizzaria.Entity.Funcionario;
 import com.mensal.pizzaria.Repository.EnderecoRepository;
 import com.mensal.pizzaria.Service.EnderecoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/enderecos")
@@ -35,4 +34,17 @@ public class EnderecoController {
                 ? ResponseEntity.badRequest().body("Sem valor encontrado.")
                 : ResponseEntity.ok(endereco);
     }
+
+    @PostMapping("/salvar")
+    public ResponseEntity<?> cadastraFuncionario(@RequestBody EnderecoDto enderecoDto) {
+        try {
+            enderecoService.cadastrarEndereco(enderecoDto);
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+        return ResponseEntity.ok().body("Registro adicionado com sucesso");
+    }
+
+
 }
