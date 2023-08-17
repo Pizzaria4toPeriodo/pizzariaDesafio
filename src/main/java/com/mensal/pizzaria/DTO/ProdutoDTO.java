@@ -9,6 +9,7 @@ public class ProdutoDTO {
     private BigDecimal preco;
 
     public ProdutoDTO() {}
+
     public ProdutoDTO(Long id, String nome, String tipo, BigDecimal preco) {
         this.id = id;
         this.nome = nome;
