@@ -1,14 +1,12 @@
 package com.mensal.pizzaria.Controller;
 
+import com.mensal.pizzaria.DTO.FuncionarioDto;
 import com.mensal.pizzaria.Entity.Funcionario;
 import com.mensal.pizzaria.Repository.FuncionarioRepository;
 import com.mensal.pizzaria.Service.FuncionarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/funcionarios")
@@ -35,5 +33,15 @@ public class FuncionarioController {
                 : ResponseEntity.ok(funcionario);
     }
 
-
+    @PostMapping("/guardar")
+    public ResponseEntity<?> cadastraFuncionario(@RequestBody FuncionarioDto funcionarioDto) {
+        try {
+            funcionarioService.cadastraFuncionario(funcionarioDto);
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+        return ResponseEntity.ok().body("Registro adicionado com sucesso");
+    }
 }
+
