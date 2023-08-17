@@ -19,7 +19,7 @@ public class FuncionarioController {
     @Autowired
     private FuncionarioRepository funcionarioRepository;
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<?> listaCompleta(){
         return ResponseEntity.ok(this.funcionarioRepository.findAll());
     }

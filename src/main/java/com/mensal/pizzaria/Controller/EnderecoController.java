@@ -1,10 +1,13 @@
 package com.mensal.pizzaria.Controller;
 
+import com.mensal.pizzaria.Entity.Endereco;
+import com.mensal.pizzaria.Entity.Funcionario;
 import com.mensal.pizzaria.Repository.EnderecoRepository;
 import com.mensal.pizzaria.Service.EnderecoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,11 +21,18 @@ public class EnderecoController {
     @Autowired
     private EnderecoRepository enderecoRepository;
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<?> listaCompleta(){
         return ResponseEntity.ok(this.enderecoRepository.findAll());
     }
 
-
-
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findById(
+            @PathVariable("id") final long id
+    ) {
+        final Endereco endereco = this.enderecoRepository.findById(id).orElse(null);
+        return endereco == null
+                ? ResponseEntity.badRequest().body("Sem valor encontrado.")
+                : ResponseEntity.ok(endereco);
+    }
 }
