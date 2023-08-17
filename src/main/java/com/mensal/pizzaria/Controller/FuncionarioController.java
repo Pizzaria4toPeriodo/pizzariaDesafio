@@ -5,6 +5,7 @@ import com.mensal.pizzaria.Entity.Funcionario;
 import com.mensal.pizzaria.Repository.FuncionarioRepository;
 import com.mensal.pizzaria.Service.FuncionarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +34,7 @@ public class FuncionarioController {
                 : ResponseEntity.ok(funcionario);
     }
 
-    @PostMapping("/guardar")
+    @PostMapping("/salvar")
     public ResponseEntity<?> cadastraFuncionario(@RequestBody FuncionarioDto funcionarioDto) {
         try {
             funcionarioService.cadastraFuncionario(funcionarioDto);
@@ -42,6 +43,24 @@ public class FuncionarioController {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
         return ResponseEntity.ok().body("Registro adicionado com sucesso");
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> atualizar(
+            @PathVariable("id") final Long id,
+            @RequestBody final FuncionarioDto funcionarioDto
+    ) {
+        try {
+            this.funcionarioService.atualizaFuncionario(id, funcionarioDto);
+        }
+        catch (DataIntegrityViolationException e){
+            return ResponseEntity.internalServerError()
+                    .body("Error:" + e.getCause().getCause().getMessage());
+        }
+        catch (RuntimeException e){
+            return ResponseEntity.internalServerError().body("error:" + e.getMessage());
+        }
+        return ResponseEntity.ok("Registro atualizado com sucesso");
     }
 }
 
