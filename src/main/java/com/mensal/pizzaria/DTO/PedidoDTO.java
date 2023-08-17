@@ -1,5 +1,6 @@
 package com.mensal.pizzaria.DTO;
 
+import com.mensal.pizzaria.Entity.Produto;
 import com.mensal.pizzaria.Entity.Status_pagamento;
 import com.mensal.pizzaria.Entity.Status_producao;
 
@@ -8,15 +9,18 @@ import java.math.BigDecimal;
 public class PedidoDTO {
     private Long id;
     private int id_cliente;
+    private Produto id_produto;
     private boolean delivery;
     private Status_producao status_producao;
     private Status_pagamento status_pagamento;
     private BigDecimal total;
 
     public PedidoDTO() {}
-    public PedidoDTO(Long id, int id_cliente, boolean delivery, Status_producao status_producao, Status_pagamento status_pagamento, BigDecimal total) {
+
+    public PedidoDTO(Long id, int id_cliente, Produto id_produto, boolean delivery, Status_producao status_producao, Status_pagamento status_pagamento, BigDecimal total) {
         this.id = id;
         this.id_cliente = id_cliente;
+        this.id_produto = id_produto;
         this.delivery = delivery;
         this.status_producao = status_producao;
         this.status_pagamento = status_pagamento;
@@ -37,6 +41,14 @@ public class PedidoDTO {
 
     public void setId_cliente(int id_cliente) {
         this.id_cliente = id_cliente;
+    }
+
+    public Produto getId_produto() {
+        return id_produto;
+    }
+
+    public void setId_produto(Produto id_produto) {
+        this.id_produto = id_produto;
     }
 
     public boolean isDelivery() {

@@ -15,12 +15,16 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false,  unique = true)
     private Long id;
+
     @ManyToMany
     @JoinTable(
             name = "pedido_produto",
             joinColumns = @JoinColumn(name = "id_pedido"),
             inverseJoinColumns = @JoinColumn(name = "id_produto")
     )
+    private Produto id_produto;
+
+    @Column(name = "id_cliente", nullable = false)
     private int id_cliente;
 
     @Column(name = "delivery", nullable = false)
