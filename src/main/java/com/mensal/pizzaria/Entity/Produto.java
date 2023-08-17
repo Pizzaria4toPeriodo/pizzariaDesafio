@@ -1,4 +1,4 @@
-package com.mensal.pizzaria.Entity;
+/*package com.mensal.pizzaria.Entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -24,3 +24,4 @@ public class Produto {
     @Column(name = "preco", nullable = false)
     private BigDecimal preco;
 }
+*/

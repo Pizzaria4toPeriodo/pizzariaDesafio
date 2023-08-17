@@ -1,4 +1,4 @@
-package com.mensal.pizzaria.DTO;
+/*package com.mensal.pizzaria.DTO;
 
 import com.mensal.pizzaria.Entity.Produto;
 import com.mensal.pizzaria.Entity.Status_pagamento;
@@ -83,3 +83,4 @@ public class PedidoDTO {
         this.total = total;
     }
 }
+*/
