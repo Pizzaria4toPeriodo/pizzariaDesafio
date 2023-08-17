@@ -20,4 +20,17 @@ public class EnderecoService {
         endereco.setNumero(enderecoDto.getNumero());
         enderecoRepository.save(endereco);
     }
+
+    @Transactional
+    public void atualizarEndereco(final Long id, EnderecoDto enderecoDto){
+        Endereco endereco = enderecoRepository.findById(id).orElse(null);
+
+        if (endereco == null){
+            throw new RuntimeException("Id do endereco nao existe!");
+        }
+
+        endereco.setRua(enderecoDto.getRua());
+        endereco.setNumero(enderecoDto.getNumero());
+        enderecoRepository.save(endereco);
+    }
 }
