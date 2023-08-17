@@ -8,6 +8,7 @@ import com.mensal.pizzaria.Repository.EnderecoRepository;
 import com.mensal.pizzaria.Service.EnderecoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,7 +43,8 @@ public class EnderecoController {
         Endereco endereco = enderecoRepository.findByRua(rua);
 
         if (endereco == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("endereco com rua '" + rua + "' não encontrado.");
         }
 
         return ResponseEntity.ok(endereco);

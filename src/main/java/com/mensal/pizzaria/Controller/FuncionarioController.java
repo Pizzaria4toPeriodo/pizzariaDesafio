@@ -1,11 +1,13 @@
 package com.mensal.pizzaria.Controller;
 
 import com.mensal.pizzaria.DTO.FuncionarioDto;
+import com.mensal.pizzaria.Entity.Endereco;
 import com.mensal.pizzaria.Entity.Funcionario;
 import com.mensal.pizzaria.Repository.FuncionarioRepository;
 import com.mensal.pizzaria.Service.FuncionarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +34,17 @@ public class FuncionarioController {
         return funcionario == null
                 ? ResponseEntity.badRequest().body("Sem valor encontrado.")
                 : ResponseEntity.ok(funcionario);
+    }
+    @GetMapping("/buscar/{nome}")
+    public ResponseEntity<?> buscarPornome(@PathVariable("nome") String nome) {
+        Funcionario funcionario = funcionarioRepository.findByNome(nome);
+
+        if (funcionario == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Funcionario com nome '" + nome + "' não encontrado.");
+        }
+
+        return ResponseEntity.ok(funcionario);
     }
 
     @PostMapping("/salvar")
