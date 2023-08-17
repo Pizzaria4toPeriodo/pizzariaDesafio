@@ -1,4 +1,4 @@
-/*package com.mensal.pizzaria.DTO;
+package com.mensal.pizzaria.DTO;
 
 import java.math.BigDecimal;
 
@@ -48,4 +48,3 @@ public class ProdutoDTO {
         this.preco = preco;
     }
 }
-*/
