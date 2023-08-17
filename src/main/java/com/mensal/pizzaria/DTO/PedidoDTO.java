@@ -12,4 +12,62 @@ public class PedidoDTO {
     private Status_producao status_producao;
     private Status_pagamento status_pagamento;
     private BigDecimal total;
+
+    public PedidoDTO() {}
+    public PedidoDTO(Long id, int id_cliente, boolean delivery, Status_producao status_producao, Status_pagamento status_pagamento, BigDecimal total) {
+        this.id = id;
+        this.id_cliente = id_cliente;
+        this.delivery = delivery;
+        this.status_producao = status_producao;
+        this.status_pagamento = status_pagamento;
+        this.total = total;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public int getId_cliente() {
+        return id_cliente;
+    }
+
+    public void setId_cliente(int id_cliente) {
+        this.id_cliente = id_cliente;
+    }
+
+    public boolean isDelivery() {
+        return delivery;
+    }
+
+    public void setDelivery(boolean delivery) {
+        this.delivery = delivery;
+    }
+
+    public Status_producao getStatus_producao() {
+        return status_producao;
+    }
+
+    public void setStatus_producao(Status_producao status_producao) {
+        this.status_producao = status_producao;
+    }
+
+    public Status_pagamento getStatus_pagamento() {
+        return status_pagamento;
+    }
+
+    public void setStatus_pagamento(Status_pagamento status_pagamento) {
+        this.status_pagamento = status_pagamento;
+    }
+
+    public BigDecimal getTotal() {
+        return total;
+    }
+
+    public void setTotal(BigDecimal total) {
+        this.total = total;
+    }
 }
