@@ -36,6 +36,18 @@ public class EnderecoController {
                 : ResponseEntity.ok(endereco);
     }
 
+
+    @GetMapping("/buscar/{rua}")
+    public ResponseEntity<?> buscarPorRua(@PathVariable("rua") String rua) {
+        Endereco endereco = enderecoRepository.findByRua(rua);
+
+        if (endereco == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(endereco);
+    }
+
     @PostMapping("/salvar")
     public ResponseEntity<?> cadastraFuncionario(@RequestBody EnderecoDto enderecoDto) {
         try {
