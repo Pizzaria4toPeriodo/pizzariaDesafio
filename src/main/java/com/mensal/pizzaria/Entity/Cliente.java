@@ -1,5 +1,6 @@
 package com.mensal.pizzaria.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,8 +27,8 @@ public class Cliente {
     @Column(name = "cpf", nullable = false)
     private String cpf;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_endereco", nullable = false)
+    @OneToMany(mappedBy = "cliente")
+    @JsonIgnore
     private List<Endereco> id_endereco;
 
     @Column(name = "telefone", nullable = false)

@@ -16,8 +16,17 @@ public class EnderecoService {
     @Transactional
     public void cadastrarEndereco(EnderecoDTO enderecoDto){
         Endereco endereco = new Endereco();
+        endereco.getCliente();
         endereco.setRua(enderecoDto.getRua());
         endereco.setNumero(enderecoDto.getNumero());
+
+        if(enderecoDto.getRua() == null || enderecoDto.getRua().isEmpty()) {
+            throw new RuntimeException("Deve conter uma rua");
+        }
+        if ("".equals(enderecoDto.getNumero())){
+            throw new RuntimeException("Deve conter um numero da rua");
+        }
+
         enderecoRepository.save(endereco);
     }
 
@@ -27,6 +36,13 @@ public class EnderecoService {
 
         if (endereco == null){
             throw new RuntimeException("Id do endereco nao existe!");
+        }
+
+        if(enderecoDto.getRua() == null || enderecoDto.getRua().isEmpty()) {
+            throw new RuntimeException("Deve conter uma rua");
+        }
+        if ("".equals(enderecoDto.getNumero())){
+            throw new RuntimeException("Deve conter um numero da rua");
         }
 
         endereco.setRua(enderecoDto.getRua());

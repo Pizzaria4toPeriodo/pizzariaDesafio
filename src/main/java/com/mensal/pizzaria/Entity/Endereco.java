@@ -25,5 +25,7 @@ public class Endereco {
     @Column(name = "numero", nullable = false)
     private int numero;
 
-
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_cliente", nullable = false)
+    private Cliente cliente;
 }
