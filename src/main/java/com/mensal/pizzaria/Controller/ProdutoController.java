@@ -36,7 +36,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/{nome}")
-    public ResponseEntity<String> buscarPorNome(@PathVariable("nome") String nome) {
+    public ResponseEntity<String> buscarPorNome(@PathVariable("nome") final String nome) {
         try {
             Produto produto = repository.findByNome(nome);
             return ResponseEntity.ok(nome);
