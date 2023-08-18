@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 public class ProdutoService {
-
     @Autowired
     private ProdutoRepository repository;
 
@@ -19,7 +18,7 @@ public class ProdutoService {
         if (produtoDTO.getId() != null) {
             throw new RuntimeException("o campo ID não deve ser inserido");
         }
-        Produto produto = toPessoaDTO(produtoDTO);
+        Produto produto = toProdutoDTO(produtoDTO);
         return this.repository.save(produto);
     }
 
@@ -29,11 +28,11 @@ public class ProdutoService {
         if (produtoBanco != null || !produtoBanco.getId().equals(produtoDTO.getId())) {
             throw new RuntimeException("não foi possível encontrar o registro informado");
         }
-        Produto produto = toPessoaDTO(produtoDTO);
+        Produto produto = toProdutoDTO(produtoDTO);
         this.repository.save(produto);
     }
 
-    public Produto toPessoaDTO(ProdutoDTO produtoDTO){
+    public Produto toProdutoDTO(ProdutoDTO produtoDTO){
         Produto produtoTemp = new Produto();
         produtoTemp.setNome(produtoDTO.getNome());
         produtoTemp.setTipo(produtoDTO.getTipo());
