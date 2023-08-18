@@ -19,9 +19,6 @@ public class Produto {
     @Column(name = "nome", nullable = false, length = 30)
     private String nome;
 
-    @Column(name = "tipo", nullable = false)
-    private String tipo;
-
     @Column(name = "preco", nullable = false)
     private BigDecimal preco;
 

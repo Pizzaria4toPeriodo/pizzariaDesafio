@@ -58,10 +58,10 @@ public class PedidoController {
         final Pedido pedido = this.repository.findById(id).orElse(null);
         try{
             this.repository.delete(pedido);
-            return ResponseEntity.ok("Registro deletado");
         }
         catch(RuntimeException e){
             return ResponseEntity.badRequest().body("ID inválido ou não existe");
         }
+        return ResponseEntity.ok("Registro deletado");
     }
 }

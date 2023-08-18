@@ -40,7 +40,6 @@ public class ProdutoService {
     /*public Produto toProdutoDTO(ProdutoDTO produtoDTO){
         Produto produtoTemp = new Produto();
         produtoTemp.setNome(produtoDTO.getNome());
-        produtoTemp.setTipo(produtoDTO.getTipo());
         produtoTemp.setPreco(produtoDTO.getPreco());
         return produtoTemp;
     }*/

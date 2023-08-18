@@ -68,10 +68,10 @@ public class ProdutoController {
         final Produto produto = this.repository.findById(id).orElse(null);
         try{
             this.repository.delete(produto);
-            return ResponseEntity.ok("Registro deletado");
         }
         catch(RuntimeException e){
             return ResponseEntity.badRequest().body("ID inválido ou não existe");
         }
+        return ResponseEntity.ok("Registro deletado");
     }
 }
