@@ -46,7 +46,6 @@ public class EnderecoController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("endereco com rua '" + rua + "' não encontrado.");
         }
-
         return ResponseEntity.ok(endereco);
     }
 

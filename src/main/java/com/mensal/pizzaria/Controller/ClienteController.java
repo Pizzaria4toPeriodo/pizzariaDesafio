@@ -1,12 +1,9 @@
 package com.mensal.pizzaria.Controller;
 
 
-import com.mensal.pizzaria.DTO.ClienteDto;
-import com.mensal.pizzaria.DTO.ProdutoDTO;
 import com.mensal.pizzaria.Entity.Cliente;
 import com.mensal.pizzaria.Service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,43 +15,28 @@ import java.util.List;
 @RequestMapping("/clientes")
 public class ClienteController {
 
-
     @Autowired
     ClienteService clienteService;
 
-
     @GetMapping()
     public ResponseEntity<List<Cliente>> findAll() {
-
         try {
             return ResponseEntity.ok(clienteService.findAll());
         } catch (Exception e) {
-
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-
-
         }
-
     }
-
 
     @PostMapping
     public ResponseEntity<String> cadastrar(@RequestBody Cliente cliente){
-
         try{
             clienteService.cadastrar(cliente);
             return ResponseEntity.ok("realizado com sucesso");
         }
-
         catch (Exception e){
-
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,e.getMessage());
-
         }
-
-
     }
-
 
     @PutMapping("/{id}")
     public ResponseEntity<String> editar(@PathVariable("id") final Long id, @RequestBody final Cliente cliente) {
@@ -62,11 +44,9 @@ public class ClienteController {
             this.clienteService.editar(cliente, id);
             return ResponseEntity.ok("Registro atualizado com sucesso");
         }
-
         catch (RuntimeException e){
             return ResponseEntity.badRequest().body("error:" + e.getMessage());
         }
-
     }
 
     @DeleteMapping("/{id}")
@@ -75,12 +55,8 @@ public class ClienteController {
             this.clienteService.excluir(id);
             return ResponseEntity.ok("Registro Excluido com sucesso");
         }
-
         catch (RuntimeException e){
             return ResponseEntity.badRequest().body("error:" + e.getMessage());
         }
-
     }
-
-
 }

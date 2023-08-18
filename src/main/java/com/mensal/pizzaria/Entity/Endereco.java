@@ -19,10 +19,8 @@ public class Endereco {
     @Column(name = "id", nullable = false,  unique = true)
     private Long id;
 
-
     @Column(name = "rua", nullable = false)
     private String rua;
-
 
     @Column(name = "numero", nullable = false)
     private int numero;

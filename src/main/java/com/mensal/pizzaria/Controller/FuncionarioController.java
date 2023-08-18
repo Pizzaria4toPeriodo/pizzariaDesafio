@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/funcionarios")
 public class FuncionarioController {
-
     @Autowired
     private FuncionarioService funcionarioService;
 
