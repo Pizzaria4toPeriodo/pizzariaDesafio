@@ -18,6 +18,20 @@ public class FuncionarioService {
         Funcionario funcionario = new Funcionario();
         funcionario.setNome(funcionarioDto.getNome());
         funcionario.setCargo(funcionarioDto.getCargo());
+
+        if(funcionarioDto.getNome() == null || funcionarioDto.getNome().isEmpty()){
+            throw new RuntimeException("deve conter um nome");
+        }
+        if (funcionarioDto.getNome().length() > 30){
+            throw new RuntimeException("O nome de funcionario nao pode ter mais de 30 carateres");
+        }
+        if (funcionarioDto.getCargo() == null || funcionarioDto.getNome().isEmpty()){
+            throw new RuntimeException("deve conter um cargo");
+        }
+        if (funcionarioDto.getCargo().length() > 30){
+            throw new RuntimeException("O cargo de funcionario nao pode ter mais de 30 carateres");
+        }
+
         funcionarioRepository.save(funcionario);
     }
 
@@ -27,6 +41,19 @@ public class FuncionarioService {
 
         if (funcionario == null){
             throw new RuntimeException("Id do funcionario nao existe!");
+        }
+
+        if(funcionarioDto.getNome() == null || funcionarioDto.getNome().isEmpty()){
+            throw new RuntimeException("deve conter um nome");
+        }
+        if (funcionarioDto.getNome().length() > 30){
+            throw new RuntimeException("O nome de funcionario nao pode ter mais de 30 carateres");
+        }
+        if (funcionarioDto.getCargo() == null || funcionarioDto.getNome().isEmpty()){
+            throw new RuntimeException("deve conter um cargo");
+        }
+        if (funcionarioDto.getCargo().length() > 30){
+            throw new RuntimeException("O cargo de funcionario nao pode ter mais de 30 carateres");
         }
 
         funcionario.setNome(funcionarioDto.getNome());
