@@ -7,12 +7,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter @Setter
+@Entity
 @Table(name = "pedido_table", schema = "pizzaria")
 public class Pedido {
 
@@ -21,15 +22,16 @@ public class Pedido {
     @Column(name = "id", nullable = false,  unique = true)
     private Long id;
 
-   @ManyToMany
+    @ManyToMany
     @JoinTable(
             name = "pedido_produto",
-            joinColumns = @JoinColumn(name = "id_pedido"),
-            inverseJoinColumns = @JoinColumn(name = "id_produto")
+            schema = "pizzaria",
+            joinColumns = @JoinColumn(name = "pedido_id"),
+            inverseJoinColumns = @JoinColumn(name = "produto_id")
     )
-    private List<Produto> id_produto;
+    private List<Produto> produtos;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_cliente", nullable = false)
     private Cliente id_cliente;
 
