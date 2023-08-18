@@ -31,6 +31,8 @@ public class Entrega {
 
 
     @OneToOne
+    @JoinColumn(name = "pedido_id")
+
     private  Pedido pedido;
 
     private String statusPedido;
