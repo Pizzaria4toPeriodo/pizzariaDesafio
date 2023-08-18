@@ -51,7 +51,7 @@ public class ClienteService {
 
         Optional<Cliente> clienteBD = clienteRepository.findById(id);
 
-        Assert.isTrue(clienteBD.isEmpty(),"Cliente cadastrado com esse ID") ;
+        Assert.isTrue(!clienteBD.isEmpty(),"Cliente nao cadastrado com esse ID") ;
 
 
 

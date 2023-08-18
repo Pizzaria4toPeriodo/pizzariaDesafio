@@ -2,14 +2,14 @@ package com.mensal.pizzaria.Controller;
 
 
 import com.mensal.pizzaria.DTO.ClienteDto;
+import com.mensal.pizzaria.DTO.ProdutoDTO;
 import com.mensal.pizzaria.Entity.Cliente;
 import com.mensal.pizzaria.Service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -35,6 +35,52 @@ public class ClienteController {
 
         }
 
+    }
+
+
+    @PostMapping
+    public ResponseEntity<String> cadastrar(@RequestBody Cliente cliente){
+
+        try{
+            clienteService.cadastrar(cliente);
+            return ResponseEntity.ok("realizado com sucesso");
+        }
+
+        catch (Exception e){
+
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,e.getMessage());
+
+        }
+
 
     }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<String> editar(@PathVariable("id") final Long id, @RequestBody final Cliente cliente) {
+        try {
+            this.clienteService.editar(cliente, id);
+            return ResponseEntity.ok("Registro atualizado com sucesso");
+        }
+
+        catch (RuntimeException e){
+            return ResponseEntity.badRequest().body("error:" + e.getMessage());
+        }
+
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deletar(@PathVariable("id") final Long id) {
+        try {
+            this.clienteService.excluir(id);
+            return ResponseEntity.ok("Registro Excluido com sucesso");
+        }
+
+        catch (RuntimeException e){
+            return ResponseEntity.badRequest().body("error:" + e.getMessage());
+        }
+
+    }
+
+
 }

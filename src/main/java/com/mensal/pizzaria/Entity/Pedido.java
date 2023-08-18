@@ -27,10 +27,6 @@ public class Pedido {
             joinColumns = @JoinColumn(name = "id_pedido"),
             inverseJoinColumns = @JoinColumn(name = "id_produto")
     )
-
-
-    /**@OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_produto", nullable = false)*/
     private List<Produto> id_produto;
 
     @ManyToOne(fetch = FetchType.EAGER)
