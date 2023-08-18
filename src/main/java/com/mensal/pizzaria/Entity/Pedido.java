@@ -1,12 +1,17 @@
 package com.mensal.pizzaria.Entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter @Setter
 @Table(name = "pedido_table", schema = "pizzaria")
 public class Pedido {
@@ -16,17 +21,21 @@ public class Pedido {
     @Column(name = "id", nullable = false,  unique = true)
     private Long id;
 
-    @ManyToMany
+   @ManyToMany
     @JoinTable(
             name = "pedido_produto",
             joinColumns = @JoinColumn(name = "id_pedido"),
             inverseJoinColumns = @JoinColumn(name = "id_produto")
     )
-    private Produto id_produto;
+
+
+    /**@OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_produto", nullable = false)*/
+    private List<Produto> id_produto;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_cliente", nullable = false)
-    private Long id_cliente;
+    private Cliente id_cliente;
 
     @Column(name = "delivery", nullable = false)
     private boolean delivery;
