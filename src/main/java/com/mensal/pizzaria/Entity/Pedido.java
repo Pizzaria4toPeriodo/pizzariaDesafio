@@ -31,7 +31,7 @@ public class Pedido {
     )
     private List<Produto> produtos;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_cliente", nullable = false)
     private Cliente id_cliente;
 
