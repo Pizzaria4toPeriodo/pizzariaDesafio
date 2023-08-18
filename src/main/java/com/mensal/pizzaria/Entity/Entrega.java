@@ -1,10 +1,5 @@
 package com.mensal.pizzaria.Entity;
 
-
-
-
-import  com.mensal.pizzaria.Entity.Funcionario;
-import  com.mensal.pizzaria.Entity.Pedido;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,11 +19,8 @@ public class Entrega {
     @Column(name = "id", nullable = false,  unique = true)
     private  Long id;
 
-
-
     @OneToOne
     private Funcionario entregador;
-
 
     @OneToOne
     @JoinColumn(name = "pedido_id")

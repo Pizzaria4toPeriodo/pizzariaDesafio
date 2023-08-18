@@ -2,9 +2,7 @@ package com.mensal.pizzaria.Service;
 
 import com.mensal.pizzaria.DTO.PedidoDTO;
 import com.mensal.pizzaria.Entity.Pedido;
-import com.mensal.pizzaria.Entity.Produto;
 import com.mensal.pizzaria.Repository.PedidoRepository;
-import com.mensal.pizzaria.Repository.ProdutoRepository;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

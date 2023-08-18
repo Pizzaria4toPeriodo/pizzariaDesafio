@@ -7,7 +7,6 @@ import lombok.Setter;
 @Entity
 @Table(name = "funcionario_table", schema = "pizzaria")
 public class Funcionario {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter @Setter
@@ -21,5 +20,4 @@ public class Funcionario {
     @Getter @Setter
     @Column(name = "cargo", nullable = false, length = 30)
     private String cargo;
-
 }
