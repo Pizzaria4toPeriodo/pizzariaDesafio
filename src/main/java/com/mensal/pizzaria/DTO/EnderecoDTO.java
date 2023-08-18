@@ -1,6 +1,6 @@
 package com.mensal.pizzaria.DTO;
 
-public class EnderecoDto {
+public class EnderecoDTO {
 
     private Long id;
 
@@ -8,7 +8,7 @@ public class EnderecoDto {
 
     private int numero;
 
-    public EnderecoDto(Long id, String rua, int numero) {
+    public EnderecoDTO(Long id, String rua, int numero) {
         this.id = id;
         this.rua = rua;
         this.numero = numero;

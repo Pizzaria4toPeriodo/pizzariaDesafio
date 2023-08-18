@@ -1,6 +1,6 @@
 package com.mensal.pizzaria.Service;
 
-import com.mensal.pizzaria.DTO.EnderecoDto;
+import com.mensal.pizzaria.DTO.EnderecoDTO;
 import com.mensal.pizzaria.Entity.Endereco;
 import com.mensal.pizzaria.Repository.EnderecoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ public class EnderecoService {
     private EnderecoRepository enderecoRepository;
 
     @Transactional
-    public void cadastrarEndereco(EnderecoDto enderecoDto){
+    public void cadastrarEndereco(EnderecoDTO enderecoDto){
         Endereco endereco = new Endereco();
         endereco.setRua(enderecoDto.getRua());
         endereco.setNumero(enderecoDto.getNumero());
@@ -22,7 +22,7 @@ public class EnderecoService {
     }
 
     @Transactional
-    public void atualizarEndereco(final Long id, EnderecoDto enderecoDto){
+    public void atualizarEndereco(final Long id, EnderecoDTO enderecoDto){
         Endereco endereco = enderecoRepository.findById(id).orElse(null);
 
         if (endereco == null){

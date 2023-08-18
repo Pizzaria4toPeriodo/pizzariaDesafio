@@ -1,7 +1,6 @@
 package com.mensal.pizzaria.Controller;
 
-import com.mensal.pizzaria.DTO.FuncionarioDto;
-import com.mensal.pizzaria.Entity.Endereco;
+import com.mensal.pizzaria.DTO.FuncionarioDTO;
 import com.mensal.pizzaria.Entity.Funcionario;
 import com.mensal.pizzaria.Repository.FuncionarioRepository;
 import com.mensal.pizzaria.Service.FuncionarioService;
@@ -47,7 +46,7 @@ public class FuncionarioController {
     }
 
     @PostMapping("/salvar")
-    public ResponseEntity<?> cadastraFuncionario(@RequestBody FuncionarioDto funcionarioDto) {
+    public ResponseEntity<?> cadastraFuncionario(@RequestBody FuncionarioDTO funcionarioDto) {
         try {
             funcionarioService.cadastraFuncionario(funcionarioDto);
         }
@@ -60,7 +59,7 @@ public class FuncionarioController {
     @PutMapping("/{id}")
     public ResponseEntity<?> atualizar(
             @PathVariable("id") final Long id,
-            @RequestBody final FuncionarioDto funcionarioDto
+            @RequestBody final FuncionarioDTO funcionarioDto
     ) {
         try {
             this.funcionarioService.atualizaFuncionario(id, funcionarioDto);

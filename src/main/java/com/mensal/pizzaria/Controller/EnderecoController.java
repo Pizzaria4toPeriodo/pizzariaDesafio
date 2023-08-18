@@ -1,9 +1,7 @@
 package com.mensal.pizzaria.Controller;
 
-import com.mensal.pizzaria.DTO.EnderecoDto;
-import com.mensal.pizzaria.DTO.FuncionarioDto;
+import com.mensal.pizzaria.DTO.EnderecoDTO;
 import com.mensal.pizzaria.Entity.Endereco;
-import com.mensal.pizzaria.Entity.Funcionario;
 import com.mensal.pizzaria.Repository.EnderecoRepository;
 import com.mensal.pizzaria.Service.EnderecoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +48,7 @@ public class EnderecoController {
     }
 
     @PostMapping("/salvar")
-    public ResponseEntity<?> cadastraFuncionario(@RequestBody EnderecoDto enderecoDto) {
+    public ResponseEntity<?> cadastraFuncionario(@RequestBody EnderecoDTO enderecoDto) {
         try {
             enderecoService.cadastrarEndereco(enderecoDto);
         }
@@ -63,7 +61,7 @@ public class EnderecoController {
     @PutMapping("/{id}")
     public ResponseEntity<?> atualizar(
             @PathVariable("id") final Long id,
-            @RequestBody final EnderecoDto enderecoDto
+            @RequestBody final EnderecoDTO enderecoDto
     ) {
         try {
             this.enderecoService.atualizarEndereco(id, enderecoDto);

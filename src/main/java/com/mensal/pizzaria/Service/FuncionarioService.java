@@ -1,6 +1,6 @@
 package com.mensal.pizzaria.Service;
 
-import com.mensal.pizzaria.DTO.FuncionarioDto;
+import com.mensal.pizzaria.DTO.FuncionarioDTO;
 import com.mensal.pizzaria.Entity.Funcionario;
 import com.mensal.pizzaria.Repository.FuncionarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ public class FuncionarioService {
     private FuncionarioRepository funcionarioRepository;
 
     @Transactional
-    public void cadastraFuncionario(FuncionarioDto funcionarioDto){
+    public void cadastraFuncionario(FuncionarioDTO funcionarioDto){
         Funcionario funcionario = new Funcionario();
         funcionario.setNome(funcionarioDto.getNome());
         funcionario.setCargo(funcionarioDto.getCargo());
@@ -22,7 +22,7 @@ public class FuncionarioService {
     }
 
     @Transactional
-    public void atualizaFuncionario(final Long id, FuncionarioDto funcionarioDto){
+    public void atualizaFuncionario(final Long id, FuncionarioDTO funcionarioDto){
         Funcionario funcionario = funcionarioRepository.findById(id).orElse(null);
 
         if (funcionario == null){

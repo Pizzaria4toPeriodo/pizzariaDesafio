@@ -1,6 +1,6 @@
 package com.mensal.pizzaria.DTO;
 
-public class FuncionarioDto {
+public class FuncionarioDTO {
 
     private Long id;
 
@@ -9,7 +9,7 @@ public class FuncionarioDto {
 
     private String cargo;
 
-    public FuncionarioDto(Long id, String nome, String cargo) {
+    public FuncionarioDTO(Long id, String nome, String cargo) {
         this.id = id;
         this.nome = nome;
         this.cargo = cargo;

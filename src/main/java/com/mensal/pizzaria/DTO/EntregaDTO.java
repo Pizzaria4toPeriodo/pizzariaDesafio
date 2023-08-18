@@ -2,9 +2,8 @@ package com.mensal.pizzaria.DTO;
 
 import com.mensal.pizzaria.Entity.Funcionario;
 import com.mensal.pizzaria.Entity.Pedido;
-import jakarta.persistence.OneToOne;
 
-public class EntregaDto {
+public class EntregaDTO {
 
     private  Long id;
 
@@ -19,8 +18,8 @@ public class EntregaDto {
     private int valorEntrega;
 
 
-    public EntregaDto(){}
-    public EntregaDto(Long id, Funcionario entregador, Pedido pedido, String statusPedido, String formaPagamento, int valorEntrega) {
+    public EntregaDTO(){}
+    public EntregaDTO(Long id, Funcionario entregador, Pedido pedido, String statusPedido, String formaPagamento, int valorEntrega) {
         this.id = id;
         this.entregador = entregador;
         this.pedido = pedido;

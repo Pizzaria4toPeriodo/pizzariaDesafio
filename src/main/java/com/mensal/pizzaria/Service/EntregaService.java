@@ -1,14 +1,10 @@
 package com.mensal.pizzaria.Service;
 
 
-import com.mensal.pizzaria.DTO.ClienteDto;
-import com.mensal.pizzaria.Entity.Cliente;
 import com.mensal.pizzaria.Entity.Entrega;
-import com.mensal.pizzaria.Repository.ClienteRepository;
 import com.mensal.pizzaria.Repository.EntregaRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
