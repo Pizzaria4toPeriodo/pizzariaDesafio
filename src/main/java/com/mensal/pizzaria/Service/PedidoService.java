@@ -27,14 +27,14 @@ public class PedidoService {
     }
 
     @Transactional
-    public void atualizar(final Long id, PedidoDTO pedidoDTO) {
+    public Pedido atualizar(final Long id, PedidoDTO pedidoDTO) {
         final Pedido pedidoBanco = this.repository.findById(id).orElse(null);
         if (pedidoBanco != null || !pedidoBanco.getId().equals(pedidoDTO.getId())) {
             throw new RuntimeException("não foi possível encontrar o registro informado");
         }
         Pedido pedido = mapper.map(pedidoDTO, Pedido.class);
         //Pedido pedido = toPedidoDTO(pedidoDTO);
-        this.repository.save(pedido);
+        return this.repository.save(pedido);
     }
 
     /*public Pedido toPedidoDTO(PedidoDTO pedidoDTO){

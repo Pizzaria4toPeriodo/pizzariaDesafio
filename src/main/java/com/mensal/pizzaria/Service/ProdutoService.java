@@ -27,14 +27,14 @@ public class ProdutoService {
     }
 
     @Transactional
-    public void atualizar(final Long id, ProdutoDTO produtoDTO) {
+    public Produto atualizar(final Long id, ProdutoDTO produtoDTO) {
         final Produto produtoBanco = this.repository.findById(id).orElse(null);
         if (produtoBanco != null || !produtoBanco.getId().equals(produtoDTO.getId())) {
             throw new RuntimeException("não foi possível encontrar o registro informado");
         }
         Produto produto = mapper.map(produtoDTO, Produto.class);
         //Produto produto = toProdutoDTO(produtoDTO);
-        this.repository.save(produto);
+        return this.repository.save(produto);
     }
 
     /*public Produto toProdutoDTO(ProdutoDTO produtoDTO){
