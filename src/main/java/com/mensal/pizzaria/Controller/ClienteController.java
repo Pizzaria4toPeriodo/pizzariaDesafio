@@ -33,8 +33,8 @@ public class ClienteController {
             clienteService.cadastrar(cliente);
             return ResponseEntity.ok("realizado com sucesso");
         }
-        catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,e.getMessage());
+        catch (RuntimeException e){
+           return ResponseEntity.badRequest().body("error:" + e.getMessage());
         }
     }
 
