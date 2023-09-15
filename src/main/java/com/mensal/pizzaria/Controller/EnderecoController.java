@@ -1,90 +1,71 @@
 package com.mensal.pizzaria.Controller;
 
 import com.mensal.pizzaria.DTO.EnderecoDTO;
-import com.mensal.pizzaria.Entity.Endereco;
+import com.mensal.pizzaria.Entity.EnderecoEntity;
 import com.mensal.pizzaria.Repository.EnderecoRepository;
 import com.mensal.pizzaria.Service.EnderecoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/enderecos")
 public class EnderecoController {
-
     @Autowired
-    private EnderecoService enderecoService;
-
+    private EnderecoService service;
     @Autowired
-    private EnderecoRepository enderecoRepository;
+    private EnderecoRepository repository;
 
-    @GetMapping
-    public ResponseEntity<?> listaCompleta(){
-        return ResponseEntity.ok(this.enderecoRepository.findAll());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<?> findById(
-            @PathVariable("id") final long id
-    ) {
-        final Endereco endereco = this.enderecoRepository.findById(id).orElse(null);
-        return endereco == null
-                ? ResponseEntity.badRequest().body("Sem valor encontrado.")
-                : ResponseEntity.ok(endereco);
-    }
-
-
-    @GetMapping("/buscar/{rua}")
-    public ResponseEntity<?> buscarPorRua(@PathVariable("rua") String rua) {
-        Endereco endereco = enderecoRepository.findByRua(rua);
-
-        if (endereco == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("endereco com rua '" + rua + "' não encontrado.");
-        }
-        return ResponseEntity.ok(endereco);
-    }
-
-    @PostMapping("/salvar")
-    public ResponseEntity<?> cadastraFuncionario(@RequestBody EnderecoDTO enderecoDto) {
+    @GetMapping("/rua")
+    public ResponseEntity<EnderecoDTO> findByRua(@RequestParam("rua") String rua) {
         try {
-            enderecoService.cadastrarEndereco(enderecoDto);
+            return new ResponseEntity<>(service.findByRua(rua), HttpStatus.OK);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
-        catch (Exception e){
-            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<EnderecoDTO>> findAll() {
+        try {
+            return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
-        return ResponseEntity.ok().body("Registro adicionado com sucesso");
+    }
+
+    @PostMapping
+    public ResponseEntity<EnderecoDTO> create(@RequestBody @Validated EnderecoDTO dto) {
+        try {
+            return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> atualizar(
-            @PathVariable("id") final Long id,
-            @RequestBody final EnderecoDTO enderecoDto
-    ) {
+    public ResponseEntity<EnderecoDTO> update(@PathVariable("id") Long id, @RequestBody @Validated EnderecoDTO dto) {
         try {
-            this.enderecoService.atualizarEndereco(id, enderecoDto);
+            return new ResponseEntity<>(service.update(id, dto), HttpStatus.OK);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
-        catch (DataIntegrityViolationException e){
-            return ResponseEntity.internalServerError()
-                    .body("Error:" + e.getCause().getCause().getMessage());
-        }
-        catch (RuntimeException e){
-            return ResponseEntity.internalServerError().body("error:" + e.getMessage());
-        }
-        return ResponseEntity.ok("Registro atualizado com sucesso");
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletar(@PathVariable("id") final Long id){
-        final Endereco endereco = this.enderecoRepository.findById(id).orElse(null);
-        try{
-            this.enderecoRepository.delete(endereco);
-            return ResponseEntity.ok("Registro deletado");
-        }
-        catch(RuntimeException e){
-            return ResponseEntity.badRequest().body("ID nao encontrado nao pode excluir");
+    public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id) {
+        try {
+            EnderecoEntity entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Não foi possível encontrar o registro informado"));
+            repository.delete(entity);
+
+            return ResponseEntity.ok(HttpStatus.OK);
+        } catch (RuntimeException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 }

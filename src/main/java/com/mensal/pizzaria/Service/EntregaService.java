@@ -1,79 +1,38 @@
 package com.mensal.pizzaria.Service;
 
-
-import com.mensal.pizzaria.Entity.Entrega;
+import com.mensal.pizzaria.DTO.EntregaDTO;
+import com.mensal.pizzaria.Entity.EntregaEntity;
 import com.mensal.pizzaria.Repository.EntregaRepository;
 import jakarta.transaction.Transactional;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class EntregaService {
-
-
-
     @Autowired
-    EntregaRepository entregaRepository;
+    private EntregaRepository repository;
+    @Autowired
+    private ModelMapper modelMapper;
 
-    public List<Entrega> findAll(){
-
-        return entregaRepository.findAll();
-    }
-
-
-    public Entrega findByid(Long id){
-
-        Optional<Entrega> entregaBD= entregaRepository.findById(id);
-
-        return entregaBD.get();
+    @Transactional
+    public List<EntregaDTO> findAll() {
+        return repository.findAll().stream().map(entity -> modelMapper.map(entity, EntregaDTO.class)).collect(Collectors.toList());
     }
 
     @Transactional
-    public Entrega cadastrar(Entrega entrega){
-
-        Optional<Entrega> entregaBD = entregaRepository.findById(entrega.getId());
-        Assert.isTrue(entregaBD.isEmpty(),"Entrega cadastrado com esse ID") ;
-
-        return entregaRepository.save(entrega);
-
+    public EntregaDTO create(EntregaDTO dto) {
+        return modelMapper.map(repository.save(modelMapper.map(dto, EntregaEntity.class)), EntregaDTO.class);
     }
-
 
     @Transactional
-    public Entrega editar(Entrega entrega, Long id){
+    public EntregaDTO update(Long id, EntregaDTO dto) {
+        repository.findById(id).orElseThrow(() -> new RuntimeException("Não foi possível encontrar o registro informado"));
 
-        Optional<Entrega> entregaBD = entregaRepository.findById(id);
-
-        Assert.isTrue(!entregaBD.isEmpty(),"Entrega nao cadastrado com esse ID") ;
-
-
-
-        return entregaRepository.save(entrega);
-
+        return modelMapper.map(repository.save(modelMapper.map(dto, EntregaEntity.class)), EntregaDTO.class);
     }
-
-
-
-    @Transactional
-    public String excluir(Long id){
-
-        Optional<Entrega> entregaBD = entregaRepository.findById(id);
-
-        Assert.isTrue(!entregaBD.isEmpty(),"Entrega nao cadastrado com esse ID") ;
-
-        entregaRepository.deleteById(id);
-        return  "Entrega excluido";
-
-
-    }
-
-
-
-
-
 }

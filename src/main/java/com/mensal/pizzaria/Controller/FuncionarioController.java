@@ -1,89 +1,71 @@
 package com.mensal.pizzaria.Controller;
 
 import com.mensal.pizzaria.DTO.FuncionarioDTO;
-import com.mensal.pizzaria.Entity.Funcionario;
+import com.mensal.pizzaria.Entity.FuncionarioEntity;
 import com.mensal.pizzaria.Repository.FuncionarioRepository;
 import com.mensal.pizzaria.Service.FuncionarioService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/funcionarios")
 public class FuncionarioController {
     @Autowired
-    private FuncionarioService funcionarioService;
-
+    private FuncionarioService service;
     @Autowired
-    private FuncionarioRepository funcionarioRepository;
+    private FuncionarioRepository repository;
 
-    @GetMapping
-    public ResponseEntity<?> listaCompleta(){
-        return ResponseEntity.ok(this.funcionarioRepository.findAll());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<?> findById(
-            @PathVariable("id") final long id
-    ) {
-        final Funcionario funcionario = this.funcionarioRepository.findById(id).orElse(null);
-        return funcionario == null
-                ? ResponseEntity.badRequest().body("Sem valor encontrado.")
-                : ResponseEntity.ok(funcionario);
-    }
-    @GetMapping("/buscar/{nome}")
-    public ResponseEntity<?> buscarPornome(@PathVariable("nome") String nome) {
-        Funcionario funcionario = funcionarioRepository.findByNome(nome);
-
-        if (funcionario == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Funcionario com nome '" + nome + "' não encontrado.");
-        }
-
-        return ResponseEntity.ok(funcionario);
-    }
-
-    @PostMapping("/salvar")
-    public ResponseEntity<?> cadastraFuncionario(@RequestBody FuncionarioDTO funcionarioDto) {
+    @GetMapping("/nome")
+    public ResponseEntity<FuncionarioDTO> findByNomeFuncionario(@RequestParam("nome") String nome) {
         try {
-            funcionarioService.cadastraFuncionario(funcionarioDto);
+            return new ResponseEntity<>(service.findByNomeFuncionario(nome), HttpStatus.OK);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
-        catch (Exception e){
-            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<FuncionarioDTO>> findAll() {
+        try {
+            return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
-        return ResponseEntity.ok().body("Registro adicionado com sucesso");
+    }
+
+    @PostMapping
+    public ResponseEntity<FuncionarioDTO> create(@RequestBody @Validated FuncionarioDTO dto) {
+        try {
+            return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> atualizar(
-            @PathVariable("id") final Long id,
-            @RequestBody final FuncionarioDTO funcionarioDto
-    ) {
+    public ResponseEntity<FuncionarioDTO> update(@PathVariable("id") Long id, @RequestBody @Validated FuncionarioDTO dto) {
         try {
-            this.funcionarioService.atualizaFuncionario(id, funcionarioDto);
+            return new ResponseEntity<>(service.update(id, dto), HttpStatus.OK);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
-        catch (DataIntegrityViolationException e){
-            return ResponseEntity.internalServerError()
-                    .body("Error:" + e.getCause().getCause().getMessage());
-        }
-        catch (RuntimeException e){
-            return ResponseEntity.internalServerError().body("error:" + e.getMessage());
-        }
-        return ResponseEntity.ok("Registro atualizado com sucesso");
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletar(@PathVariable("id") final Long id){
-        final Funcionario funcionario = this.funcionarioRepository.findById(id).orElse(null);
-        try{
-            this.funcionarioRepository.delete(funcionario);
-            return ResponseEntity.ok("Registro deletado");
-        }
-        catch(RuntimeException e){
-            return ResponseEntity.badRequest().body("ID nao encontrado nao pode excluir");
+    public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id) {
+        try {
+            FuncionarioEntity entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Não foi possível encontrar o registro informado"));
+            repository.delete(entity);
+
+            return ResponseEntity.ok(HttpStatus.OK);
+        } catch (RuntimeException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 }
-

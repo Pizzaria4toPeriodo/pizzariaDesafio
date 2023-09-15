@@ -1,29 +1,30 @@
 package com.mensal.pizzaria.Entity;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter @Setter
-@AllArgsConstructor @NoArgsConstructor
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "endereco_table", schema = "pizzaria")
-public class Endereco {
+public class EnderecoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false,  unique = true)
+    @Column(nullable = false, unique = true)
     private Long id;
 
-    @Column(name = "rua", nullable = false)
+    @Column(nullable = false)
     private String rua;
 
-    @Column(name = "numero", nullable = false)
+    @Column(nullable = false)
     private int numero;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_cliente", nullable = false)
-    private Cliente cliente;
+    private ClienteEntity cliente;
 }

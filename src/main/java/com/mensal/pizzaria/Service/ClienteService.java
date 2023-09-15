@@ -1,62 +1,48 @@
 package com.mensal.pizzaria.Service;
 
-import com.mensal.pizzaria.Entity.Cliente;
+import com.mensal.pizzaria.DTO.ClienteDTO;
+import com.mensal.pizzaria.Entity.ClienteEntity;
 import com.mensal.pizzaria.Repository.ClienteRepository;
 import jakarta.transaction.Transactional;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ClienteService {
     @Autowired
-    ClienteRepository clienteRepository;
+    private ClienteRepository repository;
+    @Autowired
+    private ModelMapper modelMapper;
 
-    public List<Cliente> findAll(){return clienteRepository.findAll();
-    }
-
-    public Cliente findByid(Long id){
-        Optional<Cliente> clienteBD= clienteRepository.findById(id);
-        return clienteBD.get();
+    @Transactional
+    public ClienteDTO findByNomeCliente(String nome) {
+        return modelMapper.map(repository.findByNomeCliente(nome), ClienteDTO.class);
     }
 
     @Transactional
-    public Cliente cadastrar(Cliente cliente){
-        Assert.isNull(clienteRepository.findByCpf(cliente.getCpf()),"Cliente cadastrado com ese cpf");
-        Assert.isTrue(cliente.getCpf().matches("\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}"),"Formato de CPF invalido, deve ser: 000.000.000-00");
-        Assert.isTrue( cliente.getNome().length() > 2,"Quantidade de caracteres minimos para ó nome é 3");
-        Assert.isTrue( cliente.getNome().length() <= 15,"Quantidade de caracteres Maximos para ó nome é 15");
-        Assert.isTrue(cliente.getNome().matches("[a-zA-Z\\s]+"),"Somente é permitido letras no nome");
-
-
-        return clienteRepository.save(cliente);
+    public ClienteDTO findByCpf(String cpf) {
+        return modelMapper.map(repository.findByCpf(cpf), ClienteDTO.class);
     }
 
     @Transactional
-    public Cliente editar(Cliente cliente, Long id){
-        Optional<Cliente> clienteBD = clienteRepository.findById(id);
-        Assert.isTrue(!clienteBD.isEmpty(),"Cliente nao cadastrado com esse ID") ;
-        Assert.isNull(clienteRepository.findByCpf(cliente.getCpf()),"Cliente cadastrado com ese cpf");
-        Assert.isTrue(cliente.getCpf().matches("\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}"),"Formato de CPF invalido, deve ser: 000.000.000-00");
-        Assert.isTrue( cliente.getNome().length() > 2,"Quantidade de caracteres minimos para ó nome é 3");
-        Assert.isTrue( cliente.getNome().length() <= 15,"Quantidade de caracteres Maximos para ó nome é 15");
-        Assert.isTrue(cliente.getNome().matches("[a-zA-Z\\s]+"),"Somente é permitido letras no nome");
-
-        return clienteRepository.save(cliente);
+    public List<ClienteDTO> findAll() {
+        return repository.findAll().stream().map(entity -> modelMapper.map(entity, ClienteDTO.class)).collect(Collectors.toList());
     }
 
     @Transactional
-    public String excluir(Long id){
+    public ClienteDTO create(ClienteDTO dto) {
+        return modelMapper.map(repository.save(modelMapper.map(dto, ClienteEntity.class)), ClienteDTO.class);
+    }
 
-        Optional<Cliente> clienteBD = clienteRepository.findById(id);
+    @Transactional
+    public ClienteDTO update(Long id, ClienteDTO dto) {
+        repository.findById(id).orElseThrow(() -> new RuntimeException("Não foi possível encontrar o registro informado"));
 
-        Assert.isTrue(!clienteBD.isEmpty(),"Cliente nao cadastrado com esse ID") ;
-
-        clienteRepository.deleteById(id);
-        return  "cliente excluido";
+        return modelMapper.map(repository.save(modelMapper.map(dto, ClienteEntity.class)), ClienteDTO.class);
     }
 }

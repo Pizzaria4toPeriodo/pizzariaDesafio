@@ -11,6 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class FuncionarioDTO {
     private Long id;
-    private String nome;
+    private String nomeFuncionario;
     private String cargo;
 }

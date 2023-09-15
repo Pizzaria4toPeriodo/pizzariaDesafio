@@ -1,17 +1,17 @@
 package com.mensal.pizzaria.Controller;
 
 import com.mensal.pizzaria.DTO.PedidoDTO;
-import com.mensal.pizzaria.DTO.ProdutoDTO;
-import com.mensal.pizzaria.Entity.Pedido;
-import com.mensal.pizzaria.Entity.Produto;
+import com.mensal.pizzaria.Entity.PedidoEntity;
 import com.mensal.pizzaria.Repository.PedidoRepository;
 import com.mensal.pizzaria.Service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/pedidos")
@@ -21,49 +21,42 @@ public class PedidoController {
     @Autowired
     private PedidoRepository repository;
 
-    @GetMapping
-    public ResponseEntity<?> listaCompleta(){
-        return ResponseEntity.ok(this.repository.findAll());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Pedido> findById(@PathVariable("id") final long id) {
+    @GetMapping("/list")
+    public ResponseEntity<List<PedidoDTO>> findAll() {
         try {
-            final Pedido pedido = this.repository.findById(id).orElse(null);
-            return ResponseEntity.ok(pedido);
-        }
-        catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
     @PostMapping
-    public ResponseEntity<Pedido> cadastrar(@RequestBody final PedidoDTO pedidoDTO) {
+    public ResponseEntity<PedidoDTO> create(@RequestBody @Validated PedidoDTO dto) {
         try {
-            return ResponseEntity.ok(this.service.cadastrar(pedidoDTO));
-        }
-        catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Pedido> atualizar(@PathVariable("id") final Long id, @RequestBody final PedidoDTO pedidoDTO) {
+    public ResponseEntity<PedidoDTO> update(@PathVariable("id") Long id, @RequestBody @Validated PedidoDTO dto) {
         try {
-            return ResponseEntity.ok(this.service.atualizar(id, pedidoDTO));
-        }
-        catch (DataIntegrityViolationException e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            return new ResponseEntity<>(service.update(id, dto), HttpStatus.OK);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletar(@PathVariable("id") final Long id) {
-        final Pedido pedidoBanco = this.repository.findById(id).orElse(null);
+    public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id) {
         try {
-            this.repository.delete(pedidoBanco);
-            return ResponseEntity.ok("Pedido deletado com sucesso");
+            PedidoEntity entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Não foi possível encontrar o registro informado"));
+            repository.delete(entity);
+
+            return ResponseEntity.ok(HttpStatus.OK);
         } catch (RuntimeException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 }

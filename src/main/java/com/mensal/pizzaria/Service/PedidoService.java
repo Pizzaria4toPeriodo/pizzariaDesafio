@@ -1,44 +1,37 @@
 package com.mensal.pizzaria.Service;
 
 import com.mensal.pizzaria.DTO.PedidoDTO;
-import com.mensal.pizzaria.Entity.Pedido;
+import com.mensal.pizzaria.Entity.PedidoEntity;
 import com.mensal.pizzaria.Repository.PedidoRepository;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PedidoService {
     @Autowired
     private PedidoRepository repository;
     @Autowired
-    private ModelMapper mapper;
+    private ModelMapper modelMapper;
 
     @Transactional
-    public Pedido cadastrar(@RequestBody final PedidoDTO pedidoDTO) {
-        if (pedidoDTO.getId() != null) {
-            throw new RuntimeException("o campo ID não deve ser inserido");
-        }
-        Pedido pedido = mapper.map(pedidoDTO, Pedido.class);
-        //Pedido pedido = toPedidoDTO(pedidoDTO);
-        return this.repository.save(pedido);
+    public List<PedidoDTO> findAll() {
+        return repository.findAll().stream().map(entity -> modelMapper.map(entity, PedidoDTO.class)).collect(Collectors.toList());
     }
 
     @Transactional
-    public Pedido atualizar(final Long id, PedidoDTO pedidoDTO) {
-        final Pedido pedidoBanco = this.repository.findById(id).orElse(null);
-        if (pedidoBanco != null || !pedidoBanco.getId().equals(pedidoDTO.getId())) {
-            throw new RuntimeException("não foi possível encontrar o registro informado");
-        }
-        Pedido pedido = mapper.map(pedidoDTO, Pedido.class);
-        //Pedido pedido = toPedidoDTO(pedidoDTO);
-        return this.repository.save(pedido);
+    public PedidoDTO create(PedidoDTO dto) {
+        return modelMapper.map(repository.save(modelMapper.map(dto, PedidoEntity.class)), PedidoDTO.class);
     }
 
-    /*public Pedido toPedidoDTO(PedidoDTO pedidoDTO){
-        Pedido pedidoTemp = new Pedido();
-        return pedidoTemp;
-    }*/
+    @Transactional
+    public PedidoDTO update(Long id, PedidoDTO dto) {
+        repository.findById(id).orElseThrow(() -> new RuntimeException("Não foi possível encontrar o registro informado"));
+
+        return modelMapper.map(repository.save(modelMapper.map(dto, PedidoEntity.class)), PedidoDTO.class);
+    }
 }

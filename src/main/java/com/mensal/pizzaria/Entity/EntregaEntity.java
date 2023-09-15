@@ -6,30 +6,31 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter @Setter
-@AllArgsConstructor @NoArgsConstructor
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "entrega_table", schema = "pizzaria")
-public class Entrega {
+public class EntregaEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false,  unique = true)
-    private  Long id;
+    @Column(nullable = false, unique = true)
+    private Long id;
 
     @OneToOne
-    @JoinColumn(name = "pedido_id")
-    private Funcionario entregador;
+    @JoinColumn(name = "id_pedido")
+    private FuncionarioEntity entregador;
 
     @OneToOne
-    @JoinColumn(name = "pedido_id")
-    private  Pedido pedido;
+    @JoinColumn(name = "id_pedido")
+    private PedidoEntity pedido;
 
     private String statusPedido;
 
-    private  String formaPagamento;
+    private String formaPagamento;
 
     private int valorEntrega;
-
 
 
 }

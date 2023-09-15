@@ -1,10 +1,8 @@
 package com.mensal.pizzaria.Repository;
 
-import com.mensal.pizzaria.Entity.Funcionario;
+import com.mensal.pizzaria.Entity.FuncionarioEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface FuncionarioRepository extends JpaRepository<Funcionario, Long> {
-    Funcionario findByNome(String nome);
+public interface FuncionarioRepository extends JpaRepository<FuncionarioEntity, Long> {
+    FuncionarioEntity findByNomeFuncionario(String nome);
 }

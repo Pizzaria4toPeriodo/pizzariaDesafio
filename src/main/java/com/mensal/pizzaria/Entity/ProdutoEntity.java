@@ -9,22 +9,24 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.util.List;
 
-@Getter @Setter
-@AllArgsConstructor @NoArgsConstructor
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "produto_table", schema = "pizzaria")
-public class Produto {
+public class ProdutoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false,  unique = true)
+    @Column(nullable = false, unique = true)
     private Long id;
 
-    @Column(name = "nome", nullable = false, length = 30)
-    private String nome;
+    @Column(nullable = false, length = 30)
+    private String nomeProduto;
 
-    @Column(name = "preco", nullable = false)
+    @Column(nullable = false)
     private BigDecimal preco;
 
-    @ManyToMany(mappedBy = "produtos")
-    private List<Pedido> pedidos;
+    @ManyToMany(mappedBy = "produtoList")
+    private List<PedidoEntity> pedidoList;
 }

@@ -1,46 +1,42 @@
 package com.mensal.pizzaria.Service;
 
 import com.mensal.pizzaria.DTO.ProdutoDTO;
-import com.mensal.pizzaria.Entity.Produto;
+import com.mensal.pizzaria.Entity.ProdutoEntity;
 import com.mensal.pizzaria.Repository.ProdutoRepository;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProdutoService {
     @Autowired
     private ProdutoRepository repository;
     @Autowired
-    private ModelMapper mapper;
+    private ModelMapper modelMapper;
 
     @Transactional
-    public Produto cadastrar(@RequestBody final ProdutoDTO produtoDTO) {
-        if (produtoDTO.getId() != null) {
-            throw new RuntimeException("o campo ID não deve ser inserido");
-        }
-        Produto produto = mapper.map(produtoDTO, Produto.class);
-        //Produto produto = toProdutoDTO(produtoDTO);
-        return this.repository.save(produto);
+    public ProdutoDTO findByNomeProduto(String nome) {
+        return modelMapper.map(repository.findByNomeProduto(nome), ProdutoDTO.class);
     }
 
     @Transactional
-    public Produto atualizar(final Long id, ProdutoDTO produtoDTO) {
-        final Produto produtoBanco = this.repository.findById(id).orElse(null);
-        if (produtoBanco != null || !produtoBanco.getId().equals(produtoDTO.getId())) {
-            throw new RuntimeException("não foi possível encontrar o registro informado");
-        }
-        Produto produto = mapper.map(produtoDTO, Produto.class);
-        //Produto produto = toProdutoDTO(produtoDTO);
-        return this.repository.save(produto);
+    public List<ProdutoDTO> findAll() {
+        return repository.findAll().stream().map(entity -> modelMapper.map(entity, ProdutoDTO.class)).collect(Collectors.toList());
     }
 
-    /*public Produto toProdutoDTO(ProdutoDTO produtoDTO){
-        Produto produtoTemp = new Produto();
-        produtoTemp.setNome(produtoDTO.getNome());
-        produtoTemp.setPreco(produtoDTO.getPreco());
-        return produtoTemp;
-    }*/
+    @Transactional
+    public ProdutoDTO create(ProdutoDTO dto) {
+        return modelMapper.map(repository.save(modelMapper.map(dto, ProdutoEntity.class)), ProdutoDTO.class);
+    }
+
+    @Transactional
+    public ProdutoDTO update(Long id, ProdutoDTO dto) {
+        repository.findById(id).orElseThrow(() -> new RuntimeException("Não foi possível encontrar o registro informado"));
+
+        return modelMapper.map(repository.save(modelMapper.map(dto, ProdutoEntity.class)), ProdutoDTO.class);
+    }
 }

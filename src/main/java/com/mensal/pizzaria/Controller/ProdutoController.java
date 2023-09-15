@@ -1,15 +1,17 @@
 package com.mensal.pizzaria.Controller;
 
 import com.mensal.pizzaria.DTO.ProdutoDTO;
-import com.mensal.pizzaria.Entity.Produto;
+import com.mensal.pizzaria.Entity.ProdutoEntity;
 import com.mensal.pizzaria.Repository.ProdutoRepository;
 import com.mensal.pizzaria.Service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/produtos")
@@ -19,61 +21,51 @@ public class ProdutoController {
     @Autowired
     private ProdutoRepository repository;
 
-    @GetMapping
-    public ResponseEntity<?> listaCompleta(){
-        return ResponseEntity.ok(this.repository.findAll());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Produto> findById(@PathVariable("id") final long id) {
+    @GetMapping("/nome")
+    public ResponseEntity<ProdutoDTO> findByNomeProduto(@RequestParam("nome") String nome) {
         try {
-            final Produto produto = this.repository.findById(id).orElse(null);
-            return ResponseEntity.ok(produto);
-        }
-        catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            return new ResponseEntity<>(service.findByNomeProduto(nome), HttpStatus.OK);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
-    @GetMapping("/{nome}")
-    public ResponseEntity<String> buscarPorNome(@PathVariable("nome") final String nome) {
+    @GetMapping("/list")
+    public ResponseEntity<List<ProdutoDTO>> findAll() {
         try {
-            Produto produto = repository.findByNome(nome);
-            return ResponseEntity.ok(nome);
-        }
-        catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
     @PostMapping
-    public ResponseEntity<Produto> cadastrar(@RequestBody final ProdutoDTO produtoDTO) {
+    public ResponseEntity<ProdutoDTO> create(@RequestBody @Validated ProdutoDTO dto) {
         try {
-            return ResponseEntity.ok(this.service.cadastrar(produtoDTO));
-        }
-        catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Produto> atualizar(@PathVariable("id") final Long id, @RequestBody final ProdutoDTO produtoDTO) {
+    public ResponseEntity<ProdutoDTO> update(@PathVariable("id") Long id, @RequestBody @Validated ProdutoDTO dto) {
         try {
-            return ResponseEntity.ok(this.service.atualizar(id, produtoDTO));
-        }
-        catch (DataIntegrityViolationException e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            return new ResponseEntity<>(service.update(id, dto), HttpStatus.OK);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletar(@PathVariable("id") final Long id) {
-        final Produto produtoBanco = this.repository.findById(id).orElse(null);
+    public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id) {
         try {
-            this.repository.delete(produtoBanco);
-            return ResponseEntity.ok("Produto deletado com sucesso");
+            ProdutoEntity entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Não foi possível encontrar o registro informado"));
+            repository.delete(entity);
+
+            return ResponseEntity.ok(HttpStatus.OK);
         } catch (RuntimeException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 }

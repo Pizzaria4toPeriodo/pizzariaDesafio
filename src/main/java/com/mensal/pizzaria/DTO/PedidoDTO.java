@@ -1,7 +1,7 @@
 package com.mensal.pizzaria.DTO;
 
-import com.mensal.pizzaria.Entity.Cliente;
-import com.mensal.pizzaria.Entity.Produto;
+import com.mensal.pizzaria.Entity.ClienteEntity;
+import com.mensal.pizzaria.Entity.ProdutoEntity;
 import com.mensal.pizzaria.Entity.Status_pagamento;
 import com.mensal.pizzaria.Entity.Status_producao;
 import lombok.AllArgsConstructor;
@@ -10,15 +10,18 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
-@Getter @Setter
-@AllArgsConstructor @NoArgsConstructor
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class PedidoDTO {
     private Long id;
-    private Cliente id_cliente;
-    private Produto id_produto;
+    private List<ProdutoEntity> produtoList;
+    private ClienteEntity cliente;
     private boolean delivery;
-    private Status_producao status_producao;
-    private Status_pagamento status_pagamento;
+    private Status_producao statusProducao;
+    private Status_pagamento statusPagamento;
     private BigDecimal total;
 }

@@ -9,26 +9,28 @@ import lombok.Setter;
 
 import java.util.List;
 
-@Getter @Setter
-@AllArgsConstructor @NoArgsConstructor
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "cliente_table", schema = "pizzaria")
-public class Cliente {
+public class ClienteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false,  unique = true)
+    @Column(nullable = false, unique = true)
     private Long id;
 
-    @Column(name = "nome", nullable = false)
-    private String nome;
+    @Column(nullable = false)
+    private String nomeCliente;
 
-    @Column(name = "cpf", nullable = false)
+    @Column(nullable = false)
     private String cpf;
 
     @JsonIgnore
     @OneToMany(mappedBy = "cliente")
-    private List<Endereco> id_endereco;
+    private List<EnderecoEntity> id_enderecoEntity;
 
-    @Column(name = "telefone", nullable = false)
+    @Column(nullable = false)
     private String telefone;
 }

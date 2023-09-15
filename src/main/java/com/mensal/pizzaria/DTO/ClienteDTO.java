@@ -1,18 +1,20 @@
 package com.mensal.pizzaria.DTO;
 
-import com.mensal.pizzaria.Entity.Endereco;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
-@Getter @Setter
-@AllArgsConstructor @NoArgsConstructor
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class ClienteDTO {
     private Long id;
-    private String nome;
+    private String nomeCliente;
     private String cpf;
-    private List<Endereco> id_endereco;
+    private List<EnderecoDTO> id_enderecoEntity;
     private String telefone;
 }

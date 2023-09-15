@@ -1,52 +1,43 @@
 package com.mensal.pizzaria.Service;
 
 import com.mensal.pizzaria.DTO.EnderecoDTO;
-import com.mensal.pizzaria.Entity.Endereco;
+import com.mensal.pizzaria.Entity.EnderecoEntity;
 import com.mensal.pizzaria.Repository.EnderecoRepository;
+import jakarta.transaction.Transactional;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class EnderecoService {
 
     @Autowired
-    private EnderecoRepository enderecoRepository;
+    private EnderecoRepository repository;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Transactional
-    public void cadastrarEndereco(EnderecoDTO enderecoDto){
-        Endereco endereco = new Endereco();
-        endereco.getCliente();
-        endereco.setRua(enderecoDto.getRua());
-        endereco.setNumero(enderecoDto.getNumero());
-
-        if(enderecoDto.getRua() == null || enderecoDto.getRua().isEmpty()) {
-            throw new RuntimeException("Deve conter uma rua");
-        }
-        if ("".equals(enderecoDto.getNumero())){
-            throw new RuntimeException("Deve conter um numero da rua");
-        }
-
-        enderecoRepository.save(endereco);
+    public EnderecoDTO findByRua(String rua) {
+        return modelMapper.map(repository.findByRua(rua), EnderecoDTO.class);
     }
 
     @Transactional
-    public void atualizarEndereco(final Long id, EnderecoDTO enderecoDto){
-        Endereco endereco = enderecoRepository.findById(id).orElse(null);
+    public List<EnderecoDTO> findAll() {
+        return repository.findAll().stream().map(entity -> modelMapper.map(entity, EnderecoDTO.class)).collect(Collectors.toList());
+    }
 
-        if (endereco == null){
-            throw new RuntimeException("Id do endereco nao existe!");
-        }
+    @Transactional
+    public EnderecoDTO create(EnderecoDTO dto) {
+        return modelMapper.map(repository.save(modelMapper.map(dto, EnderecoEntity.class)), EnderecoDTO.class);
+    }
 
-        if(enderecoDto.getRua() == null || enderecoDto.getRua().isEmpty()) {
-            throw new RuntimeException("Deve conter uma rua");
-        }
-        if ("".equals(enderecoDto.getNumero())){
-            throw new RuntimeException("Deve conter um numero da rua");
-        }
+    @Transactional
+    public EnderecoDTO update(Long id, EnderecoDTO dto) {
+        repository.findById(id).orElseThrow(() -> new RuntimeException("Não foi possível encontrar o registro informado"));
 
-        endereco.setRua(enderecoDto.getRua());
-        endereco.setNumero(enderecoDto.getNumero());
-        enderecoRepository.save(endereco);
+        return modelMapper.map(repository.save(modelMapper.map(dto, EnderecoEntity.class)), EnderecoDTO.class);
     }
 }
