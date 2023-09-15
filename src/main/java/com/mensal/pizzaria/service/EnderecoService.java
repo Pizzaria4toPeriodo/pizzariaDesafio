@@ -3,6 +3,7 @@ package com.mensal.pizzaria.service;
 import com.mensal.pizzaria.dto.EnderecoDTO;
 import com.mensal.pizzaria.entity.EnderecoEntity;
 import com.mensal.pizzaria.repository.EnderecoRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,10 @@ public class EnderecoService {
 
     @Transactional
     public EnderecoDTO update(Long id, EnderecoDTO dto) {
-        repository.findById(id).orElseThrow(() -> new RuntimeException("Não foi possível encontrar o registro informado"));
+        EnderecoEntity existingEntity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Não foi possível encontrar o registro informado"));
 
-        return modelMapper.map(repository.save(modelMapper.map(dto, EnderecoEntity.class)), EnderecoDTO.class);
+        modelMapper.map(dto, existingEntity);
+
+        return modelMapper.map(repository.save(existingEntity), EnderecoDTO.class);
     }
 }

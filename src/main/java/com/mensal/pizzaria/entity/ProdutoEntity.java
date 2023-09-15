@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "produto_table", schema = "pizzaria")
+@Table(name = "produto", schema = "pizzaria")
 public class ProdutoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

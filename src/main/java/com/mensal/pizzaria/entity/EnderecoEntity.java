@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "endereco_table", schema = "pizzaria")
+@Table(name = "endereco", schema = "pizzaria")
 public class EnderecoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,6 +25,6 @@ public class EnderecoEntity {
     private int numero;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_cliente", nullable = false)
+    @JoinColumn(name = "id_cliente", referencedColumnName = "id", nullable = false)
     private ClienteEntity cliente;
 }

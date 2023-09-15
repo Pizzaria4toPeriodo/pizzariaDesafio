@@ -3,6 +3,7 @@ package com.mensal.pizzaria.service;
 import com.mensal.pizzaria.dto.EntregaDTO;
 import com.mensal.pizzaria.entity.EntregaEntity;
 import com.mensal.pizzaria.repository.EntregaRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,10 @@ public class EntregaService {
 
     @Transactional
     public EntregaDTO update(Long id, EntregaDTO dto) {
-        repository.findById(id).orElseThrow(() -> new RuntimeException("Não foi possível encontrar o registro informado"));
+        EntregaEntity existingEntity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Não foi possível encontrar o registro informado"));
 
-        return modelMapper.map(repository.save(modelMapper.map(dto, EntregaEntity.class)), EntregaDTO.class);
+        modelMapper.map(dto, existingEntity);
+
+        return modelMapper.map(repository.save(existingEntity), EntregaDTO.class);
     }
 }

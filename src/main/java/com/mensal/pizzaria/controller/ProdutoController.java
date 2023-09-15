@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/produtos")
@@ -37,7 +36,7 @@ public class ProdutoController {
     @GetMapping("/list")
     public ResponseEntity<List<ProdutoDTO>> findAll() {
         try {
-            return new ResponseEntity<>(repository.findAll().stream().map(entity -> modelMapper.map(entity, ProdutoDTO.class)).collect(Collectors.toList()), HttpStatus.OK);
+            return new ResponseEntity<>(repository.findAll().stream().map(entity -> modelMapper.map(entity, ProdutoDTO.class)).toList(), HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }

@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "cliente_table", schema = "pizzaria")
+@Table(name = "cliente", schema = "pizzaria")
 public class ClienteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,7 +29,7 @@ public class ClienteEntity {
 
     @JsonIgnore
     @OneToMany(mappedBy = "cliente")
-    private List<EnderecoEntity> id_enderecoEntity;
+    private List<EnderecoEntity> enderecoList;
 
     @Column(nullable = false)
     private String telefone;

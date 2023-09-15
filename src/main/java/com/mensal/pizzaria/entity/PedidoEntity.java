@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "pedido_table", schema = "pizzaria")
+@Table(name = "pedido", schema = "pizzaria")
 public class PedidoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,7 +31,7 @@ public class PedidoEntity {
     private List<ProdutoEntity> produtoList;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_cliente", nullable = false)
+    @JoinColumn(name = "id_cliente", referencedColumnName = "id", nullable = false)
     private ClienteEntity cliente;
 
     @Column(nullable = false)

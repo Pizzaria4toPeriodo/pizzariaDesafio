@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "entrega_table", schema = "pizzaria")
+@Table(name = "entrega", schema = "pizzaria")
 public class EntregaEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,7 +19,7 @@ public class EntregaEntity {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "id_pedido")
+    @JoinColumn(name = "id_entregador")
     private FuncionarioEntity entregador;
 
     @OneToOne
@@ -31,6 +31,4 @@ public class EntregaEntity {
     private String formaPagamento;
 
     private int valorEntrega;
-
-
 }

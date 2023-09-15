@@ -15,6 +15,6 @@ public class ClienteDTO {
     private Long id;
     private String nomeCliente;
     private String cpf;
-    private List<EnderecoDTO> id_enderecoEntity;
+    private List<EnderecoDTO> enderecoList;
     private String telefone;
 }
