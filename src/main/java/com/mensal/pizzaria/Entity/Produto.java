@@ -1,14 +1,17 @@
 package com.mensal.pizzaria.Entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-@Entity
 @Getter @Setter
+@AllArgsConstructor @NoArgsConstructor
+@Entity
 @Table(name = "produto_table", schema = "pizzaria")
 public class Produto {
     @Id

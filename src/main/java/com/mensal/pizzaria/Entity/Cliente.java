@@ -9,10 +9,8 @@ import lombok.Setter;
 
 import java.util.List;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter @Setter
+@AllArgsConstructor @NoArgsConstructor
 @Entity
 @Table(name = "cliente_table", schema = "pizzaria")
 public class Cliente {
@@ -27,15 +25,10 @@ public class Cliente {
     @Column(name = "cpf", nullable = false)
     private String cpf;
 
-    @OneToMany(mappedBy = "cliente")
     @JsonIgnore
+    @OneToMany(mappedBy = "cliente")
     private List<Endereco> id_endereco;
 
     @Column(name = "telefone", nullable = false)
     private String telefone;
-
-
-
-
-
 }

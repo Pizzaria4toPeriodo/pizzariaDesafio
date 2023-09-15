@@ -9,13 +9,12 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.util.List;
 
+@Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter @Setter
 @Entity
 @Table(name = "pedido_table", schema = "pizzaria")
 public class Pedido {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false,  unique = true)
@@ -30,7 +29,7 @@ public class Pedido {
     )
     private List<Produto> produtos;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_cliente", nullable = false)
     private Cliente id_cliente;
 
@@ -38,9 +37,11 @@ public class Pedido {
     private boolean delivery;
 
     @Enumerated(EnumType.STRING)
+    @Column
     private Status_producao status_producao;
 
     @Enumerated(EnumType.STRING)
+    @Column
     private Status_pagamento status_pagamento;
 
     @Column(name = "total", nullable = false)
