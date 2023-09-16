@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class clienteServiceTeste {
@@ -38,16 +38,16 @@ public  List<Endereco>  id_endereco = Arrays.asList(endereco);
 
     @BeforeEach
  public void criarCliente(){
-     cliente = new Cliente(1L,"Luis Rodriguez","801.720.159-10",id_endereco,"45991539849");
+
+        cliente = new Cliente(1L,"Luis Rodriguez","801.720.159-10",id_endereco,"45991539849");
  }
 
     @Test
     public void cadastrarUsuarioTeste() {
 
         when(clienteService.cadastrar(cliente)).thenReturn(cliente);
-        
-        Assertions.assertEquals(clienteService.cadastrar(cliente),cliente);
 
+        Assertions.assertEquals(clienteService.cadastrar(cliente),cliente);
 
     }
 
