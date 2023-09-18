@@ -1,6 +1,7 @@
 package com.mensal.pizzaria.service;
 
 import com.mensal.pizzaria.dto.PedidoDTO;
+import com.mensal.pizzaria.dto.ProdutoDTO;
 import com.mensal.pizzaria.entity.PedidoEntity;
 import com.mensal.pizzaria.repository.PedidoRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -28,5 +29,13 @@ public class PedidoService {
         modelMapper.map(dto, existingEntity);
 
         return modelMapper.map(repository.save(existingEntity), PedidoDTO.class);
+    }
+
+    private Double calculoTotal(PedidoDTO dto) {
+        double total = 0.0;
+        for (ProdutoDTO produto : dto.getProdutoList()) {
+            total += produto.getPreco();
+        }
+        return total;
     }
 }

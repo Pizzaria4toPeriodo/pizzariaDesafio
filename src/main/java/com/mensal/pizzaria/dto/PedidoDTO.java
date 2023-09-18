@@ -21,11 +21,11 @@ import java.util.List;
 public class PedidoDTO {
     private Long id;
     @NotEmpty(message = "É necessário conter ao menos um produto")
-    private List<ProdutoEntity> produtoList;
+    private List<ProdutoDTO> produtoList;
     @NotNull(message = "É necessário conter um cliente")
-    private ClienteEntity cliente;
+    private ClienteDTO cliente;
     private boolean delivery;
     private Status_producao statusProducao;
     private Status_pagamento statusPagamento;
-    private BigDecimal total;
+    private Double total;
 }

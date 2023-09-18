@@ -23,6 +23,6 @@ public class ProdutoDTO {
     private String nomeProduto;
     @NotNull(message = "O preco não pode ser nulo")
     @Positive(message = "O preço de um produto não pode ser negativo")
-    private BigDecimal preco;
+    private Double preco;
     private List<PedidoDTO> pedidoList;
 }
