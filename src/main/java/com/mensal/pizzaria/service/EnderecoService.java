@@ -8,7 +8,6 @@ import com.mensal.pizzaria.repository.EnderecoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.internal.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,11 +27,6 @@ public class EnderecoService {
         Optional<EnderecoEntity> enderecoBD = this.repository.findById(enderecoEntity.getId());
 
         EnderecoEntity savedEntity = repository.save(enderecoEntity);
-
-        Assert.isTrue(enderecoBD.get().getId() != enderecoEntity.getId(),"Id do Cliente já existe");
-        Assert.isTrue(enderecoBD.get().getRua().matches("[a-zA-Z\\s]+"),"Somente é permitido letras no nome da rua");
-        Assert.isTrue(String.valueOf(enderecoBD.get().getNumero()).matches("\\d+"), "Somente é permitido numeros no campo do número");
-
 
         return modelMapper.map(savedEntity, EnderecoDTO.class);
     }
