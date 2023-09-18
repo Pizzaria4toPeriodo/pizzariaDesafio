@@ -15,7 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-@RequestMapping(value ="/clientes")
+@RequestMapping("/clientes")
 public class ClienteController {
     @Autowired
     private ClienteService service;
@@ -24,17 +24,15 @@ public class ClienteController {
     @Autowired
     private ModelMapper modelMapper;
 
-
-
     @GetMapping("/{id}")
     public ResponseEntity<ClienteDTO> findById(@PathVariable("id") final Long id) {
         try {
-             ClienteDTO clienteDTO = this.service.findById(id);
+            ClienteDTO clienteDTO = this.service.findById(id);
 
-            return  ResponseEntity.ok(clienteDTO);
+            return ResponseEntity.ok(clienteDTO);
 
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
@@ -52,12 +50,12 @@ public class ClienteController {
         try {
             return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(),e.getCause());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e.getCause());
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClienteDTO> update(@PathVariable("id") Long id, @RequestBody  ClienteDTO dto) {
+    public ResponseEntity<ClienteDTO> update(@PathVariable("id") Long id, @RequestBody ClienteDTO dto) {
         try {
             return new ResponseEntity<>(service.update(id, dto), HttpStatus.OK);
         } catch (Exception e) {

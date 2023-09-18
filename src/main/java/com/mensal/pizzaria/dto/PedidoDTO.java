@@ -4,6 +4,8 @@ import com.mensal.pizzaria.entity.ClienteEntity;
 import com.mensal.pizzaria.entity.ProdutoEntity;
 import com.mensal.pizzaria.entity.Status_pagamento;
 import com.mensal.pizzaria.entity.Status_producao;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +20,9 @@ import java.util.List;
 @NoArgsConstructor
 public class PedidoDTO {
     private Long id;
+    @NotEmpty(message = "É necessário conter ao menos um produto")
     private List<ProdutoEntity> produtoList;
+    @NotNull(message = "É necessário conter um cliente")
     private ClienteEntity cliente;
     private boolean delivery;
     private Status_producao statusProducao;
