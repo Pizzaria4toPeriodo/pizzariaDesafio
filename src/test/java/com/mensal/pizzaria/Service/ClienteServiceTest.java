@@ -23,7 +23,7 @@ import static org.mockito.Mockito.*;
 public class ClienteServiceTest {
 
     @InjectMocks
-    private ClienteService clienteService;
+    private com.mensal.pizzaria.Service.ClienteService clienteService;
 
     @Mock
     private ClienteRepository clienteRepository;
