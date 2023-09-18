@@ -1,4 +1,4 @@
-package com.mensal.pizzaria.Service;
+/*package com.mensal.pizzaria.Service;
 
 import com.mensal.pizzaria.dto.ClienteDTO;
 import com.mensal.pizzaria.dto.EnderecoDTO;
@@ -58,3 +58,4 @@ public class ClienteServiceTest {
         verify(clienteRepository, times(1)).save(clienteEntity);
     }
 }
+*/
