@@ -15,5 +15,5 @@ public class EntregaDTO {
     private PedidoDTO pedido;
     private String statusPedido;
     private String formaPagamento;
-    private int valorEntrega;
+    private Double valorEntrega;
 }

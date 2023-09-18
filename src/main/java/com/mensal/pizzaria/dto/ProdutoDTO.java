@@ -1,5 +1,6 @@
 package com.mensal.pizzaria.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -9,7 +10,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
@@ -17,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProdutoDTO {
+    @JsonIgnore
     private Long id;
     @NotBlank(message = "O nome do produto não pode ser nulo")
     @Size(min = 3, max = 50, message = "O nome do produto deve conter entre 3 a 50 caracteres")

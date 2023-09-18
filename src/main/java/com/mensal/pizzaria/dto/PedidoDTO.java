@@ -1,7 +1,6 @@
 package com.mensal.pizzaria.dto;
 
-import com.mensal.pizzaria.entity.ClienteEntity;
-import com.mensal.pizzaria.entity.ProdutoEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mensal.pizzaria.entity.Status_pagamento;
 import com.mensal.pizzaria.entity.Status_producao;
 import jakarta.validation.constraints.NotEmpty;
@@ -11,7 +10,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
@@ -19,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PedidoDTO {
+    @JsonIgnore
     private Long id;
     @NotEmpty(message = "É necessário conter ao menos um produto")
     private List<ProdutoDTO> produtoList;

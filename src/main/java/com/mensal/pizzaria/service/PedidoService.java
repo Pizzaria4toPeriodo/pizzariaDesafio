@@ -19,12 +19,20 @@ public class PedidoService {
 
     @Transactional
     public PedidoDTO create(PedidoDTO dto) {
+        if (!dto.getProdutoList().isEmpty()) {
+            dto.setTotal(calculoTotal(dto));
+        }
+
         return modelMapper.map(repository.save(modelMapper.map(dto, PedidoEntity.class)), PedidoDTO.class);
     }
 
     @Transactional
     public PedidoDTO update(Long id, PedidoDTO dto) {
         PedidoEntity existingEntity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Não foi possível encontrar o registro informado"));
+
+        if (dto.getProdutoList().size() != existingEntity.getProdutoList().size()) {
+            dto.setTotal(calculoTotal(dto));
+        }
 
         modelMapper.map(dto, existingEntity);
 
@@ -33,9 +41,11 @@ public class PedidoService {
 
     private Double calculoTotal(PedidoDTO dto) {
         double total = 0.0;
+
         for (ProdutoDTO produto : dto.getProdutoList()) {
             total += produto.getPreco();
         }
+
         return total;
     }
 }
