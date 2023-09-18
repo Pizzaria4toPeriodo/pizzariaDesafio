@@ -26,9 +26,14 @@ public class EntregaEntity {
     @JoinColumn(name = "id_pedido")
     private PedidoEntity pedido;
 
-    private String statusPedido;
+    @Enumerated(EnumType.STRING)
+    @Column
+    private Status_Pedido statusPedido;
 
-    private String formaPagamento;
+    @Enumerated(EnumType.STRING)
+    @Column
+    private Forma_Pagamento formaPagamento;
 
+    @Column
     private int valorEntrega;
 }
