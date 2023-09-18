@@ -15,7 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/clientes")
+@RequestMapping(value ="/clientes")
 public class ClienteController {
     @Autowired
     private ClienteService service;
@@ -24,28 +24,24 @@ public class ClienteController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @GetMapping("/nome")
-    public ResponseEntity<ClienteDTO> findByNomeCliente(@RequestParam("nome") String nome) {
-        try {
-            return new ResponseEntity<>(modelMapper.map(repository.findByNomeCliente(nome), ClienteDTO.class), HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-        }
-    }
 
-    @GetMapping("/cpf")
-    public ResponseEntity<ClienteDTO> findByCpf(@RequestParam("cpf") String cpf) {
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ClienteDTO> findById(@PathVariable("id") final Long id) {
         try {
-            return new ResponseEntity<>(modelMapper.map(repository.findByCpf(cpf), ClienteDTO.class), HttpStatus.OK);
+             ClienteDTO clienteDTO = this.service.findById(id);
+
+            return  ResponseEntity.ok(clienteDTO);
+
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
         }
     }
 
     @GetMapping("/list")
     public ResponseEntity<List<ClienteDTO>> findAll() {
         try {
-            return new ResponseEntity<>(repository.findAll().stream().map(entity -> modelMapper.map(entity, ClienteDTO.class)).toList(), HttpStatus.OK);
+            return new ResponseEntity<>(service.findAll().stream().map(entity -> modelMapper.map(entity, ClienteDTO.class)).toList(), HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
@@ -56,12 +52,12 @@ public class ClienteController {
         try {
             return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(),e.getCause());
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClienteDTO> update(@PathVariable("id") Long id, @RequestBody @Validated ClienteDTO dto) {
+    public ResponseEntity<ClienteDTO> update(@PathVariable("id") Long id, @RequestBody  ClienteDTO dto) {
         try {
             return new ResponseEntity<>(service.update(id, dto), HttpStatus.OK);
         } catch (Exception e) {

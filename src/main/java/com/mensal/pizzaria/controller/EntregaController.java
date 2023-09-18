@@ -1,5 +1,6 @@
 package com.mensal.pizzaria.controller;
 
+import com.mensal.pizzaria.dto.ClienteDTO;
 import com.mensal.pizzaria.dto.EntregaDTO;
 import com.mensal.pizzaria.entity.EntregaEntity;
 import com.mensal.pizzaria.repository.EntregaRepository;
@@ -33,6 +34,21 @@ public class EntregaController {
         }
     }
 
+
+    @GetMapping("/{id}")
+    public ResponseEntity<EntregaDTO> findById(@PathVariable("id") Long id){
+
+        try {
+            EntregaDTO entregaDTO = this.service.findById(id);
+            return ResponseEntity.ok(entregaDTO);
+        }
+        catch (Exception e){
+
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
     @PostMapping
     public ResponseEntity<EntregaDTO> create(@RequestBody @Validated EntregaDTO dto) {
         try {
@@ -41,6 +57,9 @@ public class EntregaController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
+
+
+
 
     @PutMapping("/{id}")
     public ResponseEntity<EntregaDTO> update(@PathVariable("id") Long id, @RequestBody @Validated EntregaDTO dto) {
