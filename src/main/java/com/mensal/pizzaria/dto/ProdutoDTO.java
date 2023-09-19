@@ -22,9 +22,15 @@ public class ProdutoDTO {
     @Size(min = 3, max = 50, message = "O nome do produto deve conter entre 3 a 50 caracteres")
     private String nomeProduto;
 
-    @NotNull(message = "O preco não pode ser nulo")
+    @NotNull(message = "O preço não pode ser nulo")
     @Positive(message = "O preço de um produto não pode ser negativo")
     private Double preco;
 
     private List<PedidoDTO> pedidoList;
+
+    public ProdutoDTO(Long id, String nomeProduto, Double preco) {
+        this.id = id;
+        this.nomeProduto = nomeProduto;
+        this.preco = preco;
+    }
 }

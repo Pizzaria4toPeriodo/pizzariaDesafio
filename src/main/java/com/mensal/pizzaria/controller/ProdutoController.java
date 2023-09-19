@@ -27,7 +27,7 @@ public class ProdutoController {
     @GetMapping("/{nome}")
     public ResponseEntity<ProdutoDTO> findByNomeProduto(@PathVariable("nome") String nome) {
         try {
-            return new ResponseEntity<>(modelMapper.map(repository.findByNomeProduto(nome), ProdutoDTO.class), HttpStatus.OK);
+            return new ResponseEntity<>(service.findByNomeProduto(nome), HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
@@ -36,7 +36,7 @@ public class ProdutoController {
     @GetMapping("/list")
     public ResponseEntity<List<ProdutoDTO>> findAll() {
         try {
-            return new ResponseEntity<>(repository.findAll().stream().map(entity -> modelMapper.map(entity, ProdutoDTO.class)).toList(), HttpStatus.OK);
+            return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
@@ -66,7 +66,7 @@ public class ProdutoController {
             ProdutoEntity entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Não foi possível encontrar o registro informado"));
             repository.delete(entity);
 
-            return ResponseEntity.ok(HttpStatus.OK);
+            return ResponseEntity.ok(HttpStatus.NO_CONTENT);
         } catch (RuntimeException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
