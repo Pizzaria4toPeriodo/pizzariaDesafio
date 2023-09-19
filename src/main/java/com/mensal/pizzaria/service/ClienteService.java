@@ -9,8 +9,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+<<<<<<< HEAD
+=======
+import java.util.stream.Collectors;
+>>>>>>> 89d15734e6678d16d002998f3903345b3cbf1544
 
 @Service
 public class ClienteService {
@@ -21,12 +24,16 @@ public class ClienteService {
 
     @Transactional
     public List<ClienteDTO> findAll() {
+<<<<<<< HEAD
         List<ClienteDTO> list = new ArrayList<>();
         for (ClienteEntity entity : repository.findAll()) {
             ClienteDTO map = modelMapper.map(entity, ClienteDTO.class);
             list.add(map);
         }
         return list;
+=======
+        return repository.findAll().stream().map(entity -> modelMapper.map(entity, ClienteDTO.class)).collect(Collectors.toList());
+>>>>>>> 89d15734e6678d16d002998f3903345b3cbf1544
     }
 
     @Transactional

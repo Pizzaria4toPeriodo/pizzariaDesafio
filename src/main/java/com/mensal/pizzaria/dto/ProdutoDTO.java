@@ -27,4 +27,10 @@ public class ProdutoDTO {
     private Double preco;
 
     private List<PedidoDTO> pedidoList;
+
+    public ProdutoDTO(Long id, String nomeProduto, Double preco) {
+        this.id = id;
+        this.nomeProduto = nomeProduto;
+        this.preco = preco;
+    }
 }
