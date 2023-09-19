@@ -9,6 +9,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class EnderecoService {
 
@@ -16,6 +19,16 @@ public class EnderecoService {
     private EnderecoRepository repository;
     @Autowired
     private ModelMapper modelMapper;
+
+    @Transactional
+    public List<EnderecoDTO> findAll() {
+        List<EnderecoDTO> list = new ArrayList<>();
+        for (EnderecoEntity entity : repository.findAll()) {
+            EnderecoDTO map = modelMapper.map(entity, EnderecoDTO.class);
+            list.add(map);
+        }
+        return list;
+    }
 
     @Transactional
     public EnderecoDTO create(EnderecoDTO dto) {

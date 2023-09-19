@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
@@ -39,12 +38,8 @@ public class PedidoEntity {
 
     @Enumerated(EnumType.STRING)
     @Column
-    private Status_producao statusProducao;
-
-    @Enumerated(EnumType.STRING)
-    @Column
-    private Status_pagamento statusPagamento;
+    private Forma_Pagamento formaPagamento;
 
     @Column(nullable = false)
-    private BigDecimal total;
+    private Double total;
 }

@@ -9,12 +9,30 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class ProdutoService {
     @Autowired
     private ProdutoRepository repository;
     @Autowired
     private ModelMapper modelMapper;
+
+    @Transactional
+    public ProdutoDTO findByNomeProduto(String nome) {
+        return modelMapper.map(repository.findByNomeProduto(nome), ProdutoDTO.class);
+    }
+
+    @Transactional
+    public List<ProdutoDTO> findAll() {
+        List<ProdutoDTO> list = new ArrayList<>();
+        for (ProdutoEntity entity : repository.findAll()) {
+            ProdutoDTO map = modelMapper.map(entity, ProdutoDTO.class);
+            list.add(map);
+        }
+        return list;
+    }
 
     @Transactional
     public ProdutoDTO create(ProdutoDTO dto) {

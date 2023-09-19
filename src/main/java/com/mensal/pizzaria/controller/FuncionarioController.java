@@ -24,8 +24,8 @@ public class FuncionarioController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @GetMapping("/nome")
-    public ResponseEntity<FuncionarioDTO> findByNomeFuncionario(@RequestParam("nome") String nome) {
+    @GetMapping("/{nome}")
+    public ResponseEntity<FuncionarioDTO> findByNomeFuncionario(@PathVariable("nome") String nome) {
         try {
             return new ResponseEntity<>(modelMapper.map(repository.findByNomeFuncionario(nome), FuncionarioDTO.class), HttpStatus.OK);
         } catch (Exception e) {
@@ -36,7 +36,7 @@ public class FuncionarioController {
     @GetMapping("/list")
     public ResponseEntity<List<FuncionarioDTO>> findAll() {
         try {
-            return new ResponseEntity<>(repository.findAll().stream().map(entity -> modelMapper.map(entity, FuncionarioDTO.class)).toList(), HttpStatus.OK);
+            return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }

@@ -15,7 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-@RequestMapping(value ="/clientes")
+@RequestMapping("/clientes")
 public class ClienteController {
     @Autowired
     private ClienteService service;
@@ -24,24 +24,19 @@ public class ClienteController {
     @Autowired
     private ModelMapper modelMapper;
 
-
-
-    @GetMapping("/{id}")
-    public ResponseEntity<ClienteDTO> findById(@PathVariable("id") final Long id) {
+    @GetMapping("/{cpf}")
+    public ResponseEntity<ClienteDTO> findByCpf(@PathVariable("cpf") String cpf) {
         try {
-             ClienteDTO clienteDTO = this.service.findById(id);
-
-            return  ResponseEntity.ok(clienteDTO);
-
+            return new ResponseEntity<>(modelMapper.map(repository.findByCpf(cpf), ClienteDTO.class), HttpStatus.OK);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
     @GetMapping("/list")
     public ResponseEntity<List<ClienteDTO>> findAll() {
         try {
-            return new ResponseEntity<>(service.findAll().stream().map(entity -> modelMapper.map(entity, ClienteDTO.class)).toList(), HttpStatus.OK);
+            return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
@@ -52,12 +47,12 @@ public class ClienteController {
         try {
             return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(),e.getCause());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e.getCause());
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClienteDTO> update(@PathVariable("id") Long id, @RequestBody  ClienteDTO dto) {
+    public ResponseEntity<ClienteDTO> update(@PathVariable("id") Long id, @RequestBody ClienteDTO dto) {
         try {
             return new ResponseEntity<>(service.update(id, dto), HttpStatus.OK);
         } catch (Exception e) {
