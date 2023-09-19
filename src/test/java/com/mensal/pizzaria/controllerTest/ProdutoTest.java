@@ -9,17 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-<<<<<<< HEAD
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-=======
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.web.server.ResponseStatusException;
->>>>>>> 89d15734e6678d16d002998f3903345b3cbf1544
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,20 +31,13 @@ class ProdutoTest {
 
     private ObjectMapper objectMapper;
     private ProdutoDTO produtoValido;
-<<<<<<< HEAD
     private ProdutoDTO produtoInvalido;
-=======
->>>>>>> 89d15734e6678d16d002998f3903345b3cbf1544
 
     @BeforeEach
     void setup() {
         objectMapper = new ObjectMapper();
-<<<<<<< HEAD
         produtoValido = new ProdutoDTO(1L, "Batata", 2.50, null);
-        produtoValido = new ProdutoDTO();
-=======
-        produtoValido = new ProdutoDTO(1L, "Batata", 2.50);
->>>>>>> 89d15734e6678d16d002998f3903345b3cbf1544
+        produtoInvalido = new ProdutoDTO();
     }
 
     @Test
@@ -90,11 +75,7 @@ class ProdutoTest {
 
     @Test
     void updateTest() throws Exception {
-<<<<<<< HEAD
         ProdutoDTO produtoDTO = new ProdutoDTO(1L, "Batata", 7.5, null);
-=======
-        ProdutoDTO produtoDTO = new ProdutoDTO(1L, "Batata", 7.5);
->>>>>>> 89d15734e6678d16d002998f3903345b3cbf1544
 
         when(service.update(produtoDTO.getId(), produtoDTO)).thenReturn(produtoDTO);
 
@@ -111,8 +92,4 @@ class ProdutoTest {
         mockMvc.perform(MockMvcRequestBuilders.delete("/produtos/{id}", id))
                 .andExpect(status().is(500));
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 89d15734e6678d16d002998f3903345b3cbf1544
