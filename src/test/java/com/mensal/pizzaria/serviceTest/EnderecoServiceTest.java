@@ -1,4 +1,4 @@
-package com.mensal.pizzaria.Service;
+package com.mensal.pizzaria.serviceTest;
 
 import com.mensal.pizzaria.dto.ClienteDTO;
 import com.mensal.pizzaria.dto.EnderecoDTO;
