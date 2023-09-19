@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
@@ -25,7 +24,7 @@ public class ProdutoEntity {
     private String nomeProduto;
 
     @Column(nullable = false)
-    private BigDecimal preco;
+    private Double preco;
 
     @ManyToMany(mappedBy = "produtoList")
     private List<PedidoEntity> pedidoList;
