@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/enderecos")
@@ -25,9 +26,13 @@ public class EnderecoController {
     private ModelMapper modelMapper;
 
     @GetMapping("/rua")
-    public ResponseEntity<EnderecoDTO> findByRua(@RequestParam("rua") String rua) {
+    public ResponseEntity<List<EnderecoDTO>> buscarPorRua(@RequestParam String rua) {
         try {
-            return new ResponseEntity<>(modelMapper.map(repository.findByRua(rua), EnderecoDTO.class), HttpStatus.OK);
+            List<EnderecoEntity> enderecoEntities = repository.findByRua(rua);
+            List<EnderecoDTO> enderecosDTO = enderecoEntities.stream()
+                    .map(entity -> modelMapper.map(entity, EnderecoDTO.class))
+                    .collect(Collectors.toList());
+            return new ResponseEntity<>(enderecosDTO, HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }

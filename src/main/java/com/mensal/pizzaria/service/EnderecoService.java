@@ -11,7 +11,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class EnderecoService {
@@ -20,6 +22,11 @@ public class EnderecoService {
     private EnderecoRepository repository;
     @Autowired
     private ModelMapper modelMapper;
+
+    @Transactional
+    public List<EnderecoEntity> findByRua(String rua) {
+        return repository.findByRua(rua);
+    }
 
     @Transactional
     public EnderecoDTO create(EnderecoDTO dto) {

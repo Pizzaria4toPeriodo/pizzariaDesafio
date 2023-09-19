@@ -1,6 +1,6 @@
 package com.mensal.pizzaria.Service;
 
-import com.mensal.pizzaria.dto.ClienteDTO;
+
 import com.mensal.pizzaria.dto.EnderecoDTO;
 import com.mensal.pizzaria.entity.ClienteEntity;
 import com.mensal.pizzaria.entity.EnderecoEntity;
@@ -40,11 +40,22 @@ public class EnderecoServiceTest {
         cliente1.setTelefone("1234567890");
 
 
-        EnderecoEntity endereco1 = new EnderecoEntity(1L, "coritians", 555, cliente1);
+        EnderecoEntity endereco = new EnderecoEntity(1L, "coritians", 555, cliente1);
 
-        Mockito.when(enderecoRepository.save(endereco1)).thenReturn(endereco1);
-        Mockito.when(enderecoRepository.findById(1L)).thenReturn(Optional.of(endereco1));
-        Mockito.when(enderecoRepository.findAll()).thenReturn(Arrays.asList(endereco1));
+        Mockito.when(enderecoRepository.save(endereco)).thenReturn(endereco);
+        Mockito.when(enderecoRepository.findById(1L)).thenReturn(Optional.of(endereco));
+        Mockito.when(enderecoService.findByRua("coritians")).thenReturn(Arrays.asList(endereco));
+        Mockito.when(enderecoRepository.findAll()).thenReturn(Arrays.asList(endereco));
+    }
+
+    @Test
+    public void testBuscarRua() {
+
+        List<EnderecoEntity> enderecos = enderecoService.findByRua("coritians");
+
+        Assertions.assertEquals(1, enderecos.size());
+
+        Assertions.assertEquals("coritians", enderecos.get(0).getRua());
     }
 
     @Test
@@ -54,5 +65,7 @@ public class EnderecoServiceTest {
         Assertions.assertNotNull(resultado);
         Assertions.assertEquals(1, resultado.size());
     }
+
+
 
 }
