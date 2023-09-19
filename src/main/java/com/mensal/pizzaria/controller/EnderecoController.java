@@ -24,8 +24,8 @@ public class EnderecoController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @GetMapping("/rua")
-    public ResponseEntity<EnderecoDTO> findByRua(@RequestParam("rua") String rua) {
+    @GetMapping("/{rua}")
+    public ResponseEntity<EnderecoDTO> findByRua(@PathVariable("rua") String rua) {
         try {
             return new ResponseEntity<>(modelMapper.map(repository.findByRua(rua), EnderecoDTO.class), HttpStatus.OK);
         } catch (Exception e) {

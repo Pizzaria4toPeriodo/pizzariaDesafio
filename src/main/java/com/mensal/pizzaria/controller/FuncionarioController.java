@@ -24,8 +24,8 @@ public class FuncionarioController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @GetMapping("/nome")
-    public ResponseEntity<FuncionarioDTO> findByNomeFuncionario(@RequestParam("nome") String nome) {
+    @GetMapping("/{nome}")
+    public ResponseEntity<FuncionarioDTO> findByNomeFuncionario(@PathVariable("nome") String nome) {
         try {
             return new ResponseEntity<>(modelMapper.map(repository.findByNomeFuncionario(nome), FuncionarioDTO.class), HttpStatus.OK);
         } catch (Exception e) {

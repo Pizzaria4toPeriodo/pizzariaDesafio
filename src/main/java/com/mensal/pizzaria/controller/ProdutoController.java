@@ -24,8 +24,8 @@ public class ProdutoController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @GetMapping("/nome")
-    public ResponseEntity<ProdutoDTO> findByNomeProduto(@RequestParam("nome") String nome) {
+    @GetMapping("/{nome}")
+    public ResponseEntity<ProdutoDTO> findByNomeProduto(@PathVariable("nome") String nome) {
         try {
             return new ResponseEntity<>(modelMapper.map(repository.findByNomeProduto(nome), ProdutoDTO.class), HttpStatus.OK);
         } catch (Exception e) {
