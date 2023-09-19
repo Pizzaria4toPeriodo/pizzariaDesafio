@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.Collections;
 
 @SpringBootTest
-public class PedidoTest {
+class PedidoTest {
     @Test
     void entityTest() {
         ProdutoEntity produto = new ProdutoEntity(1L, "Pizza Calabreza", 25.0, null);

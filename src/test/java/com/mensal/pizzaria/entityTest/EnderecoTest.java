@@ -5,7 +5,7 @@ import com.mensal.pizzaria.entity.EnderecoEntity;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class EnderecoTest {
+class EnderecoTest {
     @Test
     void entityTest() {
         ClienteEntity cliente = new ClienteEntity(1L, "Gustavo", "36126170601", null, "+55 45 99988-7766");

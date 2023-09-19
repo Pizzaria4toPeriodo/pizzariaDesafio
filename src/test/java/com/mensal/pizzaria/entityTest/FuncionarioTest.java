@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class FuncionarioTest {
+class FuncionarioTest {
     @Test
     void entityTest() {
         FuncionarioEntity funcionario = new FuncionarioEntity(1L, "Gustavo", "Entregador");
