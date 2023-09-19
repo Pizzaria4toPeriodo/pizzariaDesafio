@@ -36,7 +36,7 @@ public class ClienteController {
     @GetMapping("/list")
     public ResponseEntity<List<ClienteDTO>> findAll() {
         try {
-            return new ResponseEntity<>(service.findAll().stream().map(entity -> modelMapper.map(entity, ClienteDTO.class)).toList(), HttpStatus.OK);
+            return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }

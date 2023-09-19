@@ -42,5 +42,5 @@ public class PedidoEntity {
     private Forma_Pagamento formaPagamento;
 
     @Column(nullable = false)
-    private BigDecimal total;
+    private Double total;
 }
