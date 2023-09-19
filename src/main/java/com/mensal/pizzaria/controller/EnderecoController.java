@@ -1,6 +1,7 @@
 package com.mensal.pizzaria.controller;
 
 import com.mensal.pizzaria.dto.EnderecoDTO;
+import com.mensal.pizzaria.dto.ProdutoDTO;
 import com.mensal.pizzaria.entity.EnderecoEntity;
 import com.mensal.pizzaria.repository.EnderecoRepository;
 import com.mensal.pizzaria.service.EnderecoService;
@@ -26,14 +27,10 @@ public class EnderecoController {
     private ModelMapper modelMapper;
 
 
-    @GetMapping("/rua")
-    public ResponseEntity<List<EnderecoDTO>> buscarPorRua(@RequestParam String rua) {
+    @GetMapping("/{rua}")
+    public ResponseEntity<EnderecoDTO> findByRua(@PathVariable("rua") String rua) {
         try {
-            List<EnderecoEntity> enderecoEntities = repository.findByRua(rua);
-            List<EnderecoDTO> enderecosDTO = enderecoEntities.stream()
-                    .map(entity -> modelMapper.map(entity, EnderecoDTO.class))
-                    .collect(Collectors.toList());
-            return new ResponseEntity<>(enderecosDTO, HttpStatus.OK);
+            return new ResponseEntity<>(service.findByRua(rua), HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
