@@ -36,7 +36,7 @@ public class EnderecoController {
     @GetMapping("/list")
     public ResponseEntity<List<EnderecoDTO>> findAll() {
         try {
-            return new ResponseEntity<>(repository.findAll().stream().map(entity -> modelMapper.map(entity, EnderecoDTO.class)).toList(), HttpStatus.OK);
+            return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }

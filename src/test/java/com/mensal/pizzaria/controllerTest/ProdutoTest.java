@@ -9,11 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,11 +31,13 @@ class ProdutoTest {
 
     private ObjectMapper objectMapper;
     private ProdutoDTO produtoValido;
+    private ProdutoDTO produtoInvalido;
 
     @BeforeEach
     void setup() {
         objectMapper = new ObjectMapper();
-        produtoValido = new ProdutoDTO(1L, "Batata", 2.50);
+        produtoValido = new ProdutoDTO(1L, "Batata", 2.50, null);
+        produtoValido = new ProdutoDTO();
     }
 
     @Test
@@ -75,7 +75,7 @@ class ProdutoTest {
 
     @Test
     void updateTest() throws Exception {
-        ProdutoDTO produtoDTO = new ProdutoDTO(1L, "Batata", 7.5);
+        ProdutoDTO produtoDTO = new ProdutoDTO(1L, "Batata", 7.5, null);
 
         when(service.update(produtoDTO.getId(), produtoDTO)).thenReturn(produtoDTO);
 

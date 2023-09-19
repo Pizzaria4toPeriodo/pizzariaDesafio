@@ -9,8 +9,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ProdutoService {
@@ -26,7 +26,12 @@ public class ProdutoService {
 
     @Transactional
     public List<ProdutoDTO> findAll() {
-        return repository.findAll().stream().map(entity -> modelMapper.map(entity, ProdutoDTO.class)).collect(Collectors.toList());
+        List<ProdutoDTO> list = new ArrayList<>();
+        for (ProdutoEntity entity : repository.findAll()) {
+            ProdutoDTO map = modelMapper.map(entity, ProdutoDTO.class);
+            list.add(map);
+        }
+        return list;
     }
 
     @Transactional

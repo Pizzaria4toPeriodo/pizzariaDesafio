@@ -10,12 +10,25 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class PedidoService {
     @Autowired
     private PedidoRepository repository;
     @Autowired
     private ModelMapper modelMapper;
+
+    @Transactional
+    public List<PedidoDTO> findAll() {
+        List<PedidoDTO> list = new ArrayList<>();
+        for (PedidoEntity entity : repository.findAll()) {
+            PedidoDTO map = modelMapper.map(entity, PedidoDTO.class);
+            list.add(map);
+        }
+        return list;
+    }
 
     @Transactional
     public PedidoDTO create(PedidoDTO dto) {
