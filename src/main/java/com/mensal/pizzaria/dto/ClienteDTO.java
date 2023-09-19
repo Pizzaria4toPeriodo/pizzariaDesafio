@@ -13,8 +13,12 @@ import java.util.List;
 @NoArgsConstructor
 public class ClienteDTO {
     private Long id;
+
     private String nomeCliente;
+
     private String cpf;
+
     private List<EnderecoDTO> enderecoList;
+
     private String telefone;
 }

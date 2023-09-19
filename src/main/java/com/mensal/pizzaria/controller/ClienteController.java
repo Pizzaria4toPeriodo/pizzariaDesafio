@@ -24,15 +24,12 @@ public class ClienteController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ClienteDTO> findById(@PathVariable("id") final Long id) {
+    @GetMapping("/{cpf}")
+    public ResponseEntity<ClienteDTO> findByCpf(@PathVariable("cpf") String cpf) {
         try {
-            ClienteDTO clienteDTO = this.service.findById(id);
-
-            return ResponseEntity.ok(clienteDTO);
-
+            return new ResponseEntity<>(modelMapper.map(repository.findByCpf(cpf), ClienteDTO.class), HttpStatus.OK);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 

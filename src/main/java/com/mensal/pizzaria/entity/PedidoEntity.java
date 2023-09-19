@@ -39,11 +39,7 @@ public class PedidoEntity {
 
     @Enumerated(EnumType.STRING)
     @Column
-    private Status_producao statusProducao;
-
-    @Enumerated(EnumType.STRING)
-    @Column
-    private Status_pagamento statusPagamento;
+    private Forma_Pagamento formaPagamento;
 
     @Column(nullable = false)
     private BigDecimal total;
