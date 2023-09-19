@@ -30,11 +30,8 @@ public class EnderecoService {
 
     @Transactional
     public EnderecoDTO create(EnderecoDTO dto) {
-        EnderecoEntity enderecoEntity = modelMapper.map(dto,EnderecoEntity.class);
-        Optional<EnderecoEntity> enderecoBD = this.repository.findById(enderecoEntity.getId());
-
+        EnderecoEntity enderecoEntity = modelMapper.map(dto, EnderecoEntity.class);
         EnderecoEntity savedEntity = repository.save(enderecoEntity);
-
         return modelMapper.map(savedEntity, EnderecoDTO.class);
     }
 

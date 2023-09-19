@@ -1,6 +1,7 @@
 package com.mensal.pizzaria.Service;
 
 
+import com.mensal.pizzaria.dto.ClienteDTO;
 import com.mensal.pizzaria.dto.EnderecoDTO;
 import com.mensal.pizzaria.entity.ClienteEntity;
 import com.mensal.pizzaria.entity.EnderecoEntity;
@@ -42,6 +43,15 @@ public class EnderecoServiceTest {
 
         EnderecoEntity endereco = new EnderecoEntity(1L, "coritians", 555, cliente1);
 
+        ClienteDTO clienteDTO = new ClienteDTO();
+        clienteDTO.setId(1L);
+        clienteDTO.setNomeCliente("Cliente1");
+        clienteDTO.setCpf("31621441164");
+        clienteDTO.setTelefone("1234567890");
+
+        EnderecoDTO enderecoDTO = new EnderecoDTO(1L, "coritians", 555, clienteDTO);
+
+        Mockito.when(enderecoRepository.save(Mockito.any(EnderecoEntity.class))).thenReturn(new EnderecoEntity());
         Mockito.when(enderecoRepository.save(endereco)).thenReturn(endereco);
         Mockito.when(enderecoRepository.findById(1L)).thenReturn(Optional.of(endereco));
         Mockito.when(enderecoService.findByRua("coritians")).thenReturn(Arrays.asList(endereco));
@@ -59,13 +69,29 @@ public class EnderecoServiceTest {
     }
 
     @Test
-    public void testListaLembrete() {
+    public void testLista() {
         List<EnderecoEntity> resultado = enderecoRepository.findAll();
         System.out.println(resultado.size());
         Assertions.assertNotNull(resultado);
         Assertions.assertEquals(1, resultado.size());
     }
 
+    @Test
+    public void Testcadastra() {
+        // Crear un objeto ClienteDTO
+        ClienteDTO clienteDTO = new ClienteDTO();
+        clienteDTO.setId(1L);
+        clienteDTO.setNomeCliente("Cliente1");
+        clienteDTO.setCpf("31621441164");
+        clienteDTO.setTelefone("1234567890");
+
+        EnderecoDTO endereco1 = new EnderecoDTO(1L, "coritians", 555, clienteDTO);
+
+        // Llamar al método para crear una dirección
+        EnderecoDTO createdEnderecoDTO = enderecoService.create(endereco1);
+
+        Assertions.assertEquals(endereco1, createdEnderecoDTO);
+    }
 
 
 }
