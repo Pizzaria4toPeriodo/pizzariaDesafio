@@ -25,9 +25,9 @@ public class ClienteController {
     private ModelMapper modelMapper;
 
     @GetMapping("/{cpf}")
-    public ResponseEntity<ClienteDTO> findByCpf(@PathVariable("cpf") String cpf) {
+    public ResponseEntity<ClienteDTO> findCpf(@PathVariable("cpf") String cpf) {
         try {
-            return new ResponseEntity<>(modelMapper.map(repository.findByCpf(cpf), ClienteDTO.class), HttpStatus.OK);
+            return new ResponseEntity<>(service.findCpf(cpf), HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
