@@ -1,6 +1,7 @@
 package com.mensal.pizzaria.service;
 
 import com.mensal.pizzaria.dto.EnderecoDTO;
+import com.mensal.pizzaria.dto.ProdutoDTO;
 import com.mensal.pizzaria.entity.EnderecoEntity;
 import com.mensal.pizzaria.repository.EnderecoRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -8,9 +9,8 @@ import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 
 @Service
 public class EnderecoService {
@@ -19,6 +19,11 @@ public class EnderecoService {
     private EnderecoRepository repository;
     @Autowired
     private ModelMapper modelMapper;
+
+    @Transactional
+    public EnderecoDTO findByRua(String rua) {
+        return modelMapper.map(repository.findByRua(rua), EnderecoDTO.class);
+    }
 
     @Transactional
     public List<EnderecoDTO> findAll() {
@@ -32,7 +37,9 @@ public class EnderecoService {
 
     @Transactional
     public EnderecoDTO create(EnderecoDTO dto) {
-        return modelMapper.map(repository.save(modelMapper.map(dto, EnderecoEntity.class)), EnderecoDTO.class);
+        EnderecoEntity enderecoEntity = modelMapper.map(dto, EnderecoEntity.class);
+        EnderecoEntity savedEntity = repository.save(enderecoEntity);
+        return modelMapper.map(savedEntity, EnderecoDTO.class);
     }
 
     @Transactional

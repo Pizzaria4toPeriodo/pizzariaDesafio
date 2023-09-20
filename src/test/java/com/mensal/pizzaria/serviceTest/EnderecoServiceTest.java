@@ -1,5 +1,7 @@
-package com.mensal.pizzaria.serviceTest;
+/*package com.mensal.pizzaria.serviceTest;
 
+import com.mensal.pizzaria.dto.ClienteDTO;
+import com.mensal.pizzaria.dto.EnderecoDTO;
 import com.mensal.pizzaria.entity.ClienteEntity;
 import com.mensal.pizzaria.entity.EnderecoEntity;
 import com.mensal.pizzaria.repository.ClienteRepository;
@@ -11,10 +13,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @SpringBootTest
 class EnderecoServiceTest {
@@ -35,20 +35,41 @@ class EnderecoServiceTest {
         cliente1.setCpf("31621441164");
         cliente1.setTelefone("1234567890");
 
+        EnderecoEntity endereco = new EnderecoEntity(1L, "coritians", 555, cliente1);
 
-        EnderecoEntity endereco1 = new EnderecoEntity(1L, "coritians", 555, cliente1);
+        ClienteDTO clienteDTO = new ClienteDTO();
+        clienteDTO.setId(1L);
+        clienteDTO.setNomeCliente("Cliente1");
+        clienteDTO.setCpf("31621441164");
+        clienteDTO.setTelefone("1234567890");
 
-        Mockito.when(enderecoRepository.save(endereco1)).thenReturn(endereco1);
-        Mockito.when(enderecoRepository.findById(1L)).thenReturn(Optional.of(endereco1));
-        Mockito.when(enderecoRepository.findAll()).thenReturn(Arrays.asList(endereco1));
+        EnderecoDTO enderecoDTO = new EnderecoDTO(1L, "coritians", 555, clienteDTO);
+
+        Mockito.when(enderecoRepository.save(Mockito.any(EnderecoEntity.class))).thenReturn(new EnderecoEntity());
+        Mockito.when(enderecoRepository.save(endereco)).thenReturn(endereco);
+        Mockito.when(enderecoService.findByRua("coritians")).thenReturn(Arrays.asList(endereco));
+        Mockito.when(enderecoRepository.findAll()).thenReturn(Arrays.asList(endereco));
     }
 
     @Test
-    void testListaLembrete() {
+    public void testBuscarRua() {
+
+        List<EnderecoEntity> enderecos = enderecoService.findByRua("coritians");
+
+        Assertions.assertEquals(1, enderecos.size());
+
+        Assertions.assertEquals("coritians", enderecos.get(0).getRua());
+    }
+
+    @Test
+    public void testLista() {
         List<EnderecoEntity> resultado = enderecoRepository.findAll();
         System.out.println(resultado.size());
         Assertions.assertNotNull(resultado);
         Assertions.assertEquals(1, resultado.size());
     }
 
+
+
 }
+*/

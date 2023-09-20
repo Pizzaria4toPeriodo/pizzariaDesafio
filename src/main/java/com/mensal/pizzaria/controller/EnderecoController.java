@@ -1,6 +1,7 @@
 package com.mensal.pizzaria.controller;
 
 import com.mensal.pizzaria.dto.EnderecoDTO;
+import com.mensal.pizzaria.dto.ProdutoDTO;
 import com.mensal.pizzaria.entity.EnderecoEntity;
 import com.mensal.pizzaria.repository.EnderecoRepository;
 import com.mensal.pizzaria.service.EnderecoService;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/enderecos")
@@ -24,10 +26,11 @@ public class EnderecoController {
     @Autowired
     private ModelMapper modelMapper;
 
+
     @GetMapping("/{rua}")
     public ResponseEntity<EnderecoDTO> findByRua(@PathVariable("rua") String rua) {
         try {
-            return new ResponseEntity<>(modelMapper.map(repository.findByRua(rua), EnderecoDTO.class), HttpStatus.OK);
+            return new ResponseEntity<>(service.findByRua(rua), HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
