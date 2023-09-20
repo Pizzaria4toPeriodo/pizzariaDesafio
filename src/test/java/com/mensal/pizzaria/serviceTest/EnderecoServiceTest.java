@@ -15,14 +15,11 @@ import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -104,9 +101,25 @@ class EnderecoServiceTest {
         Assertions.assertNotNull(createdEnderecoDTO);
         Assertions.assertEquals("ruanova", createdEnderecoDTO.getRua());
         Assertions.assertEquals(556, createdEnderecoDTO.getNumero());
-
     }
 
+    @Test
+    void testUpdate() {
+        Long id = 1L;
 
+        ClienteDTO clienteDTO = new ClienteDTO();
+        clienteDTO.setId(1L);
+        clienteDTO.setNomeCliente("Cliente1");
+        clienteDTO.setCpf("31621441164");
+        clienteDTO.setTelefone("1234567890");
+
+        EnderecoDTO enderecoAtualizada = new EnderecoDTO(id, "brasil", 552, clienteDTO);
+
+        enderecoService.update(id, enderecoAtualizada);
+
+        Assertions.assertEquals("brasil", enderecoAtualizada.getRua());
+        Assertions.assertEquals(552, enderecoAtualizada.getNumero());
+        Assertions.assertEquals(clienteDTO, enderecoAtualizada.getCliente());
+    }
 
 }
