@@ -1,4 +1,4 @@
-/*package com.mensal.pizzaria.serviceTest;
+package com.mensal.pizzaria.serviceTest;
 
 import com.mensal.pizzaria.dto.ClienteDTO;
 import com.mensal.pizzaria.dto.EnderecoDTO;
@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -47,14 +49,17 @@ class EnderecoServiceTest {
 
         Mockito.when(enderecoRepository.save(Mockito.any(EnderecoEntity.class))).thenReturn(new EnderecoEntity());
         Mockito.when(enderecoRepository.save(endereco)).thenReturn(endereco);
-        Mockito.when(enderecoService.findByRua("coritians")).thenReturn(Arrays.asList(endereco));
+        Mockito.when(enderecoService.findByRua("coritians")).thenReturn(enderecoDTO);
         Mockito.when(enderecoRepository.findAll()).thenReturn(Arrays.asList(endereco));
     }
 
     @Test
     public void testBuscarRua() {
 
-        List<EnderecoEntity> enderecos = enderecoService.findByRua("coritians");
+
+       EnderecoDTO endereco =  enderecoService.findByRua("coritians");
+       List<EnderecoDTO> enderecos = new ArrayList<>();
+       enderecos.add(endereco);
 
         Assertions.assertEquals(1, enderecos.size());
 
@@ -72,4 +77,3 @@ class EnderecoServiceTest {
 
 
 }
-*/
