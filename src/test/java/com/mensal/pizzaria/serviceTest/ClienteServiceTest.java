@@ -4,7 +4,6 @@ package com.mensal.pizzaria.serviceTest;
 import com.mensal.pizzaria.dto.ClienteDTO;
 import com.mensal.pizzaria.entity.ClienteEntity;
 import com.mensal.pizzaria.repository.ClienteRepository;
-import com.mensal.pizzaria.service.ClienteService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,7 +26,7 @@ class ClienteServiceTest {
     private ModelMapper modelMapper;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 

@@ -26,7 +26,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 class PedidoTest {
-
     @Autowired
     private MockMvc mockMvc;
 
@@ -35,25 +34,17 @@ class PedidoTest {
 
     private ObjectMapper objectMapper;
     private PedidoDTO pedidoValido;
-    private ProdutoDTO produtoValido;
-    private ClienteDTO clienteValido;
+    private PedidoDTO pedidoInvalido;
 
     @BeforeEach
     void setup() {
         objectMapper = new ObjectMapper();
 
-        produtoValido = new ProdutoDTO();
-        produtoValido.setId(1L);
-        produtoValido.setNomeProduto("Banana");
-        produtoValido.setPreco(4.0);
+        ClienteDTO cliente = new ClienteDTO(1L, "Gustavo", "36126170601", null, "+55 45 99988-7766");
+        ProdutoDTO produto = new ProdutoDTO(1L, "Pizza Calabreza", 25.0, null);
 
-        clienteValido = new ClienteDTO();
-        clienteValido.setId(1L);
-        clienteValido.setNomeCliente("Cliente1");
-        clienteValido.setCpf("31621441164");
-        clienteValido.setTelefone("1234567890");
-
-        pedidoValido = new PedidoDTO(1L, List.of(produtoValido), clienteValido, true, Forma_Pagamento.DINHERO, 5.0);
+        pedidoValido = new PedidoDTO(1L, List.of(produto), cliente, true, Forma_Pagamento.PIX, 25.0);
+        pedidoInvalido = new PedidoDTO();
     }
 
     @Test
@@ -74,12 +65,15 @@ class PedidoTest {
                         .content(objectMapper.writeValueAsString(pedidoValido)))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.delivery").value("true")).andReturn();
+                .andExpect(jsonPath("$.id").value(1L)).andReturn();
     }
 
     @Test
     void updateTest() throws Exception {
-        PedidoDTO pedidoDTO = new PedidoDTO(1L, List.of(produtoValido), clienteValido, false, Forma_Pagamento.DINHERO, 8.0);
+        ClienteDTO cliente = new ClienteDTO(1L, "Gustavo", "36126170601", null, "+55 45 99988-7766");
+        ProdutoDTO produto = new ProdutoDTO(1L, "Pizza Calabreza", 25.0, null);
+
+        PedidoDTO pedidoDTO = new PedidoDTO(1L, List.of(produto), cliente, false, Forma_Pagamento.PIX, 25.0);
 
         when(service.update(pedidoDTO.getId(), pedidoDTO)).thenReturn(pedidoDTO);
 

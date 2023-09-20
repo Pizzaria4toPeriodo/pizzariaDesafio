@@ -74,6 +74,16 @@ class ProdutoTest {
     }
 
     @Test
+    void createErrorTest() throws Exception {
+        when(service.create(any(ProdutoDTO.class))).thenReturn(produtoValido);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/produtos")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(produtoInvalido)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void updateTest() throws Exception {
         ProdutoDTO produtoDTO = new ProdutoDTO(1L, "Batata", 7.5, null);
 
@@ -90,6 +100,6 @@ class ProdutoTest {
         Long id = 1L;
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/produtos/{id}", id))
-                .andExpect(status().is(500));
+                .andExpect(status().is(400));
     }
 }

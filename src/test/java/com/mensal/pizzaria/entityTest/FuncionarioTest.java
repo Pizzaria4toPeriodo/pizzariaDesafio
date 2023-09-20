@@ -15,4 +15,17 @@ class FuncionarioTest {
         Assertions.assertEquals("Gustavo", funcionario.getNomeFuncionario());
         Assertions.assertEquals("Entregador", funcionario.getCargo());
     }
+
+    @Test
+    void entitySetterTest() {
+        FuncionarioEntity funcionario = new FuncionarioEntity();
+
+        funcionario.setId(1L);
+        funcionario.setNomeFuncionario("Gustavo");
+        funcionario.setCargo("Entregador");
+
+        Assertions.assertEquals(1L, funcionario.getId());
+        Assertions.assertEquals("Gustavo", funcionario.getNomeFuncionario());
+        Assertions.assertEquals("Entregador", funcionario.getCargo());
+    }
 }

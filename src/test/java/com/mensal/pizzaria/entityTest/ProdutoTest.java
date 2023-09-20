@@ -16,4 +16,19 @@ class ProdutoTest {
         Assertions.assertEquals(25.0, produto.getPreco());
         Assertions.assertNull(produto.getPedidoList());
     }
+
+    @Test
+    void entitySetterTest() {
+        ProdutoEntity produto = new ProdutoEntity();
+
+        produto.setId(1L);
+        produto.setNomeProduto("Pizza Calabreza");
+        produto.setPreco(25.0);
+        produto.setPedidoList(null);
+
+        Assertions.assertEquals(1L, produto.getId());
+        Assertions.assertEquals("Pizza Calabreza", produto.getNomeProduto());
+        Assertions.assertEquals(25.0, produto.getPreco());
+        Assertions.assertNull(produto.getPedidoList());
+    }
 }

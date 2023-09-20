@@ -29,7 +29,7 @@ public class ProdutoController {
         try {
             return new ResponseEntity<>(service.findByNomeProduto(nome), HttpStatus.OK);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
@@ -38,7 +38,7 @@ public class ProdutoController {
         try {
             return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
@@ -47,7 +47,7 @@ public class ProdutoController {
         try {
             return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
@@ -56,7 +56,7 @@ public class ProdutoController {
         try {
             return new ResponseEntity<>(service.update(id, dto), HttpStatus.OK);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
@@ -68,7 +68,7 @@ public class ProdutoController {
 
             return ResponseEntity.ok(HttpStatus.NO_CONTENT);
         } catch (RuntimeException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 }
