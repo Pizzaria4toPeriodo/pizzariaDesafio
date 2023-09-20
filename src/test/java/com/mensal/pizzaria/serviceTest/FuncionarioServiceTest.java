@@ -59,4 +59,13 @@ public class FuncionarioServiceTest {
 
         Assertions.assertEquals("Marcelo", funcionarios.get(0).getNomeFuncionario());
     }
+
+    @Test
+    void testLista() {
+
+        List<FuncionarioDTO> funcionarioDTOLista = funcionarioService.findAll();
+
+        Assertions.assertNotNull(funcionarioDTOLista);
+        Assertions.assertEquals(1, funcionarioDTOLista.size());
+    }
 }
