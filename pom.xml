@@ -20,8 +20,6 @@
 		<sonar.java..coveragePlugin>jacoco</sonar.java..coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<sonar.jacoco.xmlReportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.xmlReportPath>
-		<sonar.login>admin</sonar.login>
-		<sonar.password>basquet011</sonar.password>
 		<sonar.language>java</sonar.language>
 	</properties>
 	<dependencies>
