@@ -66,7 +66,7 @@ public class ClienteController {
             ClienteEntity entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Não foi possível encontrar o registro informado"));
             repository.delete(entity);
 
-            return ResponseEntity.ok(HttpStatus.OK);
+            return ResponseEntity.ok(HttpStatus.NO_CONTENT);
         } catch (RuntimeException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
