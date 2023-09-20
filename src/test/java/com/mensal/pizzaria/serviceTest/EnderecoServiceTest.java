@@ -16,11 +16,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class EnderecoServiceTest {
@@ -50,12 +53,16 @@ class EnderecoServiceTest {
         clienteDTO.setCpf("31621441164");
         clienteDTO.setTelefone("1234567890");
 
+        List<EnderecoDTO> enderecoDTOList = new ArrayList<>();
+        enderecoDTOList.add(new EnderecoDTO(1L, "Rua 1", 123, clienteDTO));
+
         EnderecoDTO enderecoDTO = new EnderecoDTO(1L, "coritians", 555, clienteDTO);
 
         Mockito.when(repository.save(Mockito.any(EnderecoEntity.class))).thenReturn(new EnderecoEntity());
         Mockito.when(repository.save(endereco)).thenReturn(endereco);
+        Mockito.when(enderecoService.create(enderecoDTO)).thenReturn(enderecoDTO);
         Mockito.when(enderecoService.findByRua("coritians")).thenReturn(enderecoDTO);
-        Mockito.when(repository.findAll()).thenReturn(Arrays.asList(endereco));
+        Mockito.when(enderecoService.findAll()).thenReturn(enderecoDTOList);
         MockitoAnnotations.openMocks(this);
 
     }
@@ -63,8 +70,7 @@ class EnderecoServiceTest {
     @Test
     void testBuscarRua() {
 
-
-        EnderecoDTO endereco =  enderecoService.findByRua("coritians");
+        EnderecoDTO endereco = enderecoService.findByRua("coritians");
         List<EnderecoDTO> enderecos = new ArrayList<>();
         enderecos.add(endereco);
 
@@ -76,21 +82,29 @@ class EnderecoServiceTest {
     @Test
     void testLista() {
 
-        List<EnderecoDTO> enderecoDTOList = new ArrayList<>();
-        ClienteDTO clienteDTO = new ClienteDTO();
-        clienteDTO.setId(1L);
-        clienteDTO.setNomeCliente("Cliente1");
-        clienteDTO.setCpf("31621441164");
-        clienteDTO.setTelefone("1234567890");
-
-        enderecoDTOList.add(new EnderecoDTO(1L, "Rua 1", 123, clienteDTO));
-
-        when(enderecoService.findAll()).thenReturn(enderecoDTOList);
-
         List<EnderecoDTO> enderecoDTOLista = enderecoService.findAll();
 
         Assertions.assertNotNull(enderecoDTOLista);
         Assertions.assertEquals(1, enderecoDTOLista.size());
+    }
+
+    @Test
+    void testCreate() {
+        EnderecoDTO enderecoDTO = new EnderecoDTO(1L, "ruanova", 556, new ClienteDTO());
+
+        // Configura el comportamiento del servicio para el método create
+        when(enderecoService.create(any(EnderecoDTO.class))).thenReturn(enderecoDTO);
+
+        // Llama al método create del servicio
+        EnderecoDTO createdEnderecoDTO = enderecoService.create(enderecoDTO);
+
+        // Verifica que se haya llamado al método create en el servicio
+        verify(enderecoService, times(1)).create(any(EnderecoDTO.class));
+
+        Assertions.assertNotNull(createdEnderecoDTO);
+        Assertions.assertEquals("ruanova", createdEnderecoDTO.getRua());
+        Assertions.assertEquals(556, createdEnderecoDTO.getNumero());
+
     }
 
 
