@@ -8,7 +8,9 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,13 +37,16 @@ public class  PedidoService {
         if (!dto.getProdutoList().isEmpty()) {
             dto.setTotal(calculoTotal(dto));
         }
+        if (dto.getId() != null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Deixe o campo Id vago, ele é gerado pelo banco");
+        }
 
         return modelMapper.map(repository.save(modelMapper.map(dto, PedidoEntity.class)), PedidoDTO.class);
     }
 
     @Transactional
     public PedidoDTO update(Long id, PedidoDTO dto) {
-        PedidoEntity existingEntity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Não foi possível encontrar o registro informado"));
+        PedidoEntity existingEntity = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Não foi possível encontrar o registro informado"));
 
         if (dto.getProdutoList().size() != existingEntity.getProdutoList().size()) {
             dto.setTotal(calculoTotal(dto));
@@ -52,7 +57,7 @@ public class  PedidoService {
         return modelMapper.map(repository.save(existingEntity), PedidoDTO.class);
     }
 
-    private Double calculoTotal(PedidoDTO dto) {
+    public Double calculoTotal(PedidoDTO dto) {
         double total = 0.0;
 
         for (ProdutoDTO produto : dto.getProdutoList()) {
