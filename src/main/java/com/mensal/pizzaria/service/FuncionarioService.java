@@ -1,6 +1,7 @@
 package com.mensal.pizzaria.service;
 
 import com.mensal.pizzaria.dto.FuncionarioDTO;
+import com.mensal.pizzaria.dto.ProdutoDTO;
 import com.mensal.pizzaria.entity.FuncionarioEntity;
 import com.mensal.pizzaria.repository.FuncionarioRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -18,6 +19,11 @@ public class FuncionarioService {
     private FuncionarioRepository repository;
     @Autowired
     private ModelMapper modelMapper;
+
+    @Transactional
+    public FuncionarioDTO findByNomeFuncionario(String nome) {
+        return modelMapper.map(repository.findByNomeFuncionario(nome), FuncionarioDTO.class);
+    }
 
     @Transactional
     public List<FuncionarioDTO> findAll() {

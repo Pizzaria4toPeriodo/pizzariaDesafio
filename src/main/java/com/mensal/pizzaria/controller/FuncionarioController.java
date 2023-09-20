@@ -1,6 +1,7 @@
 package com.mensal.pizzaria.controller;
 
 import com.mensal.pizzaria.dto.FuncionarioDTO;
+import com.mensal.pizzaria.dto.ProdutoDTO;
 import com.mensal.pizzaria.entity.FuncionarioEntity;
 import com.mensal.pizzaria.repository.FuncionarioRepository;
 import com.mensal.pizzaria.service.FuncionarioService;
@@ -27,7 +28,7 @@ public class FuncionarioController {
     @GetMapping("/{nome}")
     public ResponseEntity<FuncionarioDTO> findByNomeFuncionario(@PathVariable("nome") String nome) {
         try {
-            return new ResponseEntity<>(modelMapper.map(repository.findByNomeFuncionario(nome), FuncionarioDTO.class), HttpStatus.OK);
+            return new ResponseEntity<>(service.findByNomeFuncionario(nome), HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
