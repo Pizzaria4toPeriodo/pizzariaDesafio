@@ -30,7 +30,6 @@ class EnderecoServiceTest {
     @MockBean
     private EnderecoRepository repository;
 
-
     @Mock
     private ModelMapper modelMapper;
 
@@ -60,7 +59,6 @@ class EnderecoServiceTest {
         Mockito.when(enderecoService.findByRua("coritians")).thenReturn(enderecoDTO);
         Mockito.when(enderecoService.findAll()).thenReturn(enderecoDTOList);
         MockitoAnnotations.openMocks(this);
-
     }
 
     @Test
