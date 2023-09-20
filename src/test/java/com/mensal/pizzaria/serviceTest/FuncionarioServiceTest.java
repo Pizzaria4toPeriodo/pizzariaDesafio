@@ -1,5 +1,6 @@
 package com.mensal.pizzaria.serviceTest;
 
+import com.mensal.pizzaria.dto.ClienteDTO;
 import com.mensal.pizzaria.dto.EnderecoDTO;
 import com.mensal.pizzaria.dto.FuncionarioDTO;
 import com.mensal.pizzaria.entity.FuncionarioEntity;
@@ -18,6 +19,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 public class FuncionarioServiceTest {
@@ -67,5 +71,35 @@ public class FuncionarioServiceTest {
 
         Assertions.assertNotNull(funcionarioDTOLista);
         Assertions.assertEquals(1, funcionarioDTOLista.size());
+    }
+
+    @Test
+    void testCreate() {
+        FuncionarioDTO funcionarioDTO = new FuncionarioDTO(1L, "Jose", "caixa");
+
+        // Configura el comportamiento del servicio para el método create
+        when(funcionarioService.create(any(FuncionarioDTO.class))).thenReturn(funcionarioDTO);
+
+        // Llama al método create del servicio
+        FuncionarioDTO createdFuncionarioDTO = funcionarioService.create(funcionarioDTO);
+
+        // Verifica que se haya llamado al método create en el servicio
+        verify(funcionarioService, times(1)).create(any(FuncionarioDTO.class));
+
+        Assertions.assertNotNull(createdFuncionarioDTO);
+        Assertions.assertEquals("Jose", createdFuncionarioDTO.getNomeFuncionario());
+        Assertions.assertEquals("caixa", createdFuncionarioDTO.getCargo());
+    }
+
+    @Test
+    void testUpdate() {
+        Long id = 1L;
+
+        FuncionarioDTO funcionarioAtualizada = new FuncionarioDTO(id, "Jose", "caixa");
+
+        funcionarioService.update(id, funcionarioAtualizada);
+
+        Assertions.assertEquals("Jose", funcionarioAtualizada.getNomeFuncionario());
+        Assertions.assertEquals("caixa", funcionarioAtualizada.getCargo());
     }
 }
