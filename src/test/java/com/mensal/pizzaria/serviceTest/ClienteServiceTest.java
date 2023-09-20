@@ -2,9 +2,7 @@
 package com.mensal.pizzaria.serviceTest;
 
 import com.mensal.pizzaria.dto.ClienteDTO;
-import com.mensal.pizzaria.dto.EnderecoDTO;
 import com.mensal.pizzaria.entity.ClienteEntity;
-import com.mensal.pizzaria.entity.EnderecoEntity;
 import com.mensal.pizzaria.repository.ClienteRepository;
 import com.mensal.pizzaria.service.ClienteService;
 import org.junit.jupiter.api.Assertions;
@@ -15,16 +13,12 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class ClienteServiceTest {
 
     @InjectMocks
-    private com.mensal.pizzaria.service.ClienteService clienteService;
+    private ClienteService clienteService;
 
     @Mock
     private ClienteRepository clienteRepository;
@@ -38,7 +32,7 @@ class ClienteServiceTest {
     }
 
     @Test
-    void testCreateCliente() {
+     void testCreateCliente() {
 
 
 

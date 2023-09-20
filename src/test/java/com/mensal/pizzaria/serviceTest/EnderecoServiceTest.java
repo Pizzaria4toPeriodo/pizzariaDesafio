@@ -57,9 +57,9 @@ class EnderecoServiceTest {
     void testBuscarRua() {
 
 
-       EnderecoDTO endereco =  enderecoService.findByRua("coritians");
-       List<EnderecoDTO> enderecos = new ArrayList<>();
-       enderecos.add(endereco);
+        EnderecoDTO endereco =  enderecoService.findByRua("coritians");
+        List<EnderecoDTO> enderecos = new ArrayList<>();
+        enderecos.add(endereco);
 
         Assertions.assertEquals(1, enderecos.size());
 
