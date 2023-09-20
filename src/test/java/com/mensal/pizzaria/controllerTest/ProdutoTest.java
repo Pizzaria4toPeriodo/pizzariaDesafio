@@ -66,8 +66,8 @@ class ProdutoTest {
         when(service.create(any(ProdutoDTO.class))).thenReturn(produtoValido);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/produtos")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(produtoValido)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(produtoValido)))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.nomeProduto").value("Batata")).andReturn();
@@ -90,8 +90,8 @@ class ProdutoTest {
         when(service.update(produtoDTO.getId(), produtoDTO)).thenReturn(produtoDTO);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/produtos/{id}", produtoDTO.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(produtoDTO)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(produtoDTO)))
                 .andExpect(status().isOk());
     }
 

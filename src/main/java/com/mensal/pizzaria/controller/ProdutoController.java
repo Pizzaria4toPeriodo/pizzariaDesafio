@@ -4,6 +4,7 @@ import com.mensal.pizzaria.dto.ProdutoDTO;
 import com.mensal.pizzaria.entity.ProdutoEntity;
 import com.mensal.pizzaria.repository.ProdutoRepository;
 import com.mensal.pizzaria.service.ProdutoService;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,38 +27,22 @@ public class ProdutoController {
 
     @GetMapping("/{nome}")
     public ResponseEntity<ProdutoDTO> findByNomeProduto(@PathVariable("nome") String nome) {
-        try {
-            return new ResponseEntity<>(service.findByNomeProduto(nome), HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-        }
+        return new ResponseEntity<>(service.findByNomeProduto(nome), HttpStatus.OK);
     }
 
     @GetMapping("/list")
     public ResponseEntity<List<ProdutoDTO>> findAll() {
-        try {
-            return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-        }
+        return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<ProdutoDTO> create(@RequestBody @Validated ProdutoDTO dto) {
-        try {
-            return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-        }
+    public ResponseEntity<ProdutoDTO> create(@RequestBody @Validated @Valid ProdutoDTO dto) {
+        return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProdutoDTO> update(@PathVariable("id") Long id, @RequestBody @Validated ProdutoDTO dto) {
-        try {
-            return new ResponseEntity<>(service.update(id, dto), HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-        }
+    public ResponseEntity<ProdutoDTO> update(@PathVariable("id") Long id, @RequestBody @Validated @Valid ProdutoDTO dto) {
+        return new ResponseEntity<>(service.update(id, dto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
 import java.util.List;
 
 
@@ -27,38 +28,22 @@ public class EnderecoController {
 
     @GetMapping("/{rua}")
     public ResponseEntity<EnderecoDTO> findByRua(@PathVariable("rua") String rua) {
-        try {
-            return new ResponseEntity<>(service.findByRua(rua), HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-        }
+        return new ResponseEntity<>(service.findByRua(rua), HttpStatus.OK);
     }
 
     @GetMapping("/list")
     public ResponseEntity<List<EnderecoDTO>> findAll() {
-        try {
-            return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-        }
+        return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<EnderecoDTO> create(@RequestBody @Validated EnderecoDTO dto) {
-        try {
-            return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-        }
+        return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<EnderecoDTO> update(@PathVariable("id") Long id, @RequestBody @Validated EnderecoDTO dto) {
-        try {
-            return new ResponseEntity<>(service.update(id, dto), HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-        }
+        return new ResponseEntity<>(service.update(id, dto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

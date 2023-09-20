@@ -26,38 +26,22 @@ public class ClienteController {
 
     @GetMapping("/{cpf}")
     public ResponseEntity<ClienteDTO> findCpf(@PathVariable("cpf") String cpf) {
-        try {
-            return new ResponseEntity<>(service.findCpf(cpf), HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-        }
+        return new ResponseEntity<>(service.findCpf(cpf), HttpStatus.OK);
     }
 
     @GetMapping("/list")
     public ResponseEntity<List<ClienteDTO>> findAll() {
-        try {
-            return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-        }
+        return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<ClienteDTO> create(@RequestBody @Validated ClienteDTO dto) {
-        try {
-            return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e.getCause());
-        }
+        return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ClienteDTO> update(@PathVariable("id") Long id, @RequestBody ClienteDTO dto) {
-        try {
-            return new ResponseEntity<>(service.update(id, dto), HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-        }
+        return new ResponseEntity<>(service.update(id, dto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
