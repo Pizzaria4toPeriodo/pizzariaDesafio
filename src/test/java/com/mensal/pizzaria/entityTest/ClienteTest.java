@@ -17,4 +17,21 @@ class ClienteTest {
         Assertions.assertNull(cliente.getEnderecoList());
         Assertions.assertEquals("+55 45 99988-7766", cliente.getTelefone());
     }
+
+    @Test
+    void entitySetterTest() {
+        ClienteEntity cliente = new ClienteEntity();
+
+        cliente.setId(1L);
+        cliente.setNomeCliente("Gustavo");
+        cliente.setCpf("36126170601");
+        cliente.setEnderecoList(null);
+        cliente.setTelefone("+55 45 99988-7766");
+
+        Assertions.assertEquals(1L, cliente.getId());
+        Assertions.assertEquals("Gustavo", cliente.getNomeCliente());
+        Assertions.assertEquals("36126170601", cliente.getCpf());
+        Assertions.assertNull(cliente.getEnderecoList());
+        Assertions.assertEquals("+55 45 99988-7766", cliente.getTelefone());
+    }
 }

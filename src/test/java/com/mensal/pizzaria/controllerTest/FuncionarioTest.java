@@ -1,7 +1,6 @@
 package com.mensal.pizzaria.controllerTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mensal.pizzaria.dto.EnderecoDTO;
 import com.mensal.pizzaria.dto.FuncionarioDTO;
 import com.mensal.pizzaria.service.FuncionarioService;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class FuncionarioTest {
+class FuncionarioTest {
 
     @Autowired
     private MockMvc mockMvc;
