@@ -83,4 +83,11 @@ public class FuncionarioTest {
                         .content(objectMapper.writeValueAsString(funcionarioDTO)))
                 .andExpect(status().isOk());
     }
+
+    @Test
+    void deleteTest() throws Exception {
+        Long id = 1L;
+        mockMvc.perform(MockMvcRequestBuilders.delete("/funcionarios/{id}", id))
+                .andExpect(status().is(500));
+    }
 }
