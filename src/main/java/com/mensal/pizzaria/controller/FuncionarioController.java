@@ -1,7 +1,6 @@
 package com.mensal.pizzaria.controller;
 
 import com.mensal.pizzaria.dto.FuncionarioDTO;
-import com.mensal.pizzaria.dto.ProdutoDTO;
 import com.mensal.pizzaria.entity.FuncionarioEntity;
 import com.mensal.pizzaria.repository.FuncionarioRepository;
 import com.mensal.pizzaria.service.FuncionarioService;

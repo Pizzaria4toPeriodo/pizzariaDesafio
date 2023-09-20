@@ -21,7 +21,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-public class ClienteServiceTest {
+class ClienteServiceTest {
 
     @InjectMocks
     private com.mensal.pizzaria.service.ClienteService clienteService;
@@ -38,7 +38,7 @@ public class ClienteServiceTest {
     }
 
     @Test
-    public void testCreateCliente() {
+    void testCreateCliente() {
 
 
 

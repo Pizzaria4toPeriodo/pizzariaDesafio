@@ -54,7 +54,7 @@ class EnderecoServiceTest {
     }
 
     @Test
-    public void testBuscarRua() {
+    void testBuscarRua() {
 
 
        EnderecoDTO endereco =  enderecoService.findByRua("coritians");
@@ -67,7 +67,7 @@ class EnderecoServiceTest {
     }
 
     @Test
-    public void testLista() {
+    void testLista() {
         List<EnderecoEntity> resultado = enderecoRepository.findAll();
         System.out.println(resultado.size());
         Assertions.assertNotNull(resultado);
