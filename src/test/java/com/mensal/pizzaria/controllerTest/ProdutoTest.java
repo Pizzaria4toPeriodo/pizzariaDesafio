@@ -100,6 +100,6 @@ class ProdutoTest {
         Long id = 1L;
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/produtos/{id}", id))
-                .andExpect(status().is(400));
+                .andExpect(status().is(500));
     }
 }

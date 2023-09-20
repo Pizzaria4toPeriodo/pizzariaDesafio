@@ -39,7 +39,7 @@ public class ProdutoService {
     @Transactional
     public ProdutoDTO create(ProdutoDTO dto) {
         if (dto.getId() != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Deixe o campo Id vago, ele é gerado pelo banco");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O id do produto não deve ser inserido");
         }
 
         return modelMapper.map(repository.save(modelMapper.map(dto, ProdutoEntity.class)), ProdutoDTO.class);

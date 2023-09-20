@@ -7,7 +7,9 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,34 +38,20 @@ public class ClienteService {
     }
 
     @Transactional
-    public ClienteDTO findById(Long id) {
-        Optional<ClienteEntity> clienteBD = repository.findById(id);
-
-        return modelMapper.map(clienteBD,ClienteDTO.class);
-
-    }
-
-    @Transactional
     public ClienteDTO create(ClienteDTO dto) {
+        if (dto.getId() != null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O id do cliente não deve ser inserido");
+        }
+
         return modelMapper.map(repository.save(modelMapper.map(dto, ClienteEntity.class)), ClienteDTO.class);
     }
 
     @Transactional
     public ClienteDTO update(Long id, ClienteDTO dto) {
-        ClienteEntity existingEntity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Não foi possível encontrar o registro informado"));
+        ClienteEntity existingEntity = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Não foi possível encontrar o registro informado"));
 
         modelMapper.map(dto, existingEntity);
 
         return modelMapper.map(repository.save(existingEntity), ClienteDTO.class);
     }
-
-    @Transactional
-    public void delete(Long id){
-        ClienteEntity existingEntity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Não foi possível encontrar o registro informado"));
-
-         repository.deleteById(existingEntity.getId());
-
-    }
-
-
 }

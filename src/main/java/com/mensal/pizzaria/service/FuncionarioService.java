@@ -7,7 +7,9 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,12 +38,16 @@ public class FuncionarioService {
 
     @Transactional
     public FuncionarioDTO create(FuncionarioDTO dto) {
+        if (dto.getId() != null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O id do funcionário não deve ser inserido");
+        }
+
         return modelMapper.map(repository.save(modelMapper.map(dto, FuncionarioEntity.class)), FuncionarioDTO.class);
     }
 
     @Transactional
     public FuncionarioDTO update(Long id, FuncionarioDTO dto) {
-        FuncionarioEntity existingEntity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Não foi possível encontrar o registro informado"));
+        FuncionarioEntity existingEntity = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Não foi possível encontrar o registro informado"));
 
         modelMapper.map(dto, existingEntity);
 

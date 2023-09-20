@@ -7,7 +7,10 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -38,12 +41,17 @@ public class EnderecoService {
     public EnderecoDTO create(EnderecoDTO dto) {
         EnderecoEntity enderecoEntity = modelMapper.map(dto, EnderecoEntity.class);
         EnderecoEntity savedEntity = repository.save(enderecoEntity);
+
+        if (dto.getId() != null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O id do endereço não deve ser inserido");
+        }
+
         return modelMapper.map(savedEntity, EnderecoDTO.class);
     }
 
     @Transactional
     public EnderecoDTO update(Long id, EnderecoDTO dto) {
-        EnderecoEntity existingEntity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Não foi possível encontrar o registro informado"));
+        EnderecoEntity existingEntity = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Não foi possível encontrar o registro informado"));
 
         modelMapper.map(dto, existingEntity);
 

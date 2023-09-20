@@ -74,16 +74,6 @@ class ClienteTest {
 
     }
 
-
-    @Test
-    void  findByIdTest() throws  Exception{
-
-        when(service.findById(1L)).thenReturn(clienteValido);
-
-        ClienteDTO result = service.findById(1L);
-        Assertions.assertEquals(clienteValido,result);
-    }
-
     @Test
     void createTest() throws Exception {
         when(service.create(any(ClienteDTO.class))).thenReturn(clienteValido);

@@ -62,7 +62,7 @@ class PedidoServiceTest {
     }
 
     @Test
-    void testList() {
+    void findAllTest() {
         List<PedidoEntity> listEntity = new ArrayList<>();
         listEntity.add(pedido);
 
@@ -73,7 +73,7 @@ class PedidoServiceTest {
     }
 
     @Test
-    void testCreateException() {
+    void createTestException() {
         pedidoDTO.setId(1L);
 
         ResponseStatusException exception = Assertions.assertThrows(ResponseStatusException.class, () -> service.create(pedidoDTO));
@@ -82,7 +82,7 @@ class PedidoServiceTest {
     }
 
     @Test
-    void testUpdateException() {
+    void updateTestException() {
         Long id = 2L;
 
         when(repository.findById(id)).thenReturn(Optional.empty());
@@ -92,7 +92,7 @@ class PedidoServiceTest {
     }
 
     @Test
-    void testCalcValorTotal() {
+    void calculoTotalTest() {
         PedidoDTO pedido = new PedidoDTO();
         ProdutoDTO produto1 = new ProdutoDTO(1L, "Pizza Calabreza", 25.0, null);
         ProdutoDTO produto2 = new ProdutoDTO(2L, "Pizza Pepperoni", 30.0, null);

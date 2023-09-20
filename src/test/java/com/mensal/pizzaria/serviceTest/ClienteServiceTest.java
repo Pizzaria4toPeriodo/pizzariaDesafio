@@ -1,114 +1,80 @@
 package com.mensal.pizzaria.serviceTest;
 
 import com.mensal.pizzaria.dto.ClienteDTO;
-import com.mensal.pizzaria.dto.EnderecoDTO;
 import com.mensal.pizzaria.entity.ClienteEntity;
-import com.mensal.pizzaria.entity.EnderecoEntity;
 import com.mensal.pizzaria.repository.ClienteRepository;
 import com.mensal.pizzaria.service.ClienteService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class ClienteServiceTest {
+    @InjectMocks
+    private ClienteService service;
 
-    @MockBean
-    private ClienteService clienteService;
+    @Mock
+    private ClienteService serviceTest;
 
-    @MockBean
+    @Mock
     private ClienteRepository repository;
 
     @Mock
     private ModelMapper modelMapper;
 
-    private ClienteEntity clienteValido;
-    private EnderecoEntity enderecoEntity;
-    private EnderecoDTO enderecoDTO;
+    private ClienteEntity cliente;
     private ClienteDTO clienteDTO;
 
     @BeforeEach
-    void injectData() {
-        enderecoEntity = new EnderecoEntity(1L, "Lobos", 222, clienteValido);
-        List<EnderecoEntity> enderecos = new ArrayList<>();
-        enderecos.add(enderecoEntity);
+    void setup(){
+        modelMapper = new ModelMapper();
 
-        clienteValido = new ClienteEntity(1L, "Luis", "801.720.159-10", enderecos, "45991539849");
+        cliente = new ClienteEntity(1L, "Gustavo", "36126170601", null, "+55 45 99988-7766");
 
-        enderecoDTO = new EnderecoDTO(1L,"Lobos",222,clienteDTO);
-        List<EnderecoDTO> enderecosdto = new ArrayList<>();
-        enderecos.add(enderecoEntity);
-        List<ClienteDTO> clienteDTOList = new ArrayList<>();
-        clienteDTOList.add(new ClienteDTO(1L, "Luis", "801.720.159-10", enderecosdto, "45991539849"));
-
-        Mockito.when(repository.save(Mockito.any(ClienteEntity.class))).thenReturn(new ClienteEntity());
-        Mockito.when(repository.save(clienteValido)).thenReturn(clienteValido);
-        Mockito.when(clienteService.create(clienteDTO)).thenReturn(clienteDTO);
-        Mockito.when(clienteService.findCpf("801.720.159-10")).thenReturn(clienteDTO);
-        Mockito.when(clienteService.findAll()).thenReturn(clienteDTOList);
+        clienteDTO = new ClienteDTO(1L, "Gustavo", "36126170601", null, "+55 45 99988-7766");
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    void testByCpf() {
-        ClienteDTO cliente = clienteService.findCpf("801.720.159-10");
-        List<ClienteDTO> clientes = new ArrayList<>();
-        clientes.add(cliente);
+    void testList() {
+        List<ClienteEntity> listEntity = new ArrayList<>();
+        listEntity.add(cliente);
 
-        Assertions.assertEquals(1, clientes.size());
+        when(repository.findAll()).thenReturn(listEntity);
 
-    }
-    @Test
-    void testLista() {
-
-        List<ClienteDTO> clienteDTOLista = clienteService.findAll();
-
-        Assertions.assertNotNull(clienteDTOLista);
-        Assertions.assertEquals(1, clienteDTOLista.size());
+        List<ClienteDTO> resultList = service.findAll();
+        Assertions.assertEquals(1, resultList.size());
     }
 
     @Test
-    void testCreateCliente() {
-        ClienteDTO clienteDTO = new ClienteDTO(1L, "Luis", "80172015910", null, "45991539849");
+    void testCreateException() {
+        clienteDTO.setId(1L);
 
-        when(clienteService.create(any(ClienteDTO.class))).thenReturn(clienteDTO);
+        ResponseStatusException exception = Assertions.assertThrows(ResponseStatusException.class, () -> service.create(clienteDTO));
 
-        ClienteDTO createdClienteDTO = clienteService.create(clienteDTO);
-
-        verify(clienteService, times(1)).create(any(ClienteDTO.class));
-
-        Assertions.assertNotNull(createdClienteDTO);
-        Assertions.assertEquals(1L, createdClienteDTO.getId());
-        Assertions.assertEquals("Luis", createdClienteDTO.getNomeCliente());
-        Assertions.assertEquals("80172015910", createdClienteDTO.getCpf());
-        Assertions.assertEquals("45991539849", createdClienteDTO.getTelefone());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
     }
+
     @Test
-    void testUpdate() {
-        Long id = 1L;
+    void testUpdateException() {
+        Long id = 2L;
 
-        EnderecoDTO enderecoDTO = new EnderecoDTO();
-        enderecoDTO.setId(1L);
-        enderecoDTO.setRua("ruanova");
-        enderecoDTO.setNumero(555);
+        when(repository.findById(id)).thenReturn(Optional.empty());
 
-        ClienteDTO clienteAtualizada = new ClienteDTO(id, "Mario", "80172015910", null, "45991539849");
-
-        clienteService.update(id, clienteAtualizada);
-
-        Assertions.assertEquals("Mario", clienteAtualizada.getNomeCliente());
-        Assertions.assertEquals("80172015910", clienteAtualizada.getCpf());
-        Assertions.assertEquals("45991539849", clienteAtualizada.getTelefone());
+        ResponseStatusException exception = Assertions.assertThrows(ResponseStatusException.class, () -> service.update(id, clienteDTO));
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
     }
 }

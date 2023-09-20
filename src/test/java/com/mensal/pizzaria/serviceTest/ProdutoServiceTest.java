@@ -49,7 +49,7 @@ class ProdutoServiceTest {
     }
 
     @Test
-    void testList() {
+    void findALlTest() {
         List<ProdutoEntity> listEntity = new ArrayList<>();
         listEntity.add(produto);
 
@@ -60,7 +60,7 @@ class ProdutoServiceTest {
     }
 
     @Test
-    void testCreateException() {
+    void createTestException() {
         produtoDTO.setId(1L);
 
         ResponseStatusException exception = Assertions.assertThrows(ResponseStatusException.class, () -> service.create(produtoDTO));
@@ -69,7 +69,7 @@ class ProdutoServiceTest {
     }
 
     @Test
-    void testUpdateException() {
+    void updateTestException() {
         Long id = 2L;
 
         when(repository.findById(id)).thenReturn(Optional.empty());

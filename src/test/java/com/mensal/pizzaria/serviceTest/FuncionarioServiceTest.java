@@ -1,7 +1,5 @@
 package com.mensal.pizzaria.serviceTest;
 
-import com.mensal.pizzaria.dto.ClienteDTO;
-import com.mensal.pizzaria.dto.EnderecoDTO;
 import com.mensal.pizzaria.dto.FuncionarioDTO;
 import com.mensal.pizzaria.entity.FuncionarioEntity;
 import com.mensal.pizzaria.repository.FuncionarioRepository;
@@ -10,96 +8,76 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class FuncionarioServiceTest {
+    @InjectMocks
+    private FuncionarioService service;
 
-    @MockBean
-    private FuncionarioService funcionarioService;
+    @Mock
+    private FuncionarioService serviceTest;
 
-    @MockBean
+    @Mock
     private FuncionarioRepository repository;
 
     @Mock
     private ModelMapper modelMapper;
 
+    private FuncionarioEntity funcionario;
+    private FuncionarioDTO funcionarioDTO;
+
     @BeforeEach
-    void injectData() {
-        FuncionarioEntity funcionario = new FuncionarioEntity(1L, "Marcelo", "caixa");
+    void setup() {
+        modelMapper = new ModelMapper();
 
-        List<FuncionarioDTO> funcionarioDTOList = new ArrayList<>();
-        funcionarioDTOList.add(new FuncionarioDTO(1L, "Juan", "caixa"));
+        funcionario = new FuncionarioEntity();
 
-        FuncionarioDTO funcionarioDTO = new FuncionarioDTO(1L, "Marcelo", "caixa");
+        funcionarioDTO = new FuncionarioDTO(1L, "Gustavo", "Entregador");
 
-        Mockito.when(repository.save(Mockito.any(FuncionarioEntity.class))).thenReturn(new FuncionarioEntity());
-        Mockito.when(repository.save(funcionario)).thenReturn(funcionario);
-        Mockito.when(funcionarioService.create(funcionarioDTO)).thenReturn(funcionarioDTO);
-        Mockito.when(funcionarioService.findByNomeFuncionario("Marcelo")).thenReturn(funcionarioDTO);
-        Mockito.when(funcionarioService.findAll()).thenReturn(funcionarioDTOList);
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    void testByNome() {
+    void findAllTest() {
+        List<FuncionarioEntity> listEntity = new ArrayList<>();
+        listEntity.add(funcionario);
 
-        FuncionarioDTO funcionario = funcionarioService.findByNomeFuncionario("Marcelo");
-        List<FuncionarioDTO> funcionarios = new ArrayList<>();
-        funcionarios.add(funcionario);
+        when(repository.findAll()).thenReturn(listEntity);
 
-        Assertions.assertEquals(1, funcionarios.size());
+        List<FuncionarioDTO> resultList = service.findAll();
 
-        Assertions.assertEquals("Marcelo", funcionarios.get(0).getNomeFuncionario());
+        Assertions.assertEquals(1, resultList.size());
     }
 
     @Test
-    void testLista() {
+    void testCreateException() {
+        funcionarioDTO.setId(1L);
 
-        List<FuncionarioDTO> funcionarioDTOLista = funcionarioService.findAll();
+        ResponseStatusException exception = Assertions.assertThrows(ResponseStatusException.class, () -> service.create(funcionarioDTO));
 
-        Assertions.assertNotNull(funcionarioDTOLista);
-        Assertions.assertEquals(1, funcionarioDTOLista.size());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
     }
 
     @Test
-    void testCreate() {
-        FuncionarioDTO funcionarioDTO = new FuncionarioDTO(1L, "Jose", "caixa");
+    void testUpdateException() {
+        Long id = 2L;
 
-        // Configura el comportamiento del servicio para el método create
-        when(funcionarioService.create(any(FuncionarioDTO.class))).thenReturn(funcionarioDTO);
+        when(repository.findById(id)).thenReturn(Optional.empty());
 
-        // Llama al método create del servicio
-        FuncionarioDTO createdFuncionarioDTO = funcionarioService.create(funcionarioDTO);
-
-        // Verifica que se haya llamado al método create en el servicio
-        verify(funcionarioService, times(1)).create(any(FuncionarioDTO.class));
-
-        Assertions.assertNotNull(createdFuncionarioDTO);
-        Assertions.assertEquals("Jose", createdFuncionarioDTO.getNomeFuncionario());
-        Assertions.assertEquals("caixa", createdFuncionarioDTO.getCargo());
-    }
-
-    @Test
-    void testUpdate() {
-        Long id = 1L;
-
-        FuncionarioDTO funcionarioAtualizada = new FuncionarioDTO(id, "Jose", "caixa");
-
-        funcionarioService.update(id, funcionarioAtualizada);
-
-        Assertions.assertEquals("Jose", funcionarioAtualizada.getNomeFuncionario());
-        Assertions.assertEquals("caixa", funcionarioAtualizada.getCargo());
+        ResponseStatusException exception = Assertions.assertThrows(ResponseStatusException.class, () -> service.update(id, funcionarioDTO));
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
     }
 }
