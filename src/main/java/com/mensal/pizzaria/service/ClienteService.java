@@ -8,7 +8,6 @@ import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +19,11 @@ public class ClienteService {
     private ClienteRepository repository;
     @Autowired
     private ModelMapper modelMapper;
+
+    @Transactional
+    public ClienteDTO findCpf(String cpf) {
+        return modelMapper.map(repository.findByCpf(cpf), ClienteDTO.class);
+    }
 
     @Transactional
     public List<ClienteDTO> findAll() {
@@ -38,8 +42,6 @@ public class ClienteService {
         return modelMapper.map(clienteBD,ClienteDTO.class);
 
     }
-
-
 
     @Transactional
     public ClienteDTO create(ClienteDTO dto) {
