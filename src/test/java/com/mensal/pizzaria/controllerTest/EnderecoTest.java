@@ -91,4 +91,12 @@ public class EnderecoTest {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    void deleteTest() throws Exception {
+        Long id = 1L;
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/enderecos/{id}", id))
+                .andExpect(status().is(500));
+    }
+
 }
