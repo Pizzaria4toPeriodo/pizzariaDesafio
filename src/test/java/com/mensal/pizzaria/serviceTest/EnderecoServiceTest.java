@@ -4,7 +4,6 @@ import com.mensal.pizzaria.dto.ClienteDTO;
 import com.mensal.pizzaria.dto.EnderecoDTO;
 import com.mensal.pizzaria.entity.ClienteEntity;
 import com.mensal.pizzaria.entity.EnderecoEntity;
-import com.mensal.pizzaria.repository.ClienteRepository;
 import com.mensal.pizzaria.repository.EnderecoRepository;
 import com.mensal.pizzaria.service.EnderecoService;
 import org.junit.jupiter.api.Assertions;
@@ -86,13 +85,10 @@ class EnderecoServiceTest {
 
         enderecoDTOList.add(new EnderecoDTO(1L, "Rua 1", 123, clienteDTO));
 
-        // Simular el comportamiento del repositorio al llamar a findAll
         when(enderecoService.findAll()).thenReturn(enderecoDTOList);
 
-        // Ejecutar el método findAll del servicio
         List<EnderecoDTO> enderecoDTOLista = enderecoService.findAll();
 
-        // Verificar que se haya llamado al método findAll del repositorio
         Assertions.assertNotNull(enderecoDTOLista);
         Assertions.assertEquals(1, enderecoDTOLista.size());
     }
