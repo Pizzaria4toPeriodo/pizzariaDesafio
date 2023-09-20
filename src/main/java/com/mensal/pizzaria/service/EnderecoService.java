@@ -1,7 +1,6 @@
 package com.mensal.pizzaria.service;
 
 import com.mensal.pizzaria.dto.EnderecoDTO;
-import com.mensal.pizzaria.dto.ProdutoDTO;
 import com.mensal.pizzaria.entity.EnderecoEntity;
 import com.mensal.pizzaria.repository.EnderecoRepository;
 import jakarta.persistence.EntityNotFoundException;

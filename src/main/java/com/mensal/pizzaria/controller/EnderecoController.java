@@ -1,7 +1,6 @@
 package com.mensal.pizzaria.controller;
 
 import com.mensal.pizzaria.dto.EnderecoDTO;
-import com.mensal.pizzaria.dto.ProdutoDTO;
 import com.mensal.pizzaria.entity.EnderecoEntity;
 import com.mensal.pizzaria.repository.EnderecoRepository;
 import com.mensal.pizzaria.service.EnderecoService;
@@ -12,9 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/enderecos")
