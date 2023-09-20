@@ -1,8 +1,8 @@
 package com.mensal.pizzaria.controllerTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mensal.pizzaria.dto.ClienteDTO;
 import com.mensal.pizzaria.dto.EnderecoDTO;
-import com.mensal.pizzaria.dto.ProdutoDTO;
 import com.mensal.pizzaria.service.EnderecoService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,12 +33,18 @@ public class EnderecoTest {
 
     private ObjectMapper objectMapper;
 
+    private ClienteDTO clienteValido;
     private EnderecoDTO enderecoValido;
 
     @BeforeEach
     void setup() {
         objectMapper = new ObjectMapper();
-        enderecoValido = new EnderecoDTO(1L, "ruanova", 345, null);
+        clienteValido = new ClienteDTO();
+        clienteValido.setId(1L);
+        clienteValido.setNomeCliente("Cliente1");
+        clienteValido.setCpf("31621441164");
+        clienteValido.setTelefone("1234567890");
+        enderecoValido = new EnderecoDTO(1L, "ruanova", 345, clienteValido);
     }
 
     @Test
@@ -72,6 +78,17 @@ public class EnderecoTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.rua").value("ruanova")).andReturn();
+    }
+    @Test
+    void updateTest() throws Exception {
+        EnderecoDTO enderecoDTO = new EnderecoDTO(1L, "ruanova", 555, clienteValido);
+
+        when(service.update(enderecoDTO.getId(), enderecoDTO)).thenReturn(enderecoDTO);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/enderecos/{id}", enderecoDTO.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(enderecoDTO)))
+                .andExpect(status().isOk());
     }
 
 }
