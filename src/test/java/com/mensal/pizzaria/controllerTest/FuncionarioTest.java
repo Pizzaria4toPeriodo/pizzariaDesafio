@@ -71,4 +71,16 @@ public class FuncionarioTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.nomeFuncionario").value("Marcelo")).andReturn();
     }
+
+    @Test
+    void updateTest() throws Exception {
+        FuncionarioDTO funcionarioDTO = new FuncionarioDTO(1L, "Nicolas", "caixa");
+
+        when(service.update(funcionarioDTO.getId(), funcionarioDTO)).thenReturn(funcionarioDTO);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/funcionarios/{id}", funcionarioDTO.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(funcionarioDTO)))
+                .andExpect(status().isOk());
+    }
 }
