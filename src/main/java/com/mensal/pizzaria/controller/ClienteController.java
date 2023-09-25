@@ -1,7 +1,6 @@
 package com.mensal.pizzaria.controller;
 
 import com.mensal.pizzaria.dto.ClienteDTO;
-import com.mensal.pizzaria.entity.ClienteEntity;
 import com.mensal.pizzaria.repository.ClienteRepository;
 import com.mensal.pizzaria.service.ClienteService;
 import org.modelmapper.ModelMapper;
@@ -10,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -24,35 +22,51 @@ public class ClienteController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @GetMapping("/{cpf}")
-    public ResponseEntity<ClienteDTO> findCpf(@PathVariable("cpf") String cpf) {
-        return new ResponseEntity<>(service.findCpf(cpf), HttpStatus.OK);
+    @GetMapping("/list")
+    public ResponseEntity<List<ClienteDTO>> getAll() {
+        return ResponseEntity.ok().body(service.getAll());
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<List<ClienteDTO>> findAll() {
-        return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
+    @GetMapping("/{id}")
+    public ResponseEntity<ClienteDTO> getById(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok().body(service.getById(id));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/{cpf}")
+    public ResponseEntity<ClienteDTO> getByCpf(@PathVariable("cpf") String cpf) {
+        try {
+            return ResponseEntity.ok().body(service.getByCpf(cpf));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<ClienteDTO> create(@RequestBody @Validated ClienteDTO dto) {
-        return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
+        return ResponseEntity.ok().body(service.create(dto));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ClienteDTO> update(@PathVariable("id") Long id, @RequestBody ClienteDTO dto) {
-        return new ResponseEntity<>(service.update(id, dto), HttpStatus.OK);
+        try {
+            return ResponseEntity.ok().body(service.update(id, dto));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id) {
         try {
-            ClienteEntity entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Não foi possível encontrar o registro informado"));
-            repository.delete(entity);
-
-            return ResponseEntity.ok(HttpStatus.OK);
-        } catch (RuntimeException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            service.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
         }
     }
 }

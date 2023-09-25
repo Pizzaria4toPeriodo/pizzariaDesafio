@@ -3,7 +3,6 @@ package com.mensal.pizzaria.service;
 import com.mensal.pizzaria.dto.ClienteDTO;
 import com.mensal.pizzaria.entity.ClienteEntity;
 import com.mensal.pizzaria.repository.ClienteRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ClienteService {
@@ -22,27 +20,30 @@ public class ClienteService {
     @Autowired
     private ModelMapper modelMapper;
 
+
     @Transactional
-    public ClienteDTO findCpf(String cpf) {
+    public ClienteDTO getById(Long id) {
+        return modelMapper.map(repository.findById(id), ClienteDTO.class);
+    }
+
+    @Transactional
+    public ClienteDTO getByCpf(String cpf) {
         return modelMapper.map(repository.findByCpf(cpf), ClienteDTO.class);
     }
 
     @Transactional
-    public List<ClienteDTO> findAll() {
+    public List<ClienteDTO> getAll() {
         List<ClienteDTO> list = new ArrayList<>();
         for (ClienteEntity entity : repository.findAll()) {
             ClienteDTO map = modelMapper.map(entity, ClienteDTO.class);
             list.add(map);
         }
+
         return list;
     }
 
     @Transactional
     public ClienteDTO create(ClienteDTO dto) {
-        if (dto.getId() != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O id do cliente não deve ser inserido");
-        }
-
         return modelMapper.map(repository.save(modelMapper.map(dto, ClienteEntity.class)), ClienteDTO.class);
     }
 
@@ -53,5 +54,9 @@ public class ClienteService {
         modelMapper.map(dto, existingEntity);
 
         return modelMapper.map(repository.save(existingEntity), ClienteDTO.class);
+    }
+
+    public void deleteById(Long id) {
+        repository.deleteById(id);
     }
 }

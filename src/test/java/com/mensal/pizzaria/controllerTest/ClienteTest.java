@@ -55,7 +55,7 @@ class ClienteTest {
         ClienteDTO clienteEncontrado = new ClienteDTO();
         clienteEncontrado.setCpf(clienteValido.getCpf());
 
-        when(service.findCpf(clienteValido.getCpf())).thenReturn(clienteEncontrado);
+        when(service.getCpf(clienteValido.getCpf())).thenReturn(clienteEncontrado);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/clientes/" + clienteValido.getCpf()))
                 .andExpect(status().isOk())
