@@ -56,6 +56,7 @@ public class ClienteService {
         return modelMapper.map(repository.save(existingEntity), ClienteDTO.class);
     }
 
+    @Transactional
     public void deleteById(Long id) {
         repository.deleteById(id);
     }

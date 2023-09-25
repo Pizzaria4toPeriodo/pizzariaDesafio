@@ -4,7 +4,6 @@ import com.mensal.pizzaria.dto.PedidoDTO;
 import com.mensal.pizzaria.dto.ProdutoDTO;
 import com.mensal.pizzaria.entity.PedidoEntity;
 import com.mensal.pizzaria.repository.PedidoRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,12 @@ public class  PedidoService {
     private ModelMapper modelMapper;
 
     @Transactional
-    public List<PedidoDTO> findAll() {
+    public PedidoDTO getById(Long id) {
+        return modelMapper.map(repository.findById(id), PedidoDTO.class);
+    }
+
+    @Transactional
+    public List<PedidoDTO> getAll() {
         List<PedidoDTO> list = new ArrayList<>();
         for (PedidoEntity entity : repository.findAll()) {
             PedidoDTO map = modelMapper.map(entity, PedidoDTO.class);
@@ -36,9 +40,6 @@ public class  PedidoService {
     public PedidoDTO create(PedidoDTO dto) {
         if (!dto.getProdutoList().isEmpty()) {
             dto.setTotal(calculoTotal(dto));
-        }
-        if (dto.getId() != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O id do pedido não deve ser inserido");
         }
 
         return modelMapper.map(repository.save(modelMapper.map(dto, PedidoEntity.class)), PedidoDTO.class);
@@ -55,6 +56,11 @@ public class  PedidoService {
         modelMapper.map(dto, existingEntity);
 
         return modelMapper.map(repository.save(existingEntity), PedidoDTO.class);
+    }
+
+    @Transactional
+    public void deleteById(Long id) {
+        repository.deleteById(id);
     }
 
     public Double calculoTotal(PedidoDTO dto) {

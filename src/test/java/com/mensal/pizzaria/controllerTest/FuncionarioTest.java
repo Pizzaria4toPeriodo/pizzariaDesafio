@@ -44,7 +44,7 @@ class FuncionarioTest {
         FuncionarioDTO funcionarioEncontrado = new FuncionarioDTO();
         funcionarioEncontrado.setNomeFuncionario(funcionarioValido.getNomeFuncionario());
 
-        when(service.findByNomeFuncionario(funcionarioValido.getNomeFuncionario())).thenReturn(funcionarioEncontrado);
+        when(service.getByNomeFuncionario(funcionarioValido.getNomeFuncionario())).thenReturn(funcionarioEncontrado);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/funcionarios/" + funcionarioValido.getNomeFuncionario()))
                 .andExpect(status().isOk())
@@ -55,7 +55,7 @@ class FuncionarioTest {
     void findAllTest() throws Exception {
         List<FuncionarioDTO> funcionarioList = new ArrayList<>();
         funcionarioList.add(funcionarioValido);
-        when(service.findAll()).thenReturn(funcionarioList);
+        when(service.getAll()).thenReturn(funcionarioList);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/funcionarios/list")).andExpect(status().isOk());
     }

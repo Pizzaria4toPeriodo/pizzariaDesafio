@@ -25,6 +25,7 @@ public class EnderecoService {
     public EnderecoDTO getById(Long id) {
         return modelMapper.map(repository.findById(id), EnderecoDTO.class);
     }
+
     @Transactional
     public EnderecoDTO getByRua(String rua) {
         return modelMapper.map(repository.findByRua(rua), EnderecoDTO.class);
@@ -43,7 +44,6 @@ public class EnderecoService {
     @Transactional
     public EnderecoDTO create(EnderecoDTO dto) {
         return modelMapper.map(repository.save(modelMapper.map(dto, EnderecoEntity.class)), EnderecoDTO.class);
-
     }
 
     @Transactional
@@ -55,6 +55,7 @@ public class EnderecoService {
         return modelMapper.map(repository.save(existingEntity), EnderecoDTO.class);
     }
 
+    @Transactional
     public void deleteById(Long id) {
         repository.deleteById(id);
     }
