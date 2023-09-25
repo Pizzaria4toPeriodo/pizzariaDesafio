@@ -29,20 +29,12 @@ public class ClienteController {
 
     @GetMapping("/id/{id}")
     public ResponseEntity<ClienteDTO> getById(@PathVariable Long id) {
-        try {
-            return ResponseEntity.ok().body(service.getById(id));
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok().body(service.getById(id));
     }
 
     @GetMapping("/cpf/{cpf}")
     public ResponseEntity<ClienteDTO> getByCpf(@PathVariable("cpf") String cpf) {
-        try {
-            return ResponseEntity.ok().body(service.getByCpf(cpf));
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok().body(service.getByCpf(cpf));
     }
 
     @PostMapping
@@ -53,20 +45,12 @@ public class ClienteController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ClienteDTO> update(@PathVariable("id") Long id, @RequestBody @Validated ClienteDTO dto) {
-        try {
-            return ResponseEntity.ok().body(service.update(id, dto));
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok().body(service.update(id, dto));
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id) {
-        try {
-            service.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        service.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

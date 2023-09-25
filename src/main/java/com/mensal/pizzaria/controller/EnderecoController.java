@@ -29,20 +29,12 @@ public class EnderecoController {
 
     @GetMapping("/id/{id}")
     public ResponseEntity<EnderecoDTO> getById(@PathVariable Long id) {
-        try {
-            return ResponseEntity.ok().body(service.getById(id));
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok().body(service.getById(id));
     }
 
     @GetMapping("/rua/{rua}")
     public ResponseEntity<EnderecoDTO> getByRua(@PathVariable("rua") String rua) {
-        try {
-            return ResponseEntity.ok().body(service.getByRua(rua));
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok().body(service.getByRua(rua));
     }
 
     @PostMapping
@@ -53,20 +45,12 @@ public class EnderecoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<EnderecoDTO> update(@PathVariable("id") Long id, @RequestBody @Validated EnderecoDTO dto) {
-        try {
-            return ResponseEntity.ok().body(service.update(id, dto));
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok().body(service.update(id, dto));
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id) {
-        try {
-            service.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        service.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

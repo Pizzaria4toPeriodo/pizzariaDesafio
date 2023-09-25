@@ -29,11 +29,7 @@ public class PedidoController {
 
     @GetMapping("/id/{id}")
     public ResponseEntity<PedidoDTO> getById(@PathVariable Long id) {
-        try {
-            return ResponseEntity.ok().body(service.getById(id));
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok().body(service.getById(id));
     }
 
     @PostMapping
@@ -44,20 +40,12 @@ public class PedidoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<PedidoDTO> update(@PathVariable("id") Long id, @RequestBody @Validated PedidoDTO dto) {
-        try {
-            return ResponseEntity.ok().body(service.update(id, dto));
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok().body(service.update(id, dto));
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id) {
-        try {
-            service.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        service.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

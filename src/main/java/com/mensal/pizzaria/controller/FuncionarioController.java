@@ -29,20 +29,12 @@ public class FuncionarioController {
 
     @GetMapping("/id/{id}")
     public ResponseEntity<FuncionarioDTO> getById(@PathVariable Long id) {
-        try {
-            return ResponseEntity.ok().body(service.getById(id));
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok().body(service.getById(id));
     }
 
     @GetMapping("/nome/{nome}")
     public ResponseEntity<FuncionarioDTO> getByNomeFuncionario(@PathVariable("nome") String nome) {
-        try {
-            return ResponseEntity.ok().body(service.getByNomeFuncionario(nome));
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok().body(service.getByNomeFuncionario(nome));
     }
 
     @PostMapping
@@ -53,20 +45,12 @@ public class FuncionarioController {
 
     @PutMapping("/{id}")
     public ResponseEntity<FuncionarioDTO> update(@PathVariable("id") Long id, @RequestBody @Validated FuncionarioDTO dto) {
-        try {
-            return ResponseEntity.ok().body(service.update(id, dto));
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok().body(service.update(id, dto));
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id) {
-        try {
-            service.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        service.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

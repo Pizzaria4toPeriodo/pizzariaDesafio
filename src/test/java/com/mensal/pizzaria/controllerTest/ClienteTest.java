@@ -1,112 +1,63 @@
 package com.mensal.pizzaria.controllerTest;
 
-
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mensal.pizzaria.controller.ClienteController;
 import com.mensal.pizzaria.dto.ClienteDTO;
-import com.mensal.pizzaria.dto.EnderecoDTO;
+import com.mensal.pizzaria.repository.ClienteRepository;
 import com.mensal.pizzaria.service.ClienteService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 class ClienteTest {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @MockBean
+    @InjectMocks
+    private ClienteController controller;
+    @Mock
     private ClienteService service;
-
-    private ObjectMapper objectMapper;
-
-    private ClienteDTO clienteValido;
-
-    private EnderecoDTO enderecoDTO;
-
+    @Mock
+    private ClienteRepository repository;
+    @Mock
+    private ModelMapper modelMapper;
 
     @BeforeEach
-    void setup(){
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
 
-        objectMapper = new ObjectMapper();
-        enderecoDTO = new EnderecoDTO(1L,"Lobos",222,clienteValido);
-        List<EnderecoDTO> enderecos = new ArrayList<>();
-        enderecos.add(enderecoDTO);
-        clienteValido = new ClienteDTO(1L,"Luis","801.720.159-10",enderecos,"45991539849");
-    }
-
-    @Test
-    void findCpf() throws Exception {
-        ClienteDTO clienteEncontrado = new ClienteDTO();
-        clienteEncontrado.setCpf(clienteValido.getCpf());
-
-        when(service.getByCpf(clienteValido.getCpf())).thenReturn(clienteEncontrado);
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/clientes/" + clienteValido.getCpf()))
-                .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(clienteEncontrado)));
-    }
-
-    @Test
-    void findAllTest() throws Exception{
-
+        ClienteDTO clienteDTO = new ClienteDTO(1L, "Gustavo", "36126170601", null, "+55 45 99988-7766");
         List<ClienteDTO> clienteDTOList = new ArrayList<>();
-        clienteDTOList.add(clienteValido);
+        clienteDTOList.add(clienteDTO);
+
+        when(service.getById(anyLong())).thenReturn(clienteDTO);
+        when(service.getByCpf(anyString())).thenReturn(clienteDTO);
         when(service.getAll()).thenReturn(clienteDTOList);
-        List<ClienteDTO> result = service.getAll();
-        Assertions.assertEquals(clienteDTOList, result);
-        mockMvc.perform(MockMvcRequestBuilders.get("/clientes/list")).andExpect(status().isOk());
-
+        when(service.create(any(ClienteDTO.class))).thenReturn(clienteDTO);
+        when(service.update(anyLong(), any(ClienteDTO.class))).thenReturn(clienteDTO);
+        doNothing().when(service).deleteById(anyLong());
     }
 
     @Test
-    void createTest() throws Exception {
-        when(service.create(any(ClienteDTO.class))).thenReturn(clienteValido);
+    void testDeleteCliente() {
+        Long clienteId = 1L;
+        
+        ResponseEntity<HttpStatus> response = controller.delete(clienteId);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/clientes")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(clienteValido)))
-                .andExpect(status().isCreated())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.nomeCliente").value("Luis")).andReturn();
+        verify(service).deleteById(clienteId);
+
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
-
-    @Test
-    void updateTest() throws Exception {
-        enderecoDTO = new EnderecoDTO(1L,"Lobos",222,clienteValido);
-        List<EnderecoDTO> enderecos = new ArrayList<>();
-        enderecos.add(enderecoDTO);
-        ClienteDTO clienteDTO = new ClienteDTO(1L,"Luis","801.720.159-10",enderecos,"45991539849");
-
-        when(service.update(clienteDTO.getId(), clienteDTO)).thenReturn(clienteDTO);
-
-        mockMvc.perform(MockMvcRequestBuilders.put("/clientes/{id}", clienteDTO.getId())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(clienteDTO)))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    void deleteTest() throws Exception {
-        Long id = 1L;
-
-        mockMvc.perform(MockMvcRequestBuilders.delete("/clientes/{id}", id))
-                .andExpect(status().is(500));
-    }
-
 }

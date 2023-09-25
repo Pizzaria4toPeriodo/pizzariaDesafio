@@ -29,20 +29,12 @@ public class ProdutoController {
 
     @GetMapping("/id/{id}")
     public ResponseEntity<ProdutoDTO> getById(@PathVariable Long id) {
-        try {
-            return ResponseEntity.ok().body(service.getById(id));
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok().body(service.getById(id));
     }
 
     @GetMapping("/nome/{nome}")
     public ResponseEntity<ProdutoDTO> getByNomeProduto(@PathVariable("nome") String nome) {
-        try {
-            return ResponseEntity.ok().body(service.getByNomeProduto(nome));
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok().body(service.getByNomeProduto(nome));
     }
 
     @PostMapping
@@ -53,20 +45,12 @@ public class ProdutoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ProdutoDTO> update(@PathVariable("id") Long id, @RequestBody @Validated ProdutoDTO dto) {
-        try {
-            return ResponseEntity.ok().body(service.update(id, dto));
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok().body(service.update(id, dto));
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id) {
-        try {
-            service.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        service.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
