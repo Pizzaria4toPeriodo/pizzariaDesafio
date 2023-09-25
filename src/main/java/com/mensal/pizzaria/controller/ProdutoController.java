@@ -27,7 +27,7 @@ public class ProdutoController {
         return ResponseEntity.ok().body(service.getAll());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<ProdutoDTO> getById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok().body(service.getById(id));
@@ -36,7 +36,7 @@ public class ProdutoController {
         }
     }
 
-    @GetMapping("/{nome}")
+    @GetMapping("/nome/{nome}")
     public ResponseEntity<ProdutoDTO> getByNomeProduto(@PathVariable("nome") String nome) {
         try {
             return ResponseEntity.ok().body(service.getByNomeProduto(nome));

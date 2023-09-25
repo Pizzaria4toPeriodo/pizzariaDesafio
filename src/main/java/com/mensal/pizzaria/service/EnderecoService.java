@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 public class EnderecoService {
@@ -23,7 +24,12 @@ public class EnderecoService {
 
     @Transactional
     public EnderecoDTO getById(Long id) {
-        return modelMapper.map(repository.findById(id), EnderecoDTO.class);
+        Optional<EnderecoEntity> optional = repository.findById(id);
+        if (optional.isPresent()) {
+            return modelMapper.map(optional.get(), EnderecoDTO.class);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Registro não encotrado");
+        }
     }
 
     @Transactional

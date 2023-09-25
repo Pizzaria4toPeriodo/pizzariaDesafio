@@ -27,7 +27,7 @@ public class EnderecoController {
         return ResponseEntity.ok().body(service.getAll());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<EnderecoDTO> getById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok().body(service.getById(id));
@@ -36,7 +36,7 @@ public class EnderecoController {
         }
     }
 
-    @GetMapping("/{rua}")
+    @GetMapping("/rua/{rua}")
     public ResponseEntity<EnderecoDTO> getByRua(@PathVariable("rua") String rua) {
         try {
             return ResponseEntity.ok().body(service.getByRua(rua));

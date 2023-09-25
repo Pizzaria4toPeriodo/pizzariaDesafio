@@ -27,7 +27,7 @@ public class PedidoController {
         return ResponseEntity.ok().body(service.getAll());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<PedidoDTO> getById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok().body(service.getById(id));

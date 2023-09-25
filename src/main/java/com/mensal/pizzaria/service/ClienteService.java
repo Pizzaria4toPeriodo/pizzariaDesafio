@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ClienteService {
@@ -23,7 +24,12 @@ public class ClienteService {
 
     @Transactional
     public ClienteDTO getById(Long id) {
-        return modelMapper.map(repository.findById(id), ClienteDTO.class);
+        Optional<ClienteEntity> optional = repository.findById(id);
+        if (optional.isPresent()) {
+            return modelMapper.map(optional.get(), ClienteDTO.class);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Registro não encotrado");
+        }
     }
 
     @Transactional

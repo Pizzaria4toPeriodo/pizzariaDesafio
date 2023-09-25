@@ -27,7 +27,7 @@ public class FuncionarioController {
         return ResponseEntity.ok().body(service.getAll());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<FuncionarioDTO> getById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok().body(service.getById(id));
@@ -36,7 +36,7 @@ public class FuncionarioController {
         }
     }
 
-    @GetMapping("/{nome}")
+    @GetMapping("/nome/{nome}")
     public ResponseEntity<FuncionarioDTO> getByNomeFuncionario(@PathVariable("nome") String nome) {
         try {
             return ResponseEntity.ok().body(service.getByNomeFuncionario(nome));
