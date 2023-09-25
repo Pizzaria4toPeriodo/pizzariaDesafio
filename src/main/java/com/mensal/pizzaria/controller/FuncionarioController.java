@@ -52,7 +52,7 @@ public class FuncionarioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<FuncionarioDTO> update(@PathVariable("id") Long id, @RequestBody FuncionarioDTO dto) {
+    public ResponseEntity<FuncionarioDTO> update(@PathVariable("id") Long id, @RequestBody @Validated FuncionarioDTO dto) {
         try {
             return ResponseEntity.ok().body(service.update(id, dto));
         } catch (Exception e) {

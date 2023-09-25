@@ -51,7 +51,7 @@ class PedidoTest {
     void findAllTest() throws Exception {
         List<PedidoDTO> pedidoList = new ArrayList<>();
         pedidoList.add(pedidoValido);
-        when(service.findAll()).thenReturn(pedidoList);
+        when(service.getAll()).thenReturn(pedidoList);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/pedidos/list")).andExpect(status().isOk());
     }

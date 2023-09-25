@@ -57,7 +57,7 @@ class FuncionarioServiceTest {
 
         when(repository.findAll()).thenReturn(listEntity);
 
-        List<FuncionarioDTO> resultList = service.findAll();
+        List<FuncionarioDTO> resultList = service.getAll();
 
         Assertions.assertEquals(1, resultList.size());
     }

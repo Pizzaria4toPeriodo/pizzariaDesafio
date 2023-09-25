@@ -52,7 +52,7 @@ public class EnderecoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EnderecoDTO> update(@PathVariable("id") Long id, @RequestBody EnderecoDTO dto) {
+    public ResponseEntity<EnderecoDTO> update(@PathVariable("id") Long id, @RequestBody @Validated EnderecoDTO dto) {
         try {
             return ResponseEntity.ok().body(service.update(id, dto));
         } catch (Exception e) {

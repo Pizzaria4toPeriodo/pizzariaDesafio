@@ -43,7 +43,7 @@ public class PedidoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PedidoDTO> update(@PathVariable("id") Long id, @RequestBody PedidoDTO dto) {
+    public ResponseEntity<PedidoDTO> update(@PathVariable("id") Long id, @RequestBody @Validated PedidoDTO dto) {
         try {
             return ResponseEntity.ok().body(service.update(id, dto));
         } catch (Exception e) {

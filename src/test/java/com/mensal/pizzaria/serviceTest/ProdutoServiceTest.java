@@ -55,7 +55,7 @@ class ProdutoServiceTest {
 
         when(repository.findAll()).thenReturn(listEntity);
 
-        List<ProdutoDTO> resultList = service.findAll();
+        List<ProdutoDTO> resultList = service.getAll();
         Assertions.assertEquals(1, resultList.size());
     }
 

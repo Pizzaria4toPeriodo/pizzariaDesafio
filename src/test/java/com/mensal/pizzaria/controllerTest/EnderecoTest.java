@@ -52,7 +52,7 @@ class EnderecoTest {
         EnderecoDTO enderecoEncontrado = new EnderecoDTO();
         enderecoEncontrado.setRua(enderecoValido.getRua());
 
-        when(service.findByRua(enderecoValido.getRua())).thenReturn(enderecoEncontrado);
+        when(service.getByRua(enderecoValido.getRua())).thenReturn(enderecoEncontrado);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/enderecos/" + enderecoValido.getRua()))
                 .andExpect(status().isOk())
@@ -63,7 +63,7 @@ class EnderecoTest {
     void findAllTest() throws Exception {
         List<EnderecoDTO> enderecoList = new ArrayList<>();
         enderecoList.add(enderecoValido);
-        when(service.findAll()).thenReturn(enderecoList);
+        when(service.getAll()).thenReturn(enderecoList);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/enderecos/list")).andExpect(status().isOk());
     }

@@ -62,7 +62,7 @@ class EnderecoServiceTest {
 
         when(repository.findAll()).thenReturn(listEntity);
 
-        List<EnderecoDTO> resultList = service.findAll();
+        List<EnderecoDTO> resultList = service.getAll();
         Assertions.assertEquals(1, resultList.size());
     }
 

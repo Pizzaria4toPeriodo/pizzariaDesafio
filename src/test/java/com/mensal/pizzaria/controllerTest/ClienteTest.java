@@ -55,7 +55,7 @@ class ClienteTest {
         ClienteDTO clienteEncontrado = new ClienteDTO();
         clienteEncontrado.setCpf(clienteValido.getCpf());
 
-        when(service.getCpf(clienteValido.getCpf())).thenReturn(clienteEncontrado);
+        when(service.getByCpf(clienteValido.getCpf())).thenReturn(clienteEncontrado);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/clientes/" + clienteValido.getCpf()))
                 .andExpect(status().isOk())
@@ -67,8 +67,8 @@ class ClienteTest {
 
         List<ClienteDTO> clienteDTOList = new ArrayList<>();
         clienteDTOList.add(clienteValido);
-        when(service.findAll()).thenReturn(clienteDTOList);
-        List<ClienteDTO> result = service.findAll();
+        when(service.getAll()).thenReturn(clienteDTOList);
+        List<ClienteDTO> result = service.getAll();
         Assertions.assertEquals(clienteDTOList, result);
         mockMvc.perform(MockMvcRequestBuilders.get("/clientes/list")).andExpect(status().isOk());
 

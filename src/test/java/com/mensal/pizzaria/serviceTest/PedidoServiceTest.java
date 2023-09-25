@@ -68,7 +68,7 @@ class PedidoServiceTest {
 
         when(repository.findAll()).thenReturn(listEntity);
 
-        List<PedidoDTO> resultList = service.findAll();
+        List<PedidoDTO> resultList = service.getAll();
         Assertions.assertEquals(1, resultList.size());
     }
 

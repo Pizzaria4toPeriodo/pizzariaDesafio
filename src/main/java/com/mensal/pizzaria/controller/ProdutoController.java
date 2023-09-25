@@ -52,7 +52,7 @@ public class ProdutoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProdutoDTO> update(@PathVariable("id") Long id, @RequestBody ProdutoDTO dto) {
+    public ResponseEntity<ProdutoDTO> update(@PathVariable("id") Long id, @RequestBody @Validated ProdutoDTO dto) {
         try {
             return ResponseEntity.ok().body(service.update(id, dto));
         } catch (Exception e) {
