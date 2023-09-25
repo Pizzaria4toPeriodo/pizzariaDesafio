@@ -1,17 +1,14 @@
 package com.mensal.pizzaria.controller;
 
 import com.mensal.pizzaria.dto.ProdutoDTO;
-import com.mensal.pizzaria.entity.ProdutoEntity;
 import com.mensal.pizzaria.repository.ProdutoRepository;
 import com.mensal.pizzaria.service.ProdutoService;
-import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -25,35 +22,51 @@ public class ProdutoController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @GetMapping("/{nome}")
-    public ResponseEntity<ProdutoDTO> findByNomeProduto(@PathVariable("nome") String nome) {
-        return new ResponseEntity<>(service.findByNomeProduto(nome), HttpStatus.OK);
+    @GetMapping("/list")
+    public ResponseEntity<List<ProdutoDTO>> getAll() {
+        return ResponseEntity.ok().body(service.getAll());
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<List<ProdutoDTO>> findAll() {
-        return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
+    @GetMapping("/{id}")
+    public ResponseEntity<ProdutoDTO> getById(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok().body(service.getById(id));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/{nome}")
+    public ResponseEntity<ProdutoDTO> getByNomeProduto(@PathVariable("nome") String nome) {
+        try {
+            return ResponseEntity.ok().body(service.getByNomeProduto(nome));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping
-    public ResponseEntity<ProdutoDTO> create(@RequestBody @Validated @Valid ProdutoDTO dto) {
-        return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<ProdutoDTO> create(@RequestBody @Validated ProdutoDTO dto) {
+        return ResponseEntity.ok().body(service.create(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProdutoDTO> update(@PathVariable("id") Long id, @RequestBody @Validated @Valid ProdutoDTO dto) {
-        return new ResponseEntity<>(service.update(id, dto), HttpStatus.OK);
+    public ResponseEntity<ProdutoDTO> update(@PathVariable("id") Long id, @RequestBody ProdutoDTO dto) {
+        try {
+            return ResponseEntity.ok().body(service.update(id, dto));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id) {
         try {
-            ProdutoEntity entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Não foi possível encontrar o registro informado"));
-            repository.delete(entity);
-
-            return ResponseEntity.ok(HttpStatus.OK);
-        } catch (RuntimeException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            service.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
         }
     }
 }

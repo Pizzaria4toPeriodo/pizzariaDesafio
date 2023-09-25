@@ -3,7 +3,6 @@ package com.mensal.pizzaria.service;
 import com.mensal.pizzaria.dto.ProdutoDTO;
 import com.mensal.pizzaria.entity.ProdutoEntity;
 import com.mensal.pizzaria.repository.ProdutoRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +21,17 @@ public class ProdutoService {
     private ModelMapper modelMapper;
 
     @Transactional
-    public ProdutoDTO findByNomeProduto(String nome) {
+    public ProdutoDTO getById(Long id) {
+        return modelMapper.map(repository.findById(id), ProdutoDTO.class);
+    }
+
+    @Transactional
+    public ProdutoDTO getByNomeProduto(String nome) {
         return modelMapper.map(repository.findByNomeProduto(nome), ProdutoDTO.class);
     }
 
     @Transactional
-    public List<ProdutoDTO> findAll() {
+    public List<ProdutoDTO> getAll() {
         List<ProdutoDTO> list = new ArrayList<>();
         for (ProdutoEntity entity : repository.findAll()) {
             ProdutoDTO map = modelMapper.map(entity, ProdutoDTO.class);
@@ -38,10 +42,6 @@ public class ProdutoService {
 
     @Transactional
     public ProdutoDTO create(ProdutoDTO dto) {
-        if (dto.getId() != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O id do produto não deve ser inserido");
-        }
-
         return modelMapper.map(repository.save(modelMapper.map(dto, ProdutoEntity.class)), ProdutoDTO.class);
     }
 
@@ -52,5 +52,10 @@ public class ProdutoService {
         modelMapper.map(dto, existingEntity);
 
         return modelMapper.map(repository.save(existingEntity), ProdutoDTO.class);
+    }
+
+    @Transactional
+    public void deleteById(Long id) {
+        repository.deleteById(id);
     }
 }

@@ -45,7 +45,7 @@ class ProdutoTest {
         ProdutoDTO produtoEncontrado = new ProdutoDTO();
         produtoEncontrado.setNomeProduto(produtoValido.getNomeProduto());
 
-        when(service.findByNomeProduto(produtoValido.getNomeProduto())).thenReturn(produtoEncontrado);
+        when(service.getByNomeProduto(produtoValido.getNomeProduto())).thenReturn(produtoEncontrado);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/produtos/" + produtoValido.getNomeProduto()))
                 .andExpect(status().isOk())
@@ -56,7 +56,7 @@ class ProdutoTest {
     void findAllTest() throws Exception {
         List<ProdutoDTO> produtoList = new ArrayList<>();
         produtoList.add(produtoValido);
-        when(service.findAll()).thenReturn(produtoList);
+        when(service.getAll()).thenReturn(produtoList);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/produtos/list")).andExpect(status().isOk());
     }
