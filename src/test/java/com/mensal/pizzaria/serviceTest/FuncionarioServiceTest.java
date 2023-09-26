@@ -1,9 +1,9 @@
 package com.mensal.pizzaria.serviceTest;
 
-import com.mensal.pizzaria.dto.ClienteDTO;
-import com.mensal.pizzaria.entity.ClienteEntity;
-import com.mensal.pizzaria.repository.ClienteRepository;
-import com.mensal.pizzaria.service.ClienteService;
+import com.mensal.pizzaria.dto.FuncionarioDTO;
+import com.mensal.pizzaria.entity.FuncionarioEntity;
+import com.mensal.pizzaria.repository.FuncionarioRepository;
+import com.mensal.pizzaria.service.FuncionarioService;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,41 +19,39 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
-class ClienteServiceTest {
+class FuncionarioServiceTest {
     @InjectMocks
-    private ClienteService service;
+    private FuncionarioService service;
     @Mock
-    private ClienteRepository repository;
+    private FuncionarioRepository repository;
     @Mock
     private ModelMapper modelMapper;
     private final Long id = 1L;
     private final Long idNaoExistente = 2L;
-    private final String cpf = "36126170601";
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        ClienteDTO clienteDTO = new ClienteDTO(1L, "Gustavo", cpf, null, "+55 45 99988-7766");
+        FuncionarioDTO funcionarioDTO = new FuncionarioDTO(1L, "Gustavo", "Entregador");
 
-        ClienteEntity clienteEntity = new ClienteEntity(1L, "Gustavo", cpf, null, "+55 45 99988-7766");
-        ClienteEntity clienteEntity2 = new ClienteEntity(2L, "Marcelo", "29056578049", null, "+55 45 95544-3322");
+        FuncionarioEntity funcionarioEntity = new FuncionarioEntity(1L, "Gustavo", "Entregador");
+        FuncionarioEntity funcionarioEntity2 = new FuncionarioEntity(2L, "Marcelo", "Caixa");
 
-        List<ClienteEntity> entityList = Arrays.asList(clienteEntity, clienteEntity2);
+        List<FuncionarioEntity> entityList = Arrays.asList(funcionarioEntity, funcionarioEntity2);
 
-        when(repository.findById(id)).thenReturn(Optional.of(clienteEntity));
+        when(repository.findById(id)).thenReturn(Optional.of(funcionarioEntity));
         when(repository.findById(idNaoExistente)).thenReturn(Optional.empty());
 
-        when(modelMapper.map(clienteEntity, ClienteDTO.class)).thenReturn(clienteDTO);
+        when(modelMapper.map(funcionarioEntity, FuncionarioDTO.class)).thenReturn(funcionarioDTO);
     }
 
     @Test
     void testGetByIdExistente() {
-        ClienteDTO clienteDTObanco = service.getById(id);
+        FuncionarioDTO funcionarioDTOBanco = service.getById(id);
 
-        assertNotNull(clienteDTObanco);
-        assertEquals(id, clienteDTObanco.getId());
+        assertNotNull(funcionarioDTOBanco);
+        assertEquals(id, funcionarioDTOBanco.getId());
 
         verify(repository, times(1)).findById(id);
     }

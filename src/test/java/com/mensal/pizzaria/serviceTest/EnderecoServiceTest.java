@@ -1,9 +1,11 @@
 package com.mensal.pizzaria.serviceTest;
 
 import com.mensal.pizzaria.dto.ClienteDTO;
+import com.mensal.pizzaria.dto.EnderecoDTO;
 import com.mensal.pizzaria.entity.ClienteEntity;
-import com.mensal.pizzaria.repository.ClienteRepository;
-import com.mensal.pizzaria.service.ClienteService;
+import com.mensal.pizzaria.entity.EnderecoEntity;
+import com.mensal.pizzaria.repository.EnderecoRepository;
+import com.mensal.pizzaria.service.EnderecoService;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,42 +21,42 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-
 @SpringBootTest
-class ClienteServiceTest {
+class EnderecoServiceTest {
     @InjectMocks
-    private ClienteService service;
+    private EnderecoService service;
     @Mock
-    private ClienteRepository repository;
+    private EnderecoRepository repository;
     @Mock
     private ModelMapper modelMapper;
     private final Long id = 1L;
     private final Long idNaoExistente = 2L;
-    private final String cpf = "36126170601";
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        ClienteDTO clienteDTO = new ClienteDTO(1L, "Gustavo", cpf, null, "+55 45 99988-7766");
+        ClienteDTO clienteDTO = new ClienteDTO(1L, "Gustavo", "36126170601", null, "+55 45 99988-7766");
+        EnderecoDTO enderecoDTO = new EnderecoDTO(1L, "Rua Guarani", 11, clienteDTO);
 
-        ClienteEntity clienteEntity = new ClienteEntity(1L, "Gustavo", cpf, null, "+55 45 99988-7766");
-        ClienteEntity clienteEntity2 = new ClienteEntity(2L, "Marcelo", "29056578049", null, "+55 45 95544-3322");
+        ClienteEntity clienteEntity = new ClienteEntity(1L, "Gustavo", "36126170601", null, "+55 45 99988-7766");
+        EnderecoEntity enderecoEntity = new EnderecoEntity(1L, "Rua Guarani", 11, clienteEntity);
+        EnderecoEntity enderecoEntity2 = new EnderecoEntity(2L, "Rua Taquara", 12, clienteEntity);
 
-        List<ClienteEntity> entityList = Arrays.asList(clienteEntity, clienteEntity2);
+        List<EnderecoEntity> entityList = Arrays.asList(enderecoEntity, enderecoEntity2);
 
-        when(repository.findById(id)).thenReturn(Optional.of(clienteEntity));
+        when(repository.findById(id)).thenReturn(Optional.of(enderecoEntity));
         when(repository.findById(idNaoExistente)).thenReturn(Optional.empty());
 
-        when(modelMapper.map(clienteEntity, ClienteDTO.class)).thenReturn(clienteDTO);
+        when(modelMapper.map(enderecoEntity, EnderecoDTO.class)).thenReturn(enderecoDTO);
     }
 
     @Test
     void testGetByIdExistente() {
-        ClienteDTO clienteDTObanco = service.getById(id);
+        EnderecoDTO enderecoDTOBanco = service.getById(id);
 
-        assertNotNull(clienteDTObanco);
-        assertEquals(id, clienteDTObanco.getId());
+        assertNotNull(enderecoDTOBanco);
+        assertEquals(id, enderecoDTOBanco.getId());
 
         verify(repository, times(1)).findById(id);
     }

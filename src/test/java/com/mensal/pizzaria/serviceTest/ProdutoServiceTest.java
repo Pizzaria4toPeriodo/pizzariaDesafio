@@ -1,9 +1,10 @@
 package com.mensal.pizzaria.serviceTest;
 
 import com.mensal.pizzaria.dto.ClienteDTO;
-import com.mensal.pizzaria.entity.ClienteEntity;
-import com.mensal.pizzaria.repository.ClienteRepository;
-import com.mensal.pizzaria.service.ClienteService;
+import com.mensal.pizzaria.dto.ProdutoDTO;
+import com.mensal.pizzaria.entity.ProdutoEntity;
+import com.mensal.pizzaria.repository.ProdutoRepository;
+import com.mensal.pizzaria.service.ProdutoService;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,40 +22,39 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-class ClienteServiceTest {
+class ProdutoServiceTest {
     @InjectMocks
-    private ClienteService service;
+    private ProdutoService service;
     @Mock
-    private ClienteRepository repository;
+    private ProdutoRepository repository;
     @Mock
     private ModelMapper modelMapper;
     private final Long id = 1L;
     private final Long idNaoExistente = 2L;
-    private final String cpf = "36126170601";
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        ClienteDTO clienteDTO = new ClienteDTO(1L, "Gustavo", cpf, null, "+55 45 99988-7766");
+        ProdutoDTO produtoDTO = new ProdutoDTO(1L, "Pizza Calabreza", 25.0, null);
 
-        ClienteEntity clienteEntity = new ClienteEntity(1L, "Gustavo", cpf, null, "+55 45 99988-7766");
-        ClienteEntity clienteEntity2 = new ClienteEntity(2L, "Marcelo", "29056578049", null, "+55 45 95544-3322");
+        ProdutoEntity produtoEntity = new ProdutoEntity(1L, "Pizza Calabreza", 25.0, null);
+        ProdutoEntity produtoEntity2 = new ProdutoEntity(2L, "Pizza Pepperoni", 27.0, null);
 
-        List<ClienteEntity> entityList = Arrays.asList(clienteEntity, clienteEntity2);
+        List<ProdutoEntity> entityList = Arrays.asList(produtoEntity, produtoEntity2);
 
-        when(repository.findById(id)).thenReturn(Optional.of(clienteEntity));
+        when(repository.findById(id)).thenReturn(Optional.of(produtoEntity));
         when(repository.findById(idNaoExistente)).thenReturn(Optional.empty());
 
-        when(modelMapper.map(clienteEntity, ClienteDTO.class)).thenReturn(clienteDTO);
+        when(modelMapper.map(produtoEntity, ProdutoDTO.class)).thenReturn(produtoDTO);
     }
 
     @Test
     void testGetByIdExistente() {
-        ClienteDTO clienteDTObanco = service.getById(id);
+        ProdutoDTO produtoDTOBanco = service.getById(id);
 
-        assertNotNull(clienteDTObanco);
-        assertEquals(id, clienteDTObanco.getId());
+        assertNotNull(produtoDTOBanco);
+        assertEquals(id, produtoDTOBanco.getId());
 
         verify(repository, times(1)).findById(id);
     }
