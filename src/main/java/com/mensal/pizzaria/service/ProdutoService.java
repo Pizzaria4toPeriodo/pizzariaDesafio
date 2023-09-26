@@ -3,12 +3,11 @@ package com.mensal.pizzaria.service;
 import com.mensal.pizzaria.dto.ProdutoDTO;
 import com.mensal.pizzaria.entity.ProdutoEntity;
 import com.mensal.pizzaria.repository.ProdutoRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +23,12 @@ public class ProdutoService {
     @Transactional
     public ProdutoDTO getById(Long id) {
         Optional<ProdutoEntity> optional = repository.findById(id);
+
         if (optional.isPresent()) {
-            return modelMapper.map(optional.get(), ProdutoDTO.class);
+            ProdutoEntity entity = optional.get();
+            return modelMapper.map(entity, ProdutoDTO.class);
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Registro não encotrado");
+            throw new EntityNotFoundException("Produto não encontrado com o ID: " + id);
         }
     }
 
@@ -53,7 +54,8 @@ public class ProdutoService {
 
     @Transactional
     public ProdutoDTO update(Long id, ProdutoDTO dto) {
-        ProdutoEntity existingEntity = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Não foi possível encontrar o registro informado"));
+        ProdutoEntity existingEntity = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado com o ID: " + id));
 
         modelMapper.map(dto, existingEntity);
 

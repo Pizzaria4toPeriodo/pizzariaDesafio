@@ -24,6 +24,5 @@ public class EnderecoDTO {
     @Positive(message = "O numero deve ser positivo")
     private int numero;
 
-    @NotNull(message = "O campo n pode ser nulo")
     private ClienteDTO cliente;
 }

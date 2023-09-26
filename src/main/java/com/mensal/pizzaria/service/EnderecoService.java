@@ -3,15 +3,14 @@ package com.mensal.pizzaria.service;
 import com.mensal.pizzaria.dto.EnderecoDTO;
 import com.mensal.pizzaria.entity.EnderecoEntity;
 import com.mensal.pizzaria.repository.EnderecoRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,10 +24,12 @@ public class EnderecoService {
     @Transactional
     public EnderecoDTO getById(Long id) {
         Optional<EnderecoEntity> optional = repository.findById(id);
+
         if (optional.isPresent()) {
-            return modelMapper.map(optional.get(), EnderecoDTO.class);
+            EnderecoEntity entity = optional.get();
+            return modelMapper.map(entity, EnderecoDTO.class);
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Registro não encotrado");
+            throw new EntityNotFoundException("Endereço não encontrado com o ID: " + id);
         }
     }
 
@@ -54,7 +55,8 @@ public class EnderecoService {
 
     @Transactional
     public EnderecoDTO update(Long id, EnderecoDTO dto) {
-        EnderecoEntity existingEntity = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Não foi possível encontrar o registro informado"));
+        EnderecoEntity existingEntity = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Endereço não encontrado com o ID: " + id));
 
         modelMapper.map(dto, existingEntity);
 

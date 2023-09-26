@@ -3,12 +3,11 @@ package com.mensal.pizzaria.service;
 import com.mensal.pizzaria.dto.FuncionarioDTO;
 import com.mensal.pizzaria.entity.FuncionarioEntity;
 import com.mensal.pizzaria.repository.FuncionarioRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,11 +22,13 @@ public class FuncionarioService {
 
     @Transactional
     public FuncionarioDTO getById(Long id) {
-        Optional<FuncionarioEntity> optional = repository.findById(id);
-        if (optional.isPresent()) {
-            return modelMapper.map(optional.get(), FuncionarioDTO.class);
+        Optional<FuncionarioEntity> funcionarioOptional = repository.findById(id);
+
+        if (funcionarioOptional.isPresent()) {
+            FuncionarioEntity entity = funcionarioOptional.get();
+            return modelMapper.map(entity, FuncionarioDTO.class);
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Registro não encotrado");
+            throw new EntityNotFoundException("Funcionário não encontrado com o ID: " + id);
         }
     }
 
@@ -53,7 +54,8 @@ public class FuncionarioService {
 
     @Transactional
     public FuncionarioDTO update(Long id, FuncionarioDTO dto) {
-        FuncionarioEntity existingEntity = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Não foi possível encontrar o registro informado"));
+        FuncionarioEntity existingEntity = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Funcionário não encontrado com o ID: " + id));
 
         modelMapper.map(dto, existingEntity);
 

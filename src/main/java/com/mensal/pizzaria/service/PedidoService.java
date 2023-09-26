@@ -4,12 +4,11 @@ import com.mensal.pizzaria.dto.PedidoDTO;
 import com.mensal.pizzaria.dto.ProdutoDTO;
 import com.mensal.pizzaria.entity.PedidoEntity;
 import com.mensal.pizzaria.repository.PedidoRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,13 +24,14 @@ public class  PedidoService {
     @Transactional
     public PedidoDTO getById(Long id) {
         Optional<PedidoEntity> optional = repository.findById(id);
+
         if (optional.isPresent()) {
-            return modelMapper.map(optional.get(), PedidoDTO.class);
+            PedidoEntity entity = optional.get();
+            return modelMapper.map(entity, PedidoDTO.class);
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Registro não encotrado");
+            throw new EntityNotFoundException("Pedido não encontrado com o ID: " + id);
         }
     }
-
     @Transactional
     public List<PedidoDTO> getAll() {
         List<PedidoDTO> list = new ArrayList<>();
@@ -53,11 +53,8 @@ public class  PedidoService {
 
     @Transactional
     public PedidoDTO update(Long id, PedidoDTO dto) {
-        PedidoEntity existingEntity = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Não foi possível encontrar o registro informado"));
-
-        if (dto.getProdutoList().size() != existingEntity.getProdutoList().size()) {
-            dto.setTotal(calculoTotal(dto));
-        }
+        PedidoEntity existingEntity = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado com o ID: " + id));
 
         modelMapper.map(dto, existingEntity);
 

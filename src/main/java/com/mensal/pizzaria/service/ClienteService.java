@@ -3,12 +3,11 @@ package com.mensal.pizzaria.service;
 import com.mensal.pizzaria.dto.ClienteDTO;
 import com.mensal.pizzaria.entity.ClienteEntity;
 import com.mensal.pizzaria.repository.ClienteRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,14 +20,15 @@ public class ClienteService {
     @Autowired
     private ModelMapper modelMapper;
 
-
     @Transactional
     public ClienteDTO getById(Long id) {
         Optional<ClienteEntity> optional = repository.findById(id);
+
         if (optional.isPresent()) {
-            return modelMapper.map(optional.get(), ClienteDTO.class);
+            ClienteEntity entity = optional.get();
+            return modelMapper.map(entity, ClienteDTO.class);
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Registro não encotrado");
+            throw new EntityNotFoundException("Cliente não encontrado com o ID: " + id);
         }
     }
 
@@ -55,7 +55,8 @@ public class ClienteService {
 
     @Transactional
     public ClienteDTO update(Long id, ClienteDTO dto) {
-        ClienteEntity existingEntity = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Não foi possível encontrar o registro informado"));
+        ClienteEntity existingEntity = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado com o ID: " + id));
 
         modelMapper.map(dto, existingEntity);
 
