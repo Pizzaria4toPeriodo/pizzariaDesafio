@@ -1,9 +1,9 @@
 package com.mensal.pizzaria.controllerTest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mensal.pizzaria.controller.EnderecoController;
-import com.mensal.pizzaria.dto.ClienteDTO;
 import com.mensal.pizzaria.dto.EnderecoDTO;
-import com.mensal.pizzaria.repository.EnderecoRepository;
+import com.mensal.pizzaria.entity.EnderecoEntity;
 import com.mensal.pizzaria.service.EnderecoService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,98 +11,88 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 class EnderecoControllerTest {
+    @Autowired
+    private MockMvc mockMvc;
     @InjectMocks
     private EnderecoController controller;
     @Mock
     private EnderecoService service;
     @Mock
-    private EnderecoRepository repository;
-    @Mock
     private ModelMapper modelMapper;
-    private EnderecoDTO dto;
     private final Long id = 1L;
+    private EnderecoDTO dto;
+    private EnderecoEntity entity;
+    private List<EnderecoEntity> entityList;
+    private ObjectMapper objectMapper;
 
     @BeforeEach
-    void setUp() {
+    public void setup() {
         MockitoAnnotations.openMocks(this);
+        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        objectMapper = new ObjectMapper();
 
-        ClienteDTO cliente = new ClienteDTO(id, "Gustavo", "36126170601", null, "+55 45 99988-7766");
-        dto = new EnderecoDTO(id, "Rua Guarani", 10, cliente);
-        List<EnderecoDTO> dtoList = new ArrayList<>();
-        dtoList.add(dto);
+        dto = new EnderecoDTO();
+        dto.setId(id);
+        dto.setRua("Guarani");
 
-        when(service.getById(anyLong())).thenReturn(dto);
-        when(service.getByRua(anyString())).thenReturn(dto);
-        when(service.getAll()).thenReturn(dtoList);
-        when(service.create(any(EnderecoDTO.class))).thenReturn(dto);
-        when(service.update(anyLong(), any(EnderecoDTO.class))).thenReturn(dto);
-        doNothing().when(service).deleteById(anyLong());
+        entity = new EnderecoEntity();
+        entity.setId(id);
+        entity.setRua("Guarani");
+
+        entityList = new ArrayList<>();
+        entityList.add(entity);
     }
 
     @Test
-    void testGetAll() {
-        ResponseEntity<List<EnderecoDTO>> responseEntity = controller.getAll();
+    void shouldCreate() throws Exception {
+        String areaDTOJson = objectMapper.writeValueAsString(dto);
 
-        List<EnderecoDTO> dtoList = responseEntity.getBody();
-
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(dtoList);
+        mockMvc.perform(post("/endereco/").content(areaDTOJson).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated());
     }
 
     @Test
-    void testGetById() {
-        ResponseEntity<EnderecoDTO> response = controller.getById(id);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(dto, response.getBody());
+    void shouldGetById() throws Exception {
+        when(service.getById(id)).thenReturn(entity);
+        mockMvc.perform(get("/endereco/{id}", id)).andExpect(status().isOk());
     }
 
     @Test
-    void testGetByRua() {
-        String rua = "Rua Guarani";
-        ResponseEntity<EnderecoDTO> response = controller.getByRua(rua);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(dto, response.getBody());
+    void shouldGetByCpf() throws Exception {
+        when(service.getByRua("Guarani")).thenReturn(entity);
+        mockMvc.perform(get("/endereco/rua/{rua}", "Guarani")).andExpect(status().isOk());
     }
 
     @Test
-    void testCreate() {
-        ResponseEntity<EnderecoDTO> response = controller.create(dto);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(dto, response.getBody());
+    void shouldGetAll() throws Exception {
+        when(service.getAll()).thenReturn(entityList);
+        mockMvc.perform(get("/endereco/list")).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
-    void testUpdate() {
-        ResponseEntity<EnderecoDTO> response = controller.update(id, dto);
+    void shouldUpdate() throws Exception {
+        String dtoJson = objectMapper.writeValueAsString(dto);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(dto, response.getBody());
+        mockMvc.perform(put("/endereco/{id}", id).content(dtoJson).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 
     @Test
-    void testDelete() {
-        ResponseEntity<HttpStatus> response = controller.delete(id);
-
-        verify(service).deleteById(id);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+    void shouldDelete() throws Exception {
+        mockMvc.perform(delete("/endereco/{id}", id)).andExpect(status().isOk());
     }
 }

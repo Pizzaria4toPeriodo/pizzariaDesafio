@@ -86,9 +86,9 @@ class ClienteControllerTest {
 
     @Test
     void shouldUpdate() throws Exception {
-        String areaDTOJson = objectMapper.writeValueAsString(dto);
+        String dtoJson = objectMapper.writeValueAsString(dto);
 
-        mockMvc.perform(put("/cliente/{id}", id).content(areaDTOJson).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+        mockMvc.perform(put("/cliente/{id}", id).content(dtoJson).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 
     @Test
