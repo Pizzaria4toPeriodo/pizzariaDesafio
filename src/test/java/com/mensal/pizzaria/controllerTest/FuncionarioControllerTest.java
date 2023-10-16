@@ -1,8 +1,14 @@
 package com.mensal.pizzaria.controllerTest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mensal.pizzaria.controller.EnderecoController;
 import com.mensal.pizzaria.controller.FuncionarioController;
+import com.mensal.pizzaria.dto.EnderecoDTO;
 import com.mensal.pizzaria.dto.FuncionarioDTO;
+import com.mensal.pizzaria.entity.EnderecoEntity;
+import com.mensal.pizzaria.entity.FuncionarioEntity;
 import com.mensal.pizzaria.repository.FuncionarioRepository;
+import com.mensal.pizzaria.service.EnderecoService;
 import com.mensal.pizzaria.service.FuncionarioService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,9 +16,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,85 +32,79 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 class FuncionarioControllerTest {
+    @Autowired
+    private MockMvc mockMvc;
     @InjectMocks
     private FuncionarioController controller;
     @Mock
     private FuncionarioService service;
     @Mock
-    private FuncionarioRepository repository;
-    @Mock
     private ModelMapper modelMapper;
-    private FuncionarioDTO dto;
     private final Long id = 1L;
+    private FuncionarioDTO dto;
+    private FuncionarioEntity entity;
+    private List<FuncionarioEntity> entityList;
+    private ObjectMapper objectMapper;
 
     @BeforeEach
-    void setUp() {
+    public void setup() {
         MockitoAnnotations.openMocks(this);
+        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        objectMapper = new ObjectMapper();
 
-        dto = new FuncionarioDTO(id, "Gustavo", "Cozinheiro");
-        List<FuncionarioDTO> dtoList = new ArrayList<>();
-        dtoList.add(dto);
+        dto = new FuncionarioDTO();
+        dto.setId(id);
+        dto.setNomeFuncionario("Marcelo");
 
-        when(service.getById(anyLong())).thenReturn(dto);
-        //when(service.getByNomeFuncionario(anyString())).thenReturn(dto);
-        when(service.getAll()).thenReturn(dtoList);
-        when(service.create(any(FuncionarioDTO.class))).thenReturn(dto);
-        when(service.update(anyLong(), any(FuncionarioDTO.class))).thenReturn(dto);
-        doNothing().when(service).deleteById(anyLong());
+        entity = new FuncionarioEntity();
+        entity.setId(id);
+        entity.setNomeFuncionario("Marcelo");
+
+        entityList = new ArrayList<>();
+        entityList.add(entity);
     }
 
     @Test
-    void testGetAll() {
-        ResponseEntity<List<FuncionarioDTO>> responseEntity = controller.getAll();
+    void shouldCreate() throws Exception {
+        String dtoJson = objectMapper.writeValueAsString(dto);
 
-        List<FuncionarioDTO> dtoList = responseEntity.getBody();
-
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(dtoList);
+        mockMvc.perform(post("/funcionario/").content(dtoJson).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated());
     }
 
     @Test
-    void testGetById() {
-        ResponseEntity<FuncionarioDTO> response = controller.getById(id);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(dto, response.getBody());
+    void shouldGetById() throws Exception {
+        when(service.getById(id)).thenReturn(entity);
+        mockMvc.perform(get("/funcionario/{id}", id)).andExpect(status().isOk());
     }
 
     @Test
-    void testGetByNomeFuncionario() {
-        String nomeFuncionario = "Gustavo";
-        ResponseEntity<FuncionarioDTO> response = controller.getByNomeFuncionario(nomeFuncionario);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(dto, response.getBody());
+    void shouldGetByCpf() throws Exception {
+        when(service.getByNomeFuncionario("Marcelo")).thenReturn(entity);
+        mockMvc.perform(get("/funcionario/nome/{nome}", "Marcelo")).andExpect(status().isOk());
     }
 
     @Test
-    void testCreate() {
-        ResponseEntity<FuncionarioDTO> response = controller.create(dto);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(dto, response.getBody());
+    void shouldGetAll() throws Exception {
+        when(service.getAll()).thenReturn(entityList);
+        mockMvc.perform(get("/funcionario/list")).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
-    void testUpdate() {
-        ResponseEntity<FuncionarioDTO> response = controller.update(id, dto);
+    void shouldUpdate() throws Exception {
+        String dtoJson = objectMapper.writeValueAsString(dto);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(dto, response.getBody());
+        mockMvc.perform(put("/funcionario/{id}", id).content(dtoJson).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 
     @Test
-    void testDelete() {
-        ResponseEntity<HttpStatus> response = controller.delete(id);
-
-        verify(service).deleteById(id);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+    void shouldDelete() throws Exception {
+        mockMvc.perform(delete("/funcionario/{id}", id)).andExpect(status().isOk());
     }
 }

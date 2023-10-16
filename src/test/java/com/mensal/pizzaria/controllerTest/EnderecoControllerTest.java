@@ -61,9 +61,9 @@ class EnderecoControllerTest {
 
     @Test
     void shouldCreate() throws Exception {
-        String areaDTOJson = objectMapper.writeValueAsString(dto);
+        String dtoJson = objectMapper.writeValueAsString(dto);
 
-        mockMvc.perform(post("/endereco/").content(areaDTOJson).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated());
+        mockMvc.perform(post("/endereco/").content(dtoJson).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated());
     }
 
     @Test
