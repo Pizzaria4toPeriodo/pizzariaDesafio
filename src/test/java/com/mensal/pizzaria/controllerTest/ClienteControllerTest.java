@@ -1,8 +1,9 @@
 package com.mensal.pizzaria.controllerTest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mensal.pizzaria.controller.ClienteController;
 import com.mensal.pizzaria.dto.ClienteDTO;
-import com.mensal.pizzaria.repository.ClienteRepository;
+import com.mensal.pizzaria.entity.ClienteEntity;
 import com.mensal.pizzaria.service.ClienteService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,96 +11,88 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 class ClienteControllerTest {
+    @Autowired
+    private MockMvc mockMvc;
     @InjectMocks
     private ClienteController controller;
     @Mock
     private ClienteService service;
     @Mock
-    private ClienteRepository repository;
-    @Mock
     private ModelMapper modelMapper;
-    private ClienteDTO dto;
     private final Long id = 1L;
+    private ClienteDTO dto;
+    private ClienteEntity entity;
+    private List<ClienteEntity> entityList;
+    private ObjectMapper objectMapper;
 
     @BeforeEach
-    void setUp() {
+    public void setup() {
         MockitoAnnotations.openMocks(this);
+        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        objectMapper = new ObjectMapper();
 
-        dto = new ClienteDTO(id, "Gustavo", "36126170601", null, "+55 45 99988-7766");
-        List<ClienteDTO> dtoList = new ArrayList<>();
-        dtoList.add(dto);
+        dto = new ClienteDTO();
+        dto.setId(id);
+        dto.setCpf("47917474534");
 
-        when(service.getById(anyLong())).thenReturn(dto);
-        //when(service.getByCpf(anyString())).thenReturn(dto);
-        when(service.getAll()).thenReturn(dtoList);
-        when(service.create(any(ClienteDTO.class))).thenReturn(dto);
-        when(service.update(anyLong(), any(ClienteDTO.class))).thenReturn(dto);
-        doNothing().when(service).deleteById(anyLong());
+        entity = new ClienteEntity();
+        entity.setId(id);
+        entity.setCpf("47917474534");
+
+        entityList = new ArrayList<>();
+        entityList.add(entity);
     }
 
     @Test
-    void testGetAll() {
-        ResponseEntity<List<ClienteDTO>> responseEntity = controller.getAll();
+    void shouldCreate() throws Exception {
+        String areaDTOJson = objectMapper.writeValueAsString(dto);
 
-        List<ClienteDTO> dtoList = responseEntity.getBody();
-
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(dtoList);
+        mockMvc.perform(post("/cliente/").content(areaDTOJson).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated());
     }
 
     @Test
-    void testGetById() {
-        ResponseEntity<ClienteDTO> response = controller.getById(id);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(dto, response.getBody());
+    void shouldGetById() throws Exception {
+        when(service.getById(id)).thenReturn(entity);
+        mockMvc.perform(get("/cliente/{id}", id)).andExpect(status().isOk());
     }
 
     @Test
-    void testGetByCpf() {
-        String cpf = "36126170601";
-        ResponseEntity<ClienteDTO> response = controller.getByCpf(cpf);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(dto, response.getBody());
+    void shouldGetByCpf() throws Exception {
+        when(service.getByCpf("47917474534")).thenReturn(entity);
+        mockMvc.perform(get("/cliente/cpf/{cpf}", "47917474534")).andExpect(status().isOk());
     }
 
     @Test
-    void testCreate() {
-        ResponseEntity<ClienteDTO> response = controller.create(dto);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(dto, response.getBody());
+    void shouldGetAll() throws Exception {
+        when(service.getAll()).thenReturn(entityList);
+        mockMvc.perform(get("/cliente/list")).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
-    void testUpdate() {
-        ResponseEntity<ClienteDTO> response = controller.update(id, dto);
+    void shouldUpdate() throws Exception {
+        String areaDTOJson = objectMapper.writeValueAsString(dto);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(dto, response.getBody());
+        mockMvc.perform(put("/cliente/{id}", id).content(areaDTOJson).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 
     @Test
-    void testDelete() {
-        ResponseEntity<HttpStatus> response = controller.delete(id);
-
-        verify(service).deleteById(id);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+    void shouldDelete() throws Exception {
+        mockMvc.perform(delete("/cliente/{id}", id)).andExpect(status().isOk());
     }
 }
