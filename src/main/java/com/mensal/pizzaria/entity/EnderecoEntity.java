@@ -8,10 +8,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
-@Table(name = "endereco", schema = "pizzaria")
+@Table(name = "tb_endereco", schema = "pizzaria")
 public class EnderecoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

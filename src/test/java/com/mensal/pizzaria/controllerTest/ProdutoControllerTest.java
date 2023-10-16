@@ -45,7 +45,7 @@ class ProdutoControllerTest {
         dtoList.add(dto);
 
         when(service.getById(anyLong())).thenReturn(dto);
-        when(service.getByNomeProduto(anyString())).thenReturn(dto);
+        //when(service.getByNomeProduto(anyString())).thenReturn(dto);
         when(service.getAll()).thenReturn(dtoList);
         when(service.create(any(ProdutoDTO.class))).thenReturn(dto);
         when(service.update(anyLong(), any(ProdutoDTO.class))).thenReturn(dto);

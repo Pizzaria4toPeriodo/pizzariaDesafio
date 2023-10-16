@@ -1,7 +1,7 @@
 package com.mensal.pizzaria.controller;
 
 import com.mensal.pizzaria.dto.FuncionarioDTO;
-import com.mensal.pizzaria.repository.FuncionarioRepository;
+import com.mensal.pizzaria.entity.FuncionarioEntity;
 import com.mensal.pizzaria.service.FuncionarioService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -18,34 +19,37 @@ public class FuncionarioController {
     @Autowired
     private FuncionarioService service;
     @Autowired
-    private FuncionarioRepository repository;
-    @Autowired
     private ModelMapper modelMapper;
+
+    @PostMapping
+    public ResponseEntity<FuncionarioDTO> create(@RequestBody @Validated FuncionarioDTO dto) {
+        return new ResponseEntity<>(modelMapper.map(service.create(modelMapper.map(dto, FuncionarioEntity.class)), FuncionarioDTO.class), HttpStatus.CREATED);
+    }
 
     @GetMapping("/list")
     public ResponseEntity<List<FuncionarioDTO>> getAll() {
-        return ResponseEntity.ok().body(service.getAll());
+        List<FuncionarioDTO> list = new ArrayList<>();
+        for (FuncionarioEntity entity : service.getAll()) {
+            FuncionarioDTO map = modelMapper.map(entity, FuncionarioDTO.class);
+            list.add(map);
+        }
+
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @GetMapping("/id/{id}")
     public ResponseEntity<FuncionarioDTO> getById(@PathVariable Long id) {
-        return ResponseEntity.ok().body(service.getById(id));
+        return new ResponseEntity<>(modelMapper.map(service.getById(id), FuncionarioDTO.class), HttpStatus.OK);
     }
 
     @GetMapping("/nome/{nome}")
     public ResponseEntity<FuncionarioDTO> getByNomeFuncionario(@PathVariable("nome") String nome) {
-        return ResponseEntity.ok().body(service.getByNomeFuncionario(nome));
-    }
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<FuncionarioDTO> create(@RequestBody @Validated FuncionarioDTO dto) {
-        return ResponseEntity.ok().body(service.create(dto));
+        return new ResponseEntity<>(modelMapper.map(service.getByNomeFuncionario(nome), FuncionarioDTO.class), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<FuncionarioDTO> update(@PathVariable("id") Long id, @RequestBody @Validated FuncionarioDTO dto) {
-        return ResponseEntity.ok().body(service.update(id, dto));
+        return new ResponseEntity<>(modelMapper.map(service.update(id, modelMapper.map(dto, FuncionarioEntity.class)), FuncionarioDTO.class), HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")

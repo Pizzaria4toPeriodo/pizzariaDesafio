@@ -45,7 +45,7 @@ class FuncionarioControllerTest {
         dtoList.add(dto);
 
         when(service.getById(anyLong())).thenReturn(dto);
-        when(service.getByNomeFuncionario(anyString())).thenReturn(dto);
+        //when(service.getByNomeFuncionario(anyString())).thenReturn(dto);
         when(service.getAll()).thenReturn(dtoList);
         when(service.create(any(FuncionarioDTO.class))).thenReturn(dto);
         when(service.update(anyLong(), any(FuncionarioDTO.class))).thenReturn(dto);

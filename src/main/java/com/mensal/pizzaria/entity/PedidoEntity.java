@@ -10,10 +10,8 @@ import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
-@Table(name = "pedido", schema = "pizzaria")
+@Table(name = "tb_pedido", schema = "pizzaria")
 public class PedidoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -37,9 +35,9 @@ public class PedidoEntity {
     private boolean delivery;
 
     @Enumerated(EnumType.STRING)
-    @Column
+    @Column(nullable = false)
     private Forma_Pagamento formaPagamento;
 
-    @Column(nullable = false)
+    @Column
     private Double total;
 }

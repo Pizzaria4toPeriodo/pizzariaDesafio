@@ -11,10 +11,8 @@ import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
-@Table(name = "cliente", schema = "pizzaria")
+@Table(name = "tb_cliente", schema = "pizzaria")
 public class ClienteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

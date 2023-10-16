@@ -44,7 +44,7 @@ class ClienteControllerTest {
         dtoList.add(dto);
 
         when(service.getById(anyLong())).thenReturn(dto);
-        when(service.getByCpf(anyString())).thenReturn(dto);
+        //when(service.getByCpf(anyString())).thenReturn(dto);
         when(service.getAll()).thenReturn(dtoList);
         when(service.create(any(ClienteDTO.class))).thenReturn(dto);
         when(service.update(anyLong(), any(ClienteDTO.class))).thenReturn(dto);

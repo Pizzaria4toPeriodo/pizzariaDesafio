@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface EnderecoRepository extends JpaRepository<EnderecoEntity, Long> {
-    List<EnderecoEntity> findByRua(String rua);
+    EnderecoEntity findByRua(String rua);
 }

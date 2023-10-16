@@ -1,6 +1,5 @@
 package com.mensal.pizzaria.service;
 
-import com.mensal.pizzaria.dto.ProdutoDTO;
 import com.mensal.pizzaria.entity.ProdutoEntity;
 import com.mensal.pizzaria.repository.ProdutoRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -9,7 +8,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,45 +19,39 @@ public class ProdutoService {
     private ModelMapper modelMapper;
 
     @Transactional
-    public ProdutoDTO getById(Long id) {
+    public ProdutoEntity create(ProdutoEntity entity) {
+        return repository.save(entity);
+    }
+
+    @Transactional
+    public ProdutoEntity getById(Long id) {
         Optional<ProdutoEntity> optional = repository.findById(id);
 
         if (optional.isPresent()) {
-            ProdutoEntity entity = optional.get();
-            return modelMapper.map(entity, ProdutoDTO.class);
+            return optional.get();
         } else {
             throw new EntityNotFoundException("Produto não encontrado com o ID: " + id);
         }
     }
 
     @Transactional
-    public ProdutoDTO getByNomeProduto(String nome) {
-        return modelMapper.map(repository.findByNomeProduto(nome), ProdutoDTO.class);
+    public ProdutoEntity getByNomeProduto(String nome) {
+        return repository.findByNomeProduto(nome);
     }
 
     @Transactional
-    public List<ProdutoDTO> getAll() {
-        List<ProdutoDTO> list = new ArrayList<>();
-        for (ProdutoEntity entity : repository.findAll()) {
-            ProdutoDTO map = modelMapper.map(entity, ProdutoDTO.class);
-            list.add(map);
-        }
-        return list;
+    public List<ProdutoEntity> getAll() {
+        return repository.findAll();
     }
 
     @Transactional
-    public ProdutoDTO create(ProdutoDTO dto) {
-        return modelMapper.map(repository.save(modelMapper.map(dto, ProdutoEntity.class)), ProdutoDTO.class);
-    }
-
-    @Transactional
-    public ProdutoDTO update(Long id, ProdutoDTO dto) {
+    public ProdutoEntity update(Long id, ProdutoEntity entity) {
         ProdutoEntity existingEntity = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado com o ID: " + id));
 
-        modelMapper.map(dto, existingEntity);
+        modelMapper.map(entity, existingEntity);
 
-        return modelMapper.map(repository.save(existingEntity), ProdutoDTO.class);
+        return repository.save(existingEntity);
     }
 
     @Transactional

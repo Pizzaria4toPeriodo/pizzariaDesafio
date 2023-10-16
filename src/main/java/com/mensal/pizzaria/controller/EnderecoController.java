@@ -1,7 +1,7 @@
 package com.mensal.pizzaria.controller;
 
 import com.mensal.pizzaria.dto.EnderecoDTO;
-import com.mensal.pizzaria.repository.EnderecoRepository;
+import com.mensal.pizzaria.entity.EnderecoEntity;
 import com.mensal.pizzaria.service.EnderecoService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -18,34 +19,37 @@ public class EnderecoController {
     @Autowired
     private EnderecoService service;
     @Autowired
-    private EnderecoRepository repository;
-    @Autowired
     private ModelMapper modelMapper;
+
+    @PostMapping("/")
+    public ResponseEntity<EnderecoDTO> create(@RequestBody @Validated EnderecoDTO dto) {
+        return new ResponseEntity<>(modelMapper.map(service.create(modelMapper.map(dto, EnderecoEntity.class)), EnderecoDTO.class), HttpStatus.CREATED);
+    }
 
     @GetMapping("/list")
     public ResponseEntity<List<EnderecoDTO>> getAll() {
-        return ResponseEntity.ok().body(service.getAll());
+        List<EnderecoDTO> list = new ArrayList<>();
+        for (EnderecoEntity entity : service.getAll()) {
+            EnderecoDTO map = modelMapper.map(entity, EnderecoDTO.class);
+            list.add(map);
+        }
+
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @GetMapping("/id/{id}")
     public ResponseEntity<EnderecoDTO> getById(@PathVariable Long id) {
-        return ResponseEntity.ok().body(service.getById(id));
+        return new ResponseEntity<>(modelMapper.map(service.getById(id), EnderecoDTO.class), HttpStatus.OK);
     }
 
     @GetMapping("/rua/{rua}")
     public ResponseEntity<EnderecoDTO> getByRua(@PathVariable("rua") String rua) {
-        return ResponseEntity.ok().body(service.getByRua(rua));
-    }
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<EnderecoDTO> create(@RequestBody @Validated EnderecoDTO dto) {
-        return ResponseEntity.ok().body(service.create(dto));
+        return new ResponseEntity<>(modelMapper.map(service.getByRua(rua), EnderecoDTO.class), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<EnderecoDTO> update(@PathVariable("id") Long id, @RequestBody @Validated EnderecoDTO dto) {
-        return ResponseEntity.ok().body(service.update(id, dto));
+        return new ResponseEntity<>(modelMapper.map(service.update(id, modelMapper.map(dto, EnderecoEntity.class)), EnderecoDTO.class), HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")

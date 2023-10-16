@@ -1,6 +1,5 @@
 package com.mensal.pizzaria.service;
 
-import com.mensal.pizzaria.dto.FuncionarioDTO;
 import com.mensal.pizzaria.entity.FuncionarioEntity;
 import com.mensal.pizzaria.repository.FuncionarioRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -9,7 +8,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,45 +19,39 @@ public class FuncionarioService {
     private ModelMapper modelMapper;
 
     @Transactional
-    public FuncionarioDTO getById(Long id) {
-        Optional<FuncionarioEntity> funcionarioOptional = repository.findById(id);
+    public FuncionarioEntity create(FuncionarioEntity entity) {
+        return repository.save(entity);
+    }
 
-        if (funcionarioOptional.isPresent()) {
-            FuncionarioEntity entity = funcionarioOptional.get();
-            return modelMapper.map(entity, FuncionarioDTO.class);
+    @Transactional
+    public FuncionarioEntity getById(Long id) {
+        Optional<FuncionarioEntity> optional = repository.findById(id);
+
+        if (optional.isPresent()) {
+            return optional.get();
         } else {
             throw new EntityNotFoundException("Funcionário não encontrado com o ID: " + id);
         }
     }
 
     @Transactional
-    public FuncionarioDTO getByNomeFuncionario(String nome) {
-        return modelMapper.map(repository.findByNomeFuncionario(nome), FuncionarioDTO.class);
+    public FuncionarioEntity getByNomeFuncionario(String nome) {
+        return repository.findByNomeFuncionario(nome);
     }
 
     @Transactional
-    public List<FuncionarioDTO> getAll() {
-        List<FuncionarioDTO> list = new ArrayList<>();
-        for (FuncionarioEntity entity : repository.findAll()) {
-            FuncionarioDTO map = modelMapper.map(entity, FuncionarioDTO.class);
-            list.add(map);
-        }
-        return list;
+    public List<FuncionarioEntity> getAll() {
+        return repository.findAll();
     }
 
     @Transactional
-    public FuncionarioDTO create(FuncionarioDTO dto) {
-        return modelMapper.map(repository.save(modelMapper.map(dto, FuncionarioEntity.class)), FuncionarioDTO.class);
-    }
-
-    @Transactional
-    public FuncionarioDTO update(Long id, FuncionarioDTO dto) {
+    public FuncionarioEntity update(Long id, FuncionarioEntity entity) {
         FuncionarioEntity existingEntity = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Funcionário não encontrado com o ID: " + id));
 
-        modelMapper.map(dto, existingEntity);
+        modelMapper.map(entity, existingEntity);
 
-        return modelMapper.map(repository.save(existingEntity), FuncionarioDTO.class);
+        return repository.save(existingEntity);
     }
 
     @Transactional

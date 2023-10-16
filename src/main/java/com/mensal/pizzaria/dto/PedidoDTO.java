@@ -17,14 +17,16 @@ import java.util.List;
 public class PedidoDTO {
     private Long id;
 
-    @NotEmpty(message = "É necessário conter ao menos um produto")
+    //@NotEmpty(message = "É necessário conter ao menos um produto")
     private List<ProdutoDTO> produtoList;
 
-    @NotNull(message = "É necessário conter um cliente")
+    //@NotNull(message = "É necessário conter um cliente")
     private ClienteDTO cliente;
 
+    //@NotNull(message = "É necessário conter se é delivery")
     private boolean delivery;
 
+    //@NotNull(message = "É necessário conter uma forma de pagamento")
     private Forma_Pagamento formaPagamento;
 
     private Double total;

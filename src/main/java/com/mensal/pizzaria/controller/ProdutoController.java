@@ -1,7 +1,7 @@
 package com.mensal.pizzaria.controller;
 
 import com.mensal.pizzaria.dto.ProdutoDTO;
-import com.mensal.pizzaria.repository.ProdutoRepository;
+import com.mensal.pizzaria.entity.ProdutoEntity;
 import com.mensal.pizzaria.service.ProdutoService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -18,34 +19,37 @@ public class ProdutoController {
     @Autowired
     private ProdutoService service;
     @Autowired
-    private ProdutoRepository repository;
-    @Autowired
     private ModelMapper modelMapper;
+
+    @PostMapping
+    public ResponseEntity<ProdutoDTO> create(@RequestBody @Validated ProdutoDTO dto) {
+        return new ResponseEntity<>(modelMapper.map(service.create(modelMapper.map(dto, ProdutoEntity.class)), ProdutoDTO.class), HttpStatus.CREATED);
+    }
 
     @GetMapping("/list")
     public ResponseEntity<List<ProdutoDTO>> getAll() {
-        return ResponseEntity.ok().body(service.getAll());
+        List<ProdutoDTO> list = new ArrayList<>();
+        for (ProdutoEntity entity : service.getAll()) {
+            ProdutoDTO map = modelMapper.map(entity, ProdutoDTO.class);
+            list.add(map);
+        }
+
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @GetMapping("/id/{id}")
     public ResponseEntity<ProdutoDTO> getById(@PathVariable Long id) {
-        return ResponseEntity.ok().body(service.getById(id));
+        return new ResponseEntity<>(modelMapper.map(service.getById(id), ProdutoDTO.class), HttpStatus.OK);
     }
 
     @GetMapping("/nome/{nome}")
     public ResponseEntity<ProdutoDTO> getByNomeProduto(@PathVariable("nome") String nome) {
-        return ResponseEntity.ok().body(service.getByNomeProduto(nome));
-    }
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<ProdutoDTO> create(@RequestBody @Validated ProdutoDTO dto) {
-        return ResponseEntity.ok().body(service.create(dto));
+        return new ResponseEntity<>(modelMapper.map(service.getByNomeProduto(nome), ProdutoDTO.class), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ProdutoDTO> update(@PathVariable("id") Long id, @RequestBody @Validated ProdutoDTO dto) {
-        return ResponseEntity.ok().body(service.update(id, dto));
+        return new ResponseEntity<>(modelMapper.map(service.update(id, modelMapper.map(dto, ProdutoEntity.class)), ProdutoDTO.class), HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")

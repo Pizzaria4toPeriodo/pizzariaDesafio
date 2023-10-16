@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface ClienteRepository extends JpaRepository<ClienteEntity, Long> {
     Optional<ClienteEntity> findByNomeCliente(String nomeCliente);
 
-    List<ClienteEntity> findByCpf(String cpf);
+    ClienteEntity findByCpf(String cpf);
 }

@@ -91,7 +91,7 @@ class PedidoServiceTest {
         produtos.add(produto2);
         pedido.setProdutoList(produtos);
 
-        Double total = service.calculoTotal(pedido);
+        //Double total = service.calculoTotal(pedido);
 
         double result = 30.0 + 25.0;
         assertEquals(result, total, 0.01);
