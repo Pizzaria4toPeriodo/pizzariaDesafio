@@ -30,31 +30,61 @@ class ClienteServiceTest {
     private ModelMapper modelMapper;
     private final Long id = 1L;
     private final Long idNaoExistente = 2L;
-    private final String cpf = "36126170601";
+    private ClienteDTO dto;
+    private ClienteEntity entity;
+    private ClienteEntity entity2;
+    private List<ClienteEntity> entityList;
+    private ClienteEntity updatedEntity;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        ClienteDTO clienteDTO = new ClienteDTO(1L, "Gustavo", cpf, null, "+55 45 99988-7766");
+        modelMapper = new ModelMapper();
 
-        ClienteEntity clienteEntity = new ClienteEntity(1L, "Gustavo", cpf, null, "+55 45 99988-7766");
-        ClienteEntity clienteEntity2 = new ClienteEntity(2L, "Marcelo", "29056578049", null, "+55 45 95544-3322");
+        dto = new ClienteDTO();
+        dto.setId(id);
+        dto.setCpf("47917474534");
 
-        List<ClienteEntity> entityList = Arrays.asList(clienteEntity, clienteEntity2);
+        entity = new ClienteEntity();
+        entity.setId(id);
+        entity.setCpf("47917474534");
 
-        when(repository.findById(id)).thenReturn(Optional.of(clienteEntity));
+        entity2 = new ClienteEntity();
+        entity2.setId(2L);
+        entity2.setCpf("47917474534");
+
+        entityList = Arrays.asList(entity, entity2);
+
+        updatedEntity = new ClienteEntity();
+        updatedEntity.setId(id);
+        updatedEntity.setNomeCliente("Zé");
+
+        when(repository.findById(id)).thenReturn(Optional.of(entity));
         when(repository.findById(idNaoExistente)).thenReturn(Optional.empty());
+        when(repository.findByCpf("47917474534")).thenReturn(entity);
+        when(repository.findAll()).thenReturn(entityList);
+        when(repository.findById(id)).thenReturn(Optional.of(entity));
+    }
 
-        when(modelMapper.map(clienteEntity, ClienteDTO.class)).thenReturn(clienteDTO);
+    @Test
+    void testCreate() {
+        when(repository.save(any())).thenReturn(entity);
+
+        ClienteEntity createdEntity = service.create(entity);
+
+        assertNotNull(createdEntity);
+        assertEquals("47917474534", createdEntity.getCpf());
+
+        verify(repository, times(1)).save(entity);
     }
 
     @Test
     void testGetByIdExistente() {
-        ClienteDTO clienteDTObanco = service.getById(id);
+        ClienteEntity database = service.getById(id);
 
-        assertNotNull(clienteDTObanco);
-        assertEquals(id, clienteDTObanco.getId());
+        assertNotNull(database);
+        assertEquals(id, database.getId());
 
         verify(repository, times(1)).findById(id);
     }
@@ -64,6 +94,35 @@ class ClienteServiceTest {
         assertThrows(EntityNotFoundException.class, () -> service.getById(idNaoExistente));
 
         verify(repository, times(1)).findById(idNaoExistente);
+    }
+
+    @Test
+    void testGetByCPF() {
+        ClienteEntity database = service.getByCpf("47917474534");
+
+        assertEquals("47917474534", database.getCpf());
+    }
+
+    @Test
+    void testFindAll() {
+        List<ClienteEntity> database = service.getAll();
+
+        assertEquals(2, database.size());
+
+        verify(repository, times(1)).findAll();
+    }
+
+    @Test
+    void testUpdate() {
+        when(repository.save(any())).thenReturn(updatedEntity);
+
+        ClienteEntity result = service.update(id, updatedEntity);
+
+        assertNotNull(result);
+        assertEquals(id, result.getId());
+        assertEquals("47917474534", result.getCpf());
+
+        verify(repository, times(1)).save(any());
     }
 
     @Test
