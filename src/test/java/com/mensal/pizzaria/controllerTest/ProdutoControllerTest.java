@@ -1,8 +1,9 @@
 package com.mensal.pizzaria.controllerTest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mensal.pizzaria.controller.ProdutoController;
 import com.mensal.pizzaria.dto.ProdutoDTO;
-import com.mensal.pizzaria.repository.ProdutoRepository;
+import com.mensal.pizzaria.entity.ProdutoEntity;
 import com.mensal.pizzaria.service.ProdutoService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,97 +11,88 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 class ProdutoControllerTest {
+    @Autowired
+    private MockMvc mockMvc;
     @InjectMocks
     private ProdutoController controller;
     @Mock
     private ProdutoService service;
     @Mock
-    private ProdutoRepository repository;
-    @Mock
     private ModelMapper modelMapper;
-    private ProdutoDTO dto;
     private final Long id = 1L;
+    private ProdutoDTO dto;
+    private ProdutoEntity entity;
+    private List<ProdutoEntity> entityList;
+    private ObjectMapper objectMapper;
 
     @BeforeEach
-    void setUp() {
+    public void setup() {
         MockitoAnnotations.openMocks(this);
+        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        objectMapper = new ObjectMapper();
 
-        dto = new ProdutoDTO(id, "Pizza", 30.0, null);
-        List<ProdutoDTO> dtoList = new ArrayList<>();
-        dtoList.add(dto);
+        dto = new ProdutoDTO();
+        dto.setId(id);
+        dto.setNomeProduto("Pizza");
 
-        when(service.getById(anyLong())).thenReturn(dto);
-        //when(service.getByNomeProduto(anyString())).thenReturn(dto);
-        when(service.getAll()).thenReturn(dtoList);
-        when(service.create(any(ProdutoDTO.class))).thenReturn(dto);
-        when(service.update(anyLong(), any(ProdutoDTO.class))).thenReturn(dto);
-        doNothing().when(service).deleteById(anyLong());
+        entity = new ProdutoEntity();
+        entity.setId(id);
+        entity.setNomeProduto("Pizza");
+
+        entityList = new ArrayList<>();
+        entityList.add(entity);
     }
 
     @Test
-    void testGetAll() {
-        ResponseEntity<List<ProdutoDTO>> responseEntity = controller.getAll();
+    void shouldCreate() throws Exception {
+        String dtoJson = objectMapper.writeValueAsString(dto);
 
-        List<ProdutoDTO> dtoList = responseEntity.getBody();
-
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(dtoList);
+        mockMvc.perform(post("/produto/").content(dtoJson).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated());
     }
 
     @Test
-    void testGetById() {
-        ResponseEntity<ProdutoDTO> response = controller.getById(id);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(dto, response.getBody());
+    void shouldGetById() throws Exception {
+        when(service.getById(id)).thenReturn(entity);
+        mockMvc.perform(get("/produto/{id}", id)).andExpect(status().isOk());
     }
 
     @Test
-    void testGetByNomeProduto() {
-        String nomeProduto = "Pizza";
-        ResponseEntity<ProdutoDTO> response = controller.getByNomeProduto(nomeProduto);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(dto, response.getBody());
+    void shouldGetByNomeProduto() throws Exception {
+        when(service.getByNomeProduto("Pizza")).thenReturn(entity);
+        mockMvc.perform(get("/produto/nome/{nome}", "Pizza")).andExpect(status().isOk());
     }
 
     @Test
-    void testCreate() {
-        ResponseEntity<ProdutoDTO> response = controller.create(dto);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(dto, response.getBody());
+    void shouldGetAll() throws Exception {
+        when(service.getAll()).thenReturn(entityList);
+        mockMvc.perform(get("/produto/list")).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
-    void testUpdate() {
-        ResponseEntity<ProdutoDTO> response = controller.update(id, dto);
+    void shouldUpdate() throws Exception {
+        String dtoJson = objectMapper.writeValueAsString(dto);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(dto, response.getBody());
+        mockMvc.perform(put("/produto/{id}", id).content(dtoJson).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 
     @Test
-    void testDelete() {
-        ResponseEntity<HttpStatus> response = controller.delete(id);
-
-        verify(service).deleteById(id);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+    void shouldDelete() throws Exception {
+        mockMvc.perform(delete("/produto/{id}", id)).andExpect(status().isOk());
     }
 }

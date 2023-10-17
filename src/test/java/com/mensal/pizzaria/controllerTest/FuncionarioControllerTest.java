@@ -85,7 +85,7 @@ class FuncionarioControllerTest {
     }
 
     @Test
-    void shouldGetByCpf() throws Exception {
+    void shouldGetByNomeFuncionario() throws Exception {
         when(service.getByNomeFuncionario("Marcelo")).thenReturn(entity);
         mockMvc.perform(get("/funcionario/nome/{nome}", "Marcelo")).andExpect(status().isOk());
     }

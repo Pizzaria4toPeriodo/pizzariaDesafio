@@ -73,7 +73,7 @@ class EnderecoControllerTest {
     }
 
     @Test
-    void shouldGetByCpf() throws Exception {
+    void shouldGetByRua() throws Exception {
         when(service.getByRua("Guarani")).thenReturn(entity);
         mockMvc.perform(get("/endereco/rua/{rua}", "Guarani")).andExpect(status().isOk());
     }
