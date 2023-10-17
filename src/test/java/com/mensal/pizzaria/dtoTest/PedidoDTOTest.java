@@ -12,8 +12,8 @@ import java.util.Collections;
 class PedidoDTOTest {
     @Test
     void entityTest() {
-        ProdutoDTO produto = new ProdutoDTO(1L, "Pizza Calabreza", 25.0, null);
-        ClienteDTO cliente = new ClienteDTO(1L, "Gustavo", "36126170601", null, "+55 45 99988-7766");
+        ProdutoDTO produto = new ProdutoDTO();
+        ClienteDTO cliente = new ClienteDTO();
 
         PedidoDTO pedido = new PedidoDTO(1L, Collections.singletonList(produto), cliente, true, Forma_Pagamento.PIX, 25.0);
 
@@ -30,18 +30,6 @@ class PedidoDTOTest {
     void entitySetterTest() {
         ProdutoDTO produto = new ProdutoDTO();
         ClienteDTO cliente = new ClienteDTO();
-
-        produto.setId(1L);
-        produto.setNomeProduto("Pizza Calabreza");
-        produto.setPreco(25.0);
-        produto.setPedidoList(null);
-
-        cliente.setId(1L);
-        cliente.setNomeCliente("Gustavo");
-        cliente.setCpf("36126170601");
-        cliente.setEnderecoList(null);
-        cliente.setTelefone("+55 45 99988-7766");
-
         PedidoDTO pedido = new PedidoDTO();
 
         pedido.setId(1L);
