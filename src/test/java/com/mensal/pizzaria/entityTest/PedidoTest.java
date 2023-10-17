@@ -13,18 +13,6 @@ class PedidoTest {
     void entitySetterTest() {
         ProdutoEntity produto = new ProdutoEntity();
         ClienteEntity cliente = new ClienteEntity();
-
-        produto.setId(1L);
-        produto.setNomeProduto("Pizza Calabreza");
-        produto.setPreco(25.0);
-        produto.setPedidoList(null);
-
-        cliente.setId(1L);
-        cliente.setNomeCliente("Gustavo");
-        cliente.setCpf("36126170601");
-        cliente.setEnderecoList(null);
-        cliente.setTelefone("+55 45 99988-7766");
-
         PedidoEntity pedido = new PedidoEntity();
 
         pedido.setId(1L);
