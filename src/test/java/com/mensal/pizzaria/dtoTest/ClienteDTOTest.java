@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class ClienteDTOTest {
     @Test
     void testDTO() {
-        ClienteDTO cliente = new ClienteDTO(1L, "Gustavo", "36126170601", null, "+55 45 99988-7766");
+        ClienteDTO cliente = new ClienteDTO(1L, "Gustavo", "36126170601", "+55 45 99988-7766", null);
 
         Assertions.assertEquals(1L, cliente.getId());
         Assertions.assertEquals("Gustavo", cliente.getNomeCliente());

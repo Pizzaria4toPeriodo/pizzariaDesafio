@@ -2,7 +2,10 @@ package com.mensal.pizzaria.controllerTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mensal.pizzaria.controller.PedidoController;
+import com.mensal.pizzaria.dto.ClienteDTO;
 import com.mensal.pizzaria.dto.PedidoDTO;
+import com.mensal.pizzaria.dto.ProdutoDTO;
+import com.mensal.pizzaria.entity.Forma_Pagamento;
 import com.mensal.pizzaria.entity.PedidoEntity;
 import com.mensal.pizzaria.service.PedidoService;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,6 +54,15 @@ class PedidoControllerTest {
 
         dto = new PedidoDTO();
         dto.setId(id);
+        List<ProdutoDTO> produtoDTOList = new ArrayList<>();
+        ProdutoDTO produto = new ProdutoDTO();
+        produtoDTOList.add(produto);
+        dto.setProdutoList(produtoDTOList);
+        ClienteDTO clienteDTO = new ClienteDTO();
+        dto.setCliente(clienteDTO);
+        dto.setDelivery(true);
+        dto.setFormaPagamento(Forma_Pagamento.CARTAO);
+        dto.setTotal(65.0);
 
         entity = new PedidoEntity();
         entity.setId(id);

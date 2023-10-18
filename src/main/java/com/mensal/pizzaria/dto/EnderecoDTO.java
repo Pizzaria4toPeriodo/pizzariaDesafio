@@ -1,5 +1,6 @@
 package com.mensal.pizzaria.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -24,6 +25,7 @@ public class EnderecoDTO {
     @Positive(message = "O numero deve ser positivo")
     private int numero;
 
+    @JsonIgnoreProperties("enderecoList")
     @NotNull(message = "O campo n pode ser nulo")
     private ClienteDTO cliente;
 }

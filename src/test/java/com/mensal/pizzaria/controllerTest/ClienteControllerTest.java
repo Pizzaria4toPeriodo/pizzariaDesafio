@@ -51,7 +51,9 @@ class ClienteControllerTest {
 
         dto = new ClienteDTO();
         dto.setId(id);
+        dto.setNomeCliente("Marcelo");
         dto.setCpf("47917474534");
+        dto.setTelefone("55 45 999887766");
 
         entity = new ClienteEntity();
         entity.setId(id);

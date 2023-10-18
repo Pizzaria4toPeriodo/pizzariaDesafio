@@ -22,7 +22,7 @@ public class EnderecoEntity {
     @Column(nullable = false)
     private int numero;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_cliente", referencedColumnName = "id", nullable = false)
     private ClienteEntity cliente;
 }

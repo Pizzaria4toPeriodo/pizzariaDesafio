@@ -19,10 +19,23 @@ public class  PedidoService {
     @Autowired
     private ModelMapper modelMapper;
 
+    public Double calculoTotal(PedidoEntity entity) {
+        double total = 0.0;
+
+        for (ProdutoEntity produto : entity.getProdutoList()) {
+            if (produto.getPreco() != null) {
+                total += produto.getPreco();
+            }
+        }
+
+        return total;
+    }
+
     @Transactional
     public PedidoEntity create(PedidoEntity entity) {
         if (!entity.getProdutoList().isEmpty()) {
-            entity.setTotal(calculoTotal(entity));
+            double total = calculoTotal(entity);
+            entity.setTotal(total);
         }
 
         return repository.save(entity);
@@ -49,6 +62,11 @@ public class  PedidoService {
         PedidoEntity existingEntity = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado com o ID: " + id));
 
+        if (!entity.getProdutoList().isEmpty()) {
+            double total = calculoTotal(entity);
+            entity.setTotal(total);
+        }
+
         modelMapper.map(entity, existingEntity);
 
         return repository.save(existingEntity);
@@ -57,15 +75,5 @@ public class  PedidoService {
     @Transactional
     public void deleteById(Long id) {
         repository.deleteById(id);
-    }
-
-    public Double calculoTotal(PedidoEntity entity) {
-        double total = 0.0;
-
-        for (ProdutoEntity produto : entity.getProdutoList()) {
-            total += produto.getPreco();
-        }
-
-        return total;
     }
 }

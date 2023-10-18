@@ -1,11 +1,14 @@
 package com.mensal.pizzaria.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,4 +24,7 @@ public class FuncionarioDTO {
     @NotBlank(message = "O campo não pode ser vazio")
     @Size(min = 3, max = 40, message = "O cargo deve conter entre 3-40 caracteres")
     private String cargo;
+
+    @JsonIgnoreProperties("funcionario")
+    private List<PedidoDTO> pedidoList;
 }

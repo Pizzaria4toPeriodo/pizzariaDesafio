@@ -2,6 +2,7 @@ package com.mensal.pizzaria.controllerTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mensal.pizzaria.controller.EnderecoController;
+import com.mensal.pizzaria.dto.ClienteDTO;
 import com.mensal.pizzaria.dto.EnderecoDTO;
 import com.mensal.pizzaria.entity.EnderecoEntity;
 import com.mensal.pizzaria.service.EnderecoService;
@@ -52,6 +53,8 @@ class EnderecoControllerTest {
         dto = new EnderecoDTO();
         dto.setId(id);
         dto.setRua("Guarani");
+        dto.setNumero(1);
+        dto.setCliente(new ClienteDTO());
 
         entity = new EnderecoEntity();
         entity.setId(id);

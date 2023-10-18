@@ -25,10 +25,12 @@ public class ClienteEntity {
     @Column(nullable = false)
     private String cpf;
 
-    @JsonIgnore
+    @Column(nullable = false)
+    private String telefone;
+
     @OneToMany(mappedBy = "cliente")
     private List<EnderecoEntity> enderecoList;
 
-    @Column(nullable = false)
-    private String telefone;
+    @OneToMany(mappedBy = "cliente")
+    private List<PedidoEntity> pedidoList;
 }

@@ -1,11 +1,9 @@
 package com.mensal.pizzaria.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mensal.pizzaria.entity.EnderecoEntity;
-import jakarta.persistence.OneToMany;
+import com.mensal.pizzaria.entity.PedidoEntity;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,8 +27,12 @@ public class ClienteDTO {
     @CPF(message = "O CPF deve seguir o formato padrão")
     private String cpf;
 
-    private List<EnderecoEntity> enderecoList;
-
     @NotBlank(message = "O campo nao pode ser nulo")
     private String telefone;
+
+    @JsonIgnoreProperties("cliente")
+    private List<EnderecoDTO> enderecoList;
+
+    @JsonIgnoreProperties("cliente")
+    private List<PedidoDTO> pedidoList;
 }

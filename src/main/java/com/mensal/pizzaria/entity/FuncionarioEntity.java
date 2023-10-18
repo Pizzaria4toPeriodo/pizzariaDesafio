@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -21,4 +23,7 @@ public class FuncionarioEntity {
 
     @Column(nullable = false, length = 30)
     private String cargo;
+
+    @OneToMany(mappedBy = "funcionario")
+    private List<PedidoEntity> pedidoList;
 }

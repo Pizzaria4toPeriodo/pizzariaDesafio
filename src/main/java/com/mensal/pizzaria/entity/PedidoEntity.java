@@ -1,9 +1,7 @@
 package com.mensal.pizzaria.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
@@ -27,9 +25,13 @@ public class PedidoEntity {
     )
     private List<ProdutoEntity> produtoList;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_cliente", referencedColumnName = "id", nullable = false)
     private ClienteEntity cliente;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_funcionario", referencedColumnName = "id", nullable = false)
+    private FuncionarioEntity funcionario;
 
     @Column(nullable = false)
     private boolean delivery;
@@ -38,6 +40,5 @@ public class PedidoEntity {
     @Column(nullable = false)
     private Forma_Pagamento formaPagamento;
 
-    @Column
     private Double total;
 }
