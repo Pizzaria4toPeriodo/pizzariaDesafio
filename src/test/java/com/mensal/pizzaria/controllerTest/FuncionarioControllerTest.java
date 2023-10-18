@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -37,6 +38,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@AutoConfigureMockMvc
 @SpringBootTest
 class FuncionarioControllerTest {
     @Autowired
@@ -75,36 +77,36 @@ class FuncionarioControllerTest {
     void shouldCreate() throws Exception {
         String dtoJson = objectMapper.writeValueAsString(dto);
 
-        mockMvc.perform(post("/funcionario/").content(dtoJson).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated());
+        mockMvc.perform(post("/funcionarios/").content(dtoJson).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated());
     }
 
     @Test
     void shouldGetById() throws Exception {
         when(service.getById(id)).thenReturn(entity);
-        mockMvc.perform(get("/funcionario/{id}", id)).andExpect(status().isOk());
+        mockMvc.perform(get("/funcionarios/{id}", id)).andExpect(status().isOk());
     }
 
     @Test
     void shouldGetByNomeFuncionario() throws Exception {
         when(service.getByNomeFuncionario("Marcelo")).thenReturn(entity);
-        mockMvc.perform(get("/funcionario/nome/{nome}", "Marcelo")).andExpect(status().isOk());
+        mockMvc.perform(get("/funcionarios/nome/{nome}", "Marcelo")).andExpect(status().isOk());
     }
 
     @Test
     void shouldGetAll() throws Exception {
         when(service.getAll()).thenReturn(entityList);
-        mockMvc.perform(get("/funcionario/list")).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON));
+        mockMvc.perform(get("/funcionarios/")).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
     void shouldUpdate() throws Exception {
         String dtoJson = objectMapper.writeValueAsString(dto);
 
-        mockMvc.perform(put("/funcionario/{id}", id).content(dtoJson).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+        mockMvc.perform(put("/funcionarios/{id}", id).content(dtoJson).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 
     @Test
     void shouldDelete() throws Exception {
-        mockMvc.perform(delete("/funcionario/{id}", id)).andExpect(status().isOk());
+        mockMvc.perform(delete("/funcionarios/{id}", id)).andExpect(status().isOk());
     }
 }

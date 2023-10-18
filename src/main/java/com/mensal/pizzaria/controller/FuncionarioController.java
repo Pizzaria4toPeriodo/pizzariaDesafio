@@ -21,12 +21,12 @@ public class FuncionarioController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @PostMapping
+    @PostMapping("/")
     public ResponseEntity<FuncionarioDTO> create(@RequestBody @Validated FuncionarioDTO dto) {
         return new ResponseEntity<>(modelMapper.map(service.create(modelMapper.map(dto, FuncionarioEntity.class)), FuncionarioDTO.class), HttpStatus.CREATED);
     }
 
-    @GetMapping("/list")
+    @GetMapping("/")
     public ResponseEntity<List<FuncionarioDTO>> getAll() {
         List<FuncionarioDTO> list = new ArrayList<>();
         for (FuncionarioEntity entity : service.getAll()) {
@@ -37,7 +37,7 @@ public class FuncionarioController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @GetMapping("/id/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<FuncionarioDTO> getById(@PathVariable Long id) {
         return new ResponseEntity<>(modelMapper.map(service.getById(id), FuncionarioDTO.class), HttpStatus.OK);
     }

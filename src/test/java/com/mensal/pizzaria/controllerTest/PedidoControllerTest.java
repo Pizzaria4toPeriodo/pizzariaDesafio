@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -25,6 +26,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@AutoConfigureMockMvc
 @SpringBootTest
 class PedidoControllerTest {
     @Autowired
@@ -61,30 +63,30 @@ class PedidoControllerTest {
     void shouldCreate() throws Exception {
         String dtoJson = objectMapper.writeValueAsString(dto);
 
-        mockMvc.perform(post("/pedido/").content(dtoJson).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated());
+        mockMvc.perform(post("/pedidos/").content(dtoJson).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated());
     }
 
     @Test
     void shouldGetById() throws Exception {
         when(service.getById(id)).thenReturn(entity);
-        mockMvc.perform(get("/pedido/{id}", id)).andExpect(status().isOk());
+        mockMvc.perform(get("/pedidos/{id}", id)).andExpect(status().isOk());
     }
 
     @Test
     void shouldGetAll() throws Exception {
         when(service.getAll()).thenReturn(entityList);
-        mockMvc.perform(get("/pedido/list")).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON));
+        mockMvc.perform(get("/pedidos/")).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
     void shouldUpdate() throws Exception {
         String dtoJson = objectMapper.writeValueAsString(dto);
 
-        mockMvc.perform(put("/pedido/{id}", id).content(dtoJson).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+        mockMvc.perform(put("/pedidos/{id}", id).content(dtoJson).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 
     @Test
     void shouldDelete() throws Exception {
-        mockMvc.perform(delete("/pedido/{id}", id)).andExpect(status().isOk());
+        mockMvc.perform(delete("/pedidos/{id}", id)).andExpect(status().isOk());
     }
 }

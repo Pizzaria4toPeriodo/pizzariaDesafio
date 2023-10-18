@@ -28,30 +28,58 @@ class FuncionarioServiceTest {
     private ModelMapper modelMapper;
     private final Long id = 1L;
     private final Long idNaoExistente = 2L;
+    private FuncionarioEntity entity;
+    private FuncionarioEntity updatedEntity;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        FuncionarioDTO funcionarioDTO = new FuncionarioDTO(1L, "Gustavo", "Entregador");
+        modelMapper = new ModelMapper();
 
-        FuncionarioEntity funcionarioEntity = new FuncionarioEntity(1L, "Gustavo", "Entregador");
-        FuncionarioEntity funcionarioEntity2 = new FuncionarioEntity(2L, "Marcelo", "Caixa");
+        FuncionarioDTO dto = new FuncionarioDTO();
+        dto.setId(id);
+        dto.setNomeFuncionario("Marcelo");
 
-        List<FuncionarioEntity> entityList = Arrays.asList(funcionarioEntity, funcionarioEntity2);
+        entity = new FuncionarioEntity();
+        entity.setId(id);
+        entity.setNomeFuncionario("Marcelo");
 
-        when(repository.findById(id)).thenReturn(Optional.of(funcionarioEntity));
+        FuncionarioEntity entity2 = new FuncionarioEntity();
+        entity2.setId(2L);
+        entity.setNomeFuncionario("Marcelo");
+
+        List<FuncionarioEntity> entityList = Arrays.asList(entity, entity2);
+
+        updatedEntity = new FuncionarioEntity();
+        updatedEntity.setId(id);
+        updatedEntity.setNomeFuncionario("Zé");
+
+        when(repository.findById(id)).thenReturn(Optional.of(entity));
         when(repository.findById(idNaoExistente)).thenReturn(Optional.empty());
+        when(repository.findByNomeFuncionario("Marcelo")).thenReturn(entity);
+        when(repository.findAll()).thenReturn(entityList);
+        when(repository.findById(id)).thenReturn(Optional.of(entity));
+    }
 
-        when(modelMapper.map(funcionarioEntity, FuncionarioDTO.class)).thenReturn(funcionarioDTO);
+    @Test
+    void testCreate() {
+        when(repository.save(any())).thenReturn(entity);
+
+        FuncionarioEntity createdEntity = service.create(entity);
+
+        assertNotNull(createdEntity);
+        assertEquals("Marcelo", createdEntity.getNomeFuncionario());
+
+        verify(repository, times(1)).save(entity);
     }
 
     @Test
     void testGetByIdExistente() {
-        FuncionarioDTO funcionarioDTOBanco = service.getById(id);
+        FuncionarioEntity database = service.getById(id);
 
-        assertNotNull(funcionarioDTOBanco);
-        assertEquals(id, funcionarioDTOBanco.getId());
+        assertNotNull(database);
+        assertEquals(id, database.getId());
 
         verify(repository, times(1)).findById(id);
     }
@@ -61,6 +89,35 @@ class FuncionarioServiceTest {
         assertThrows(EntityNotFoundException.class, () -> service.getById(idNaoExistente));
 
         verify(repository, times(1)).findById(idNaoExistente);
+    }
+
+    @Test
+    void testGetByNomeFuncionario() {
+        FuncionarioEntity database = service.getByNomeFuncionario("Marcelo");
+
+        assertEquals("Marcelo", database.getNomeFuncionario());
+    }
+
+    @Test
+    void testFindAll() {
+        List<FuncionarioEntity> database = service.getAll();
+
+        assertEquals(2, database.size());
+
+        verify(repository, times(1)).findAll();
+    }
+
+    @Test
+    void testUpdate() {
+        when(repository.save(any())).thenReturn(updatedEntity);
+
+        FuncionarioEntity result = service.update(id, updatedEntity);
+
+        assertNotNull(result);
+        assertEquals(id, result.getId());
+        assertEquals("Zé", result.getNomeFuncionario());
+
+        verify(repository, times(1)).save(any());
     }
 
     @Test

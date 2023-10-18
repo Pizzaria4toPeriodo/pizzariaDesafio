@@ -26,7 +26,7 @@ public class EnderecoController {
         return new ResponseEntity<>(modelMapper.map(service.create(modelMapper.map(dto, EnderecoEntity.class)), EnderecoDTO.class), HttpStatus.CREATED);
     }
 
-    @GetMapping("/list")
+    @GetMapping("/")
     public ResponseEntity<List<EnderecoDTO>> getAll() {
         List<EnderecoDTO> list = new ArrayList<>();
         for (EnderecoEntity entity : service.getAll()) {
@@ -37,7 +37,7 @@ public class EnderecoController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @GetMapping("/id/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<EnderecoDTO> getById(@PathVariable Long id) {
         return new ResponseEntity<>(modelMapper.map(service.getById(id), EnderecoDTO.class), HttpStatus.OK);
     }

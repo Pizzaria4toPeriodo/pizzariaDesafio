@@ -1,8 +1,6 @@
 package com.mensal.pizzaria.serviceTest;
 
-import com.mensal.pizzaria.dto.ClienteDTO;
 import com.mensal.pizzaria.dto.EnderecoDTO;
-import com.mensal.pizzaria.entity.ClienteEntity;
 import com.mensal.pizzaria.entity.EnderecoEntity;
 import com.mensal.pizzaria.repository.EnderecoRepository;
 import com.mensal.pizzaria.service.EnderecoService;
@@ -31,32 +29,46 @@ class EnderecoServiceTest {
     private ModelMapper modelMapper;
     private final Long id = 1L;
     private final Long idNaoExistente = 2L;
+    private EnderecoEntity entity;
+    private EnderecoEntity updatedEntity;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        ClienteDTO clienteDTO = new ClienteDTO(1L, "Gustavo", "36126170601", null, "+55 45 99988-7766");
-        EnderecoDTO enderecoDTO = new EnderecoDTO(1L, "Rua Guarani", 11, clienteDTO);
+        modelMapper = new ModelMapper();
 
-        ClienteEntity clienteEntity = new ClienteEntity(1L, "Gustavo", "36126170601", null, "+55 45 99988-7766");
-        EnderecoEntity enderecoEntity = new EnderecoEntity(1L, "Rua Guarani", 11, clienteEntity);
-        EnderecoEntity enderecoEntity2 = new EnderecoEntity(2L, "Rua Taquara", 12, clienteEntity);
+        EnderecoDTO dto = new EnderecoDTO();
+        dto.setId(id);
+        dto.setRua("Guarani");
 
-        List<EnderecoEntity> entityList = Arrays.asList(enderecoEntity, enderecoEntity2);
+        entity = new EnderecoEntity();
+        entity.setId(id);
+        entity.setRua("Guarani");
 
-        when(repository.findById(id)).thenReturn(Optional.of(enderecoEntity));
+        EnderecoEntity entity2 = new EnderecoEntity();
+        entity2.setId(2L);
+        entity2.setRua("Guarani");
+
+        List<EnderecoEntity> entityList = Arrays.asList(entity, entity2);
+
+        updatedEntity = new EnderecoEntity();
+        updatedEntity.setId(id);
+        updatedEntity.setRua("Taquara");
+
+        when(repository.findById(id)).thenReturn(Optional.of(entity));
         when(repository.findById(idNaoExistente)).thenReturn(Optional.empty());
-
-        when(modelMapper.map(enderecoEntity, EnderecoDTO.class)).thenReturn(enderecoDTO);
+        when(repository.findByRua("Guarani")).thenReturn(entity);
+        when(repository.findAll()).thenReturn(entityList);
+        when(repository.findById(id)).thenReturn(Optional.of(entity));
     }
 
     @Test
     void testGetByIdExistente() {
-        EnderecoDTO enderecoDTOBanco = service.getById(id);
+        EnderecoEntity database = service.getById(id);
 
-        assertNotNull(enderecoDTOBanco);
-        assertEquals(id, enderecoDTOBanco.getId());
+        assertNotNull(database);
+        assertEquals(id, database.getId());
 
         verify(repository, times(1)).findById(id);
     }
@@ -66,6 +78,47 @@ class EnderecoServiceTest {
         assertThrows(EntityNotFoundException.class, () -> service.getById(idNaoExistente));
 
         verify(repository, times(1)).findById(idNaoExistente);
+    }
+
+    @Test
+    void testGetByRua() {
+        EnderecoEntity database = service.getByRua("Guarani");
+
+        assertEquals("Guarani", database.getRua());
+    }
+
+    @Test
+    void testFindAll() {
+        List<EnderecoEntity> database = service.getAll();
+
+        assertEquals(2, database.size());
+
+        verify(repository, times(1)).findAll();
+    }
+
+    @Test
+    void testCreate() {
+        when(repository.save(any())).thenReturn(entity);
+
+        EnderecoEntity createdEntity = service.create(entity);
+
+        assertNotNull(createdEntity);
+        assertEquals("Guarani", createdEntity.getRua());
+
+        verify(repository, times(1)).save(entity);
+    }
+
+    @Test
+    void testUpdate() {
+        when(repository.save(any())).thenReturn(updatedEntity);
+
+        EnderecoEntity result = service.update(id, updatedEntity);
+
+        assertNotNull(result);
+        assertEquals(id, result.getId());
+        assertEquals("Taquara", result.getRua());
+
+        verify(repository, times(1)).save(any());
     }
 
     @Test

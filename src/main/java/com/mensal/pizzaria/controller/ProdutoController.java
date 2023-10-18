@@ -21,12 +21,12 @@ public class ProdutoController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @PostMapping
+    @PostMapping("/")
     public ResponseEntity<ProdutoDTO> create(@RequestBody @Validated ProdutoDTO dto) {
         return new ResponseEntity<>(modelMapper.map(service.create(modelMapper.map(dto, ProdutoEntity.class)), ProdutoDTO.class), HttpStatus.CREATED);
     }
 
-    @GetMapping("/list")
+    @GetMapping("/")
     public ResponseEntity<List<ProdutoDTO>> getAll() {
         List<ProdutoDTO> list = new ArrayList<>();
         for (ProdutoEntity entity : service.getAll()) {
@@ -37,7 +37,7 @@ public class ProdutoController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @GetMapping("/id/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ProdutoDTO> getById(@PathVariable Long id) {
         return new ResponseEntity<>(modelMapper.map(service.getById(id), ProdutoDTO.class), HttpStatus.OK);
     }

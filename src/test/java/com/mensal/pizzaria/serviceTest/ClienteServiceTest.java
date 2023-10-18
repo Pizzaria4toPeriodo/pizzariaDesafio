@@ -30,10 +30,7 @@ class ClienteServiceTest {
     private ModelMapper modelMapper;
     private final Long id = 1L;
     private final Long idNaoExistente = 2L;
-    private ClienteDTO dto;
     private ClienteEntity entity;
-    private ClienteEntity entity2;
-    private List<ClienteEntity> entityList;
     private ClienteEntity updatedEntity;
 
     @BeforeEach
@@ -42,7 +39,7 @@ class ClienteServiceTest {
 
         modelMapper = new ModelMapper();
 
-        dto = new ClienteDTO();
+        ClienteDTO dto = new ClienteDTO();
         dto.setId(id);
         dto.setCpf("47917474534");
 
@@ -50,15 +47,15 @@ class ClienteServiceTest {
         entity.setId(id);
         entity.setCpf("47917474534");
 
-        entity2 = new ClienteEntity();
+        ClienteEntity entity2 = new ClienteEntity();
         entity2.setId(2L);
         entity2.setCpf("47917474534");
 
-        entityList = Arrays.asList(entity, entity2);
+        List<ClienteEntity> entityList = Arrays.asList(entity, entity2);
 
         updatedEntity = new ClienteEntity();
         updatedEntity.setId(id);
-        updatedEntity.setNomeCliente("Zé");
+        updatedEntity.setCpf("60488595037");
 
         when(repository.findById(id)).thenReturn(Optional.of(entity));
         when(repository.findById(idNaoExistente)).thenReturn(Optional.empty());
@@ -120,7 +117,7 @@ class ClienteServiceTest {
 
         assertNotNull(result);
         assertEquals(id, result.getId());
-        assertEquals("47917474534", result.getCpf());
+        assertEquals("60488595037", result.getCpf());
 
         verify(repository, times(1)).save(any());
     }

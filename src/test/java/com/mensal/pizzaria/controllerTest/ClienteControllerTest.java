@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -25,6 +26,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@AutoConfigureMockMvc
 @SpringBootTest
 class ClienteControllerTest {
     @Autowired
@@ -42,7 +44,7 @@ class ClienteControllerTest {
     private ObjectMapper objectMapper;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
         objectMapper = new ObjectMapper();
@@ -63,36 +65,36 @@ class ClienteControllerTest {
     void shouldCreate() throws Exception {
         String dtoJson = objectMapper.writeValueAsString(dto);
 
-        mockMvc.perform(post("/cliente/").content(dtoJson).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated());
+        mockMvc.perform(post("/clientes/").content(dtoJson).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated());
     }
 
     @Test
     void shouldGetById() throws Exception {
         when(service.getById(id)).thenReturn(entity);
-        mockMvc.perform(get("/cliente/{id}", id)).andExpect(status().isOk());
+        mockMvc.perform(get("/clientes/{id}", id)).andExpect(status().isOk());
     }
 
     @Test
     void shouldGetByCpf() throws Exception {
         when(service.getByCpf("47917474534")).thenReturn(entity);
-        mockMvc.perform(get("/cliente/cpf/{cpf}", "47917474534")).andExpect(status().isOk());
+        mockMvc.perform(get("/clientes/cpf/{cpf}", "47917474534")).andExpect(status().isOk());
     }
 
     @Test
     void shouldGetAll() throws Exception {
         when(service.getAll()).thenReturn(entityList);
-        mockMvc.perform(get("/cliente/list")).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON));
+        mockMvc.perform(get("/clientes/")).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
     void shouldUpdate() throws Exception {
         String dtoJson = objectMapper.writeValueAsString(dto);
 
-        mockMvc.perform(put("/cliente/{id}", id).content(dtoJson).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+        mockMvc.perform(put("/clientes/{id}", id).content(dtoJson).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 
     @Test
     void shouldDelete() throws Exception {
-        mockMvc.perform(delete("/cliente/{id}", id)).andExpect(status().isOk());
+        mockMvc.perform(delete("/clientes/{id}", id)).andExpect(status().isOk());
     }
 }

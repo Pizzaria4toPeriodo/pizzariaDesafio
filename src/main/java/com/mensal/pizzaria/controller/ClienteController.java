@@ -26,7 +26,7 @@ public class ClienteController {
         return new ResponseEntity<>(modelMapper.map(service.create(modelMapper.map(dto, ClienteEntity.class)), ClienteDTO.class), HttpStatus.CREATED);
     }
 
-    @GetMapping("/list")
+    @GetMapping("/")
     public ResponseEntity<List<ClienteDTO>> getAll() {
         List<ClienteDTO> list = new ArrayList<>();
         for (ClienteEntity entity : service.getAll()) {
@@ -37,7 +37,7 @@ public class ClienteController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @GetMapping("/id/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ClienteDTO> getById(@PathVariable Long id) {
         return new ResponseEntity<>(modelMapper.map(service.getById(id), ClienteDTO.class), HttpStatus.OK);
     }

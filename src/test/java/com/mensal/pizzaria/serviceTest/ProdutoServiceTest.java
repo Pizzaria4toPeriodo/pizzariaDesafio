@@ -1,6 +1,5 @@
 package com.mensal.pizzaria.serviceTest;
 
-import com.mensal.pizzaria.dto.ClienteDTO;
 import com.mensal.pizzaria.dto.ProdutoDTO;
 import com.mensal.pizzaria.entity.ProdutoEntity;
 import com.mensal.pizzaria.repository.ProdutoRepository;
@@ -31,30 +30,58 @@ class ProdutoServiceTest {
     private ModelMapper modelMapper;
     private final Long id = 1L;
     private final Long idNaoExistente = 2L;
+    private ProdutoEntity entity;
+    private ProdutoEntity updatedEntity;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        ProdutoDTO produtoDTO = new ProdutoDTO(1L, "Pizza Calabreza", 25.0, null);
+        modelMapper = new ModelMapper();
 
-        ProdutoEntity produtoEntity = new ProdutoEntity(1L, "Pizza Calabreza", 25.0, null);
-        ProdutoEntity produtoEntity2 = new ProdutoEntity(2L, "Pizza Pepperoni", 27.0, null);
+        ProdutoDTO dto = new ProdutoDTO();
+        dto.setId(id);
+        dto.setNomeProduto("Pizza");
 
-        List<ProdutoEntity> entityList = Arrays.asList(produtoEntity, produtoEntity2);
+        entity = new ProdutoEntity();
+        entity.setId(id);
+        entity.setNomeProduto("Pizza");
 
-        when(repository.findById(id)).thenReturn(Optional.of(produtoEntity));
+        ProdutoEntity entity2 = new ProdutoEntity();
+        entity2.setId(2L);
+        entity.setNomeProduto("Pizza");
+
+        List<ProdutoEntity> entityList = Arrays.asList(entity, entity2);
+
+        updatedEntity = new ProdutoEntity();
+        updatedEntity.setId(id);
+        updatedEntity.setNomeProduto("Coca-cola");
+
+        when(repository.findById(id)).thenReturn(Optional.of(entity));
         when(repository.findById(idNaoExistente)).thenReturn(Optional.empty());
+        when(repository.findByNomeProduto("Pizza")).thenReturn(entity);
+        when(repository.findAll()).thenReturn(entityList);
+        when(repository.findById(id)).thenReturn(Optional.of(entity));
+    }
 
-        when(modelMapper.map(produtoEntity, ProdutoDTO.class)).thenReturn(produtoDTO);
+    @Test
+    void testCreate() {
+        when(repository.save(any())).thenReturn(entity);
+
+        ProdutoEntity createdEntity = service.create(entity);
+
+        assertNotNull(createdEntity);
+        assertEquals("Pizza", createdEntity.getNomeProduto());
+
+        verify(repository, times(1)).save(entity);
     }
 
     @Test
     void testGetByIdExistente() {
-        ProdutoDTO produtoDTOBanco = service.getById(id);
+        ProdutoEntity database = service.getById(id);
 
-        assertNotNull(produtoDTOBanco);
-        assertEquals(id, produtoDTOBanco.getId());
+        assertNotNull(database);
+        assertEquals(id, database.getId());
 
         verify(repository, times(1)).findById(id);
     }
@@ -64,6 +91,35 @@ class ProdutoServiceTest {
         assertThrows(EntityNotFoundException.class, () -> service.getById(idNaoExistente));
 
         verify(repository, times(1)).findById(idNaoExistente);
+    }
+
+    @Test
+    void testGetByNomeFuncionario() {
+        ProdutoEntity database = service.getByNomeProduto("Pizza");
+
+        assertEquals("Pizza", database.getNomeProduto());
+    }
+
+    @Test
+    void testFindAll() {
+        List<ProdutoEntity> database = service.getAll();
+
+        assertEquals(2, database.size());
+
+        verify(repository, times(1)).findAll();
+    }
+
+    @Test
+    void testUpdate() {
+        when(repository.save(any())).thenReturn(updatedEntity);
+
+        ProdutoEntity result = service.update(id, updatedEntity);
+
+        assertNotNull(result);
+        assertEquals(id, result.getId());
+        assertEquals("Coca-cola", result.getNomeProduto());
+
+        verify(repository, times(1)).save(any());
     }
 
     @Test
