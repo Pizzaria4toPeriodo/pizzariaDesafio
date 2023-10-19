@@ -1,7 +1,7 @@
 package com.mensal.pizzaria.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mensal.pizzaria.entity.Forma_Pagamento;
+import com.mensal.pizzaria.entity.enums.Forma_Pagamento;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

@@ -1,5 +1,6 @@
 package com.mensal.pizzaria.entity;
 
+import com.mensal.pizzaria.entity.enums.Forma_Pagamento;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

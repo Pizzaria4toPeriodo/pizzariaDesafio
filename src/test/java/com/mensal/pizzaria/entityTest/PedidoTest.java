@@ -1,6 +1,7 @@
 package com.mensal.pizzaria.entityTest;
 
 import com.mensal.pizzaria.entity.*;
+import com.mensal.pizzaria.entity.enums.Forma_Pagamento;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

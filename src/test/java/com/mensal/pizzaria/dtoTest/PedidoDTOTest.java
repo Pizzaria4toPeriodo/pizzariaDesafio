@@ -3,7 +3,7 @@ package com.mensal.pizzaria.dtoTest;
 import com.mensal.pizzaria.dto.ClienteDTO;
 import com.mensal.pizzaria.dto.PedidoDTO;
 import com.mensal.pizzaria.dto.ProdutoDTO;
-import com.mensal.pizzaria.entity.Forma_Pagamento;
+import com.mensal.pizzaria.entity.enums.Forma_Pagamento;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

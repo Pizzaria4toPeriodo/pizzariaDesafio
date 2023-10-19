@@ -5,7 +5,7 @@ import com.mensal.pizzaria.controller.PedidoController;
 import com.mensal.pizzaria.dto.ClienteDTO;
 import com.mensal.pizzaria.dto.PedidoDTO;
 import com.mensal.pizzaria.dto.ProdutoDTO;
-import com.mensal.pizzaria.entity.Forma_Pagamento;
+import com.mensal.pizzaria.entity.enums.Forma_Pagamento;
 import com.mensal.pizzaria.entity.PedidoEntity;
 import com.mensal.pizzaria.service.PedidoService;
 import org.junit.jupiter.api.BeforeEach;
