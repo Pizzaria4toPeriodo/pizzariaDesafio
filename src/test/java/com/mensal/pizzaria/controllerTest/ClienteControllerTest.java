@@ -71,21 +71,27 @@ class ClienteControllerTest {
     }
 
     @Test
+    void shouldGetAll() throws Exception {
+        when(service.getAll()).thenReturn(entityList);
+        mockMvc.perform(get("/clientes/")).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
     void shouldGetById() throws Exception {
         when(service.getById(id)).thenReturn(entity);
         mockMvc.perform(get("/clientes/{id}", id)).andExpect(status().isOk());
     }
 
     @Test
-    void shouldGetByCpf() throws Exception {
-        when(service.getByCpf("47917474534")).thenReturn(entity);
-        mockMvc.perform(get("/clientes/cpf/{cpf}", "47917474534")).andExpect(status().isOk());
+    void shouldGetByNomeCliente() throws Exception {
+        when(service.getByCpf("Marcelo")).thenReturn(entity);
+        mockMvc.perform(get("/clientes/nome/{nome}", "Marcelo")).andExpect(status().isOk());
     }
 
     @Test
-    void shouldGetAll() throws Exception {
-        when(service.getAll()).thenReturn(entityList);
-        mockMvc.perform(get("/clientes/")).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    void shouldGetByCpf() throws Exception {
+        when(service.getByCpf("47917474534")).thenReturn(entity);
+        mockMvc.perform(get("/clientes/cpf/{cpf}", "47917474534")).andExpect(status().isOk());
     }
 
     @Test

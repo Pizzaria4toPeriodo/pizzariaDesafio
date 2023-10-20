@@ -87,6 +87,12 @@ class PizzaControllerTest {
     }
 
     @Test
+    void shouldGetAll() throws Exception {
+        when(service.getAll()).thenReturn(entityList);
+        mockMvc.perform(get("/pizzas/")).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
     void shouldGetById() throws Exception {
         when(service.getById(id)).thenReturn(entity);
         mockMvc.perform(get("/pizzas/{id}", id)).andExpect(status().isOk());
@@ -99,9 +105,15 @@ class PizzaControllerTest {
     }
 
     @Test
-    void shouldGetAll() throws Exception {
-        when(service.getAll()).thenReturn(entityList);
-        mockMvc.perform(get("/pizzas/")).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    void shouldGetByTamanho() throws Exception {
+        when(service.getByTamanho(Tamanho.M)).thenReturn(entity);
+        mockMvc.perform(get("/pizzas/tamanho/{tamanho}", Tamanho.M)).andExpect(status().isOk());
+    }
+
+    @Test
+    void shouldGetByCategoria() throws Exception {
+        when(service.getByCategoria(Categoria.TRADICIONAL)).thenReturn(entity);
+        mockMvc.perform(get("/pizzas/categoria/{categoria}", Categoria.TRADICIONAL)).andExpect(status().isOk());
     }
 
     @Test

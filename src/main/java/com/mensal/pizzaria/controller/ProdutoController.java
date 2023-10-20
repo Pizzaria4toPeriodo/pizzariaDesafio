@@ -43,7 +43,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/nome/{nome}")
-    public ResponseEntity<ProdutoDTO> getByNomeProduto(@PathVariable("nome") String nome) {
+    public ResponseEntity<ProdutoDTO> getByNomeProduto(@PathVariable String nome) {
         return new ResponseEntity<>(modelMapper.map(service.getByNomeProduto(nome), ProdutoDTO.class), HttpStatus.OK);
     }
 

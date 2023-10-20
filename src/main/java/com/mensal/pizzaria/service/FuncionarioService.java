@@ -24,6 +24,11 @@ public class FuncionarioService {
     }
 
     @Transactional
+    public List<FuncionarioEntity> getAll() {
+        return repository.findAll();
+    }
+
+    @Transactional
     public FuncionarioEntity getById(Long id) {
         Optional<FuncionarioEntity> optional = repository.findById(id);
 
@@ -40,14 +45,8 @@ public class FuncionarioService {
     }
 
     @Transactional
-    public List<FuncionarioEntity> getAll() {
-        return repository.findAll();
-    }
-
-    @Transactional
     public FuncionarioEntity update(Long id, FuncionarioEntity entity) {
-        FuncionarioEntity existingEntity = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Funcionário não encontrado com o ID: " + id));
+        FuncionarioEntity existingEntity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Funcionário não encontrado com o ID: " + id));
 
         modelMapper.map(entity, existingEntity);
 

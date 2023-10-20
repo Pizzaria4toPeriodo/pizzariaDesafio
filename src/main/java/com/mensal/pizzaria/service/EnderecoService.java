@@ -25,6 +25,11 @@ public class EnderecoService {
     }
 
     @Transactional
+    public List<EnderecoEntity> getAll() {
+        return repository.findAll();
+    }
+
+    @Transactional
     public EnderecoEntity getById(Long id) {
         Optional<EnderecoEntity> optional = repository.findById(id);
 
@@ -46,14 +51,8 @@ public class EnderecoService {
     }
 
     @Transactional
-    public List<EnderecoEntity> getAll() {
-        return repository.findAll();
-    }
-
-    @Transactional
     public EnderecoEntity update(Long id, EnderecoEntity entity) {
-        EnderecoEntity existingEntity = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Endereço não encontrado com o ID: " + id));
+        EnderecoEntity existingEntity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Endereço não encontrado com o ID: " + id));
 
         modelMapper.map(entity, existingEntity);
 

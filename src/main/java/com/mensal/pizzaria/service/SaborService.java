@@ -25,6 +25,11 @@ public class SaborService {
     }
 
     @Transactional
+    public List<SaborEntity> getAll() {
+        return repository.findAll();
+    }
+
+    @Transactional
     public SaborEntity getById(Long id) {
         Optional<SaborEntity> optional = repository.findById(id);
 
@@ -33,11 +38,6 @@ public class SaborService {
         } else {
             throw new EntityNotFoundException("Produto não encontrado com o ID: " + id);
         }
-    }
-
-    @Transactional
-    public List<SaborEntity> getAll() {
-        return repository.findAll();
     }
 
     @Transactional

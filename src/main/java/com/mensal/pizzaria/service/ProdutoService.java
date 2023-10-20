@@ -24,6 +24,11 @@ public class ProdutoService {
     }
 
     @Transactional
+    public List<ProdutoEntity> getAll() {
+        return repository.findAll();
+    }
+
+    @Transactional
     public ProdutoEntity getById(Long id) {
         Optional<ProdutoEntity> optional = repository.findById(id);
 
@@ -37,11 +42,6 @@ public class ProdutoService {
     @Transactional
     public ProdutoEntity getByNomeProduto(String nome) {
         return repository.findByNomeProduto(nome);
-    }
-
-    @Transactional
-    public List<ProdutoEntity> getAll() {
-        return repository.findAll();
     }
 
     @Transactional

@@ -43,7 +43,7 @@ public class FuncionarioController {
     }
 
     @GetMapping("/nome/{nome}")
-    public ResponseEntity<FuncionarioDTO> getByNomeFuncionario(@PathVariable("nome") String nome) {
+    public ResponseEntity<FuncionarioDTO> getByNomeFuncionario(@PathVariable String nome) {
         return new ResponseEntity<>(modelMapper.map(service.getByNomeFuncionario(nome), FuncionarioDTO.class), HttpStatus.OK);
     }
 

@@ -26,6 +26,11 @@ public class PizzaService {
     }
 
     @Transactional
+    public List<PizzaEntity> getAll() {
+        return repository.findAll();
+    }
+
+    @Transactional
     public PizzaEntity getById(Long id) {
         Optional<PizzaEntity> optional = repository.findById(id);
 
@@ -34,11 +39,6 @@ public class PizzaService {
         } else {
             throw new EntityNotFoundException("Pizza não encontrada com o ID: " + id);
         }
-    }
-
-    @Transactional
-    public List<PizzaEntity> getAll() {
-        return repository.findAll();
     }
 
     @Transactional

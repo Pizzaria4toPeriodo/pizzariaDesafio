@@ -64,7 +64,6 @@ class FuncionarioControllerTest {
         dto = new FuncionarioDTO();
         dto.setId(id);
         dto.setNomeFuncionario("Marcelo");
-        dto.setCargo("Entregador");
 
         entity = new FuncionarioEntity();
         entity.setId(id);

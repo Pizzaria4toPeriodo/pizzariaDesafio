@@ -71,6 +71,12 @@ class ProdutoControllerTest {
     }
 
     @Test
+    void shouldGetAll() throws Exception {
+        when(service.getAll()).thenReturn(entityList);
+        mockMvc.perform(get("/produtos/")).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
     void shouldGetById() throws Exception {
         when(service.getById(id)).thenReturn(entity);
         mockMvc.perform(get("/produtos/{id}", id)).andExpect(status().isOk());
@@ -80,12 +86,6 @@ class ProdutoControllerTest {
     void shouldGetByNomeProduto() throws Exception {
         when(service.getByNomeProduto("Refrigerante")).thenReturn(entity);
         mockMvc.perform(get("/produtos/nome/{nome}", "Refrigerante")).andExpect(status().isOk());
-    }
-
-    @Test
-    void shouldGetAll() throws Exception {
-        when(service.getAll()).thenReturn(entityList);
-        mockMvc.perform(get("/produtos/")).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test

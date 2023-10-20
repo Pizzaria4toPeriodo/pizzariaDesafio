@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mensal.pizzaria.controller.EnderecoController;
 import com.mensal.pizzaria.dto.ClienteDTO;
 import com.mensal.pizzaria.dto.EnderecoDTO;
+import com.mensal.pizzaria.entity.ClienteEntity;
 import com.mensal.pizzaria.entity.EnderecoEntity;
 import com.mensal.pizzaria.service.EnderecoService;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,11 +55,16 @@ class EnderecoControllerTest {
         dto.setId(id);
         dto.setRua("Guarani");
         dto.setNumero(1);
-        dto.setCliente(new ClienteDTO());
+        ClienteDTO clienteDTO = new ClienteDTO();
+        clienteDTO.setNomeCliente("Gustavo");
+        dto.setCliente(clienteDTO);
 
         entity = new EnderecoEntity();
         entity.setId(id);
         entity.setRua("Guarani");
+        ClienteEntity clienteEntity = new ClienteEntity();
+        clienteEntity.setNomeCliente("Gustavo");
+        entity.setCliente(clienteEntity);
 
         entityList = new ArrayList<>();
         entityList.add(entity);
@@ -81,6 +87,12 @@ class EnderecoControllerTest {
     void shouldGetByRua() throws Exception {
         when(service.getByRua("Guarani")).thenReturn(entity);
         mockMvc.perform(get("/enderecos/rua/{rua}", "Guarani")).andExpect(status().isOk());
+    }
+
+    @Test
+    void shouldGetByNomeCliente() throws Exception {
+        when(service.getEnderecosByNomeCliente("Gustavo")).thenReturn(entityList);
+        mockMvc.perform(get("/enderecos/cliente/{nomeCLiente}", "Gustavo")).andExpect(status().isOk());
     }
 
     @Test

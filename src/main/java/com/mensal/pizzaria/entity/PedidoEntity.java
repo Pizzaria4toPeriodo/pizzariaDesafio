@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -49,6 +50,8 @@ public class PedidoEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Forma_Pagamento formaPagamento;
+
+    private LocalDateTime criadoEm;
 
     private Double total;
 }

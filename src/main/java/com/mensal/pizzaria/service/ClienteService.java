@@ -23,6 +23,10 @@ public class ClienteService {
         return repository.save(entity);
     }
 
+    @Transactional
+    public List<ClienteEntity> getAll() {
+        return repository.findAll();
+    }
 
     @Transactional
     public ClienteEntity getById(Long id) {
@@ -36,11 +40,6 @@ public class ClienteService {
     }
 
     @Transactional
-    public ClienteEntity getByCpf(String cpf) {
-        return repository.findByCpf(cpf);
-    }
-
-    @Transactional
     public ClienteEntity getByNomeCliente(String nome) {
         Optional<ClienteEntity> optional = repository.findByNomeCliente(nome);
         if (optional.isPresent()) {
@@ -51,14 +50,13 @@ public class ClienteService {
     }
 
     @Transactional
-    public List<ClienteEntity> getAll() {
-        return repository.findAll();
+    public ClienteEntity getByCpf(String cpf) {
+        return repository.findByCpf(cpf);
     }
 
     @Transactional
     public ClienteEntity update(Long id, ClienteEntity entity) {
-        ClienteEntity existingEntity = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado com o ID: " + id));
+        ClienteEntity existingEntity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado com o ID: " + id));
 
         modelMapper.map(entity, existingEntity);
 

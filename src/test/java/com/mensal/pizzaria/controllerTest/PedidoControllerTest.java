@@ -3,6 +3,8 @@ package com.mensal.pizzaria.controllerTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mensal.pizzaria.controller.PedidoController;
 import com.mensal.pizzaria.dto.*;
+import com.mensal.pizzaria.entity.ClienteEntity;
+import com.mensal.pizzaria.entity.FuncionarioEntity;
 import com.mensal.pizzaria.entity.enums.Forma_Pagamento;
 import com.mensal.pizzaria.entity.PedidoEntity;
 import com.mensal.pizzaria.service.PedidoService;
@@ -65,6 +67,12 @@ class PedidoControllerTest {
         entity = new PedidoEntity();
         entity.setId(id);
 
+        ClienteEntity clienteEntity = new ClienteEntity();
+        entity.setCliente(clienteEntity);
+
+        FuncionarioEntity funcionarioEntity = new FuncionarioEntity();
+        entity.setFuncionario(funcionarioEntity);
+
         entityList = new ArrayList<>();
         entityList.add(entity);
     }
@@ -77,15 +85,33 @@ class PedidoControllerTest {
     }
 
     @Test
+    void shouldGetAll() throws Exception {
+        when(service.getAll()).thenReturn(entityList);
+        mockMvc.perform(get("/pedidos/")).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
     void shouldGetById() throws Exception {
         when(service.getById(id)).thenReturn(entity);
         mockMvc.perform(get("/pedidos/{id}", id)).andExpect(status().isOk());
     }
 
     @Test
-    void shouldGetAll() throws Exception {
-        when(service.getAll()).thenReturn(entityList);
-        mockMvc.perform(get("/pedidos/")).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    void shouldGetPedidosByNomeCliente() throws Exception {
+        when(service.getPedidosByNomeCliente("Gustavo")).thenReturn(entityList);
+        mockMvc.perform(get("/pedidos/cliente/{nomeCliente}", "Gustavo")).andExpect(status().isOk());
+    }
+
+    @Test
+    void shouldGetPedidosByNomeFuncionario() throws Exception {
+        when(service.getPedidosByNomeFuncionario("Marcelo")).thenReturn(entityList);
+        mockMvc.perform(get("/pedidos/funcionario/{nomeFuncionario}", "Marcelo")).andExpect(status().isOk());
+    }
+
+    @Test
+    void shouldGetByDelivery() throws Exception {
+        when(service.getByDelivery(true)).thenReturn(entityList);
+        mockMvc.perform(get("/pedidos/delivery/{delivery}", true)).andExpect(status().isOk());
     }
 
     @Test

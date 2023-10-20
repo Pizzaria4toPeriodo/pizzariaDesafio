@@ -42,6 +42,11 @@ public class  PedidoService {
     }
 
     @Transactional
+    public List<PedidoEntity> getAll() {
+        return repository.findAll();
+    }
+
+    @Transactional
     public PedidoEntity getById(Long id) {
         Optional<PedidoEntity> optional = repository.findById(id);
 
@@ -53,8 +58,18 @@ public class  PedidoService {
     }
 
     @Transactional
-    public List<PedidoEntity> getAll() {
-        return repository.findAll();
+    public List<PedidoEntity> getPedidosByNomeCliente(String nome) {
+        return repository.findPedidosByCliente(nome);
+    }
+
+    @Transactional
+    public List<PedidoEntity> getPedidosByNomeFuncionario(String nome) {
+        return repository.findPedidosByFuncionario(nome);
+    }
+
+    @Transactional
+    public List<PedidoEntity> getByDelivery(boolean delivery) {
+        return repository.findByDelivery(delivery);
     }
 
     @Transactional

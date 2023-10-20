@@ -72,6 +72,12 @@ class SaborControllerTest {
     }
 
     @Test
+    void shouldGetAll() throws Exception {
+        when(service.getAll()).thenReturn(entityList);
+        mockMvc.perform(get("/sabores/")).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
     void shouldGetById() throws Exception {
         when(service.getById(id)).thenReturn(entity);
         mockMvc.perform(get("/sabores/{id}", id)).andExpect(status().isOk());
@@ -84,9 +90,9 @@ class SaborControllerTest {
     }
 
     @Test
-    void shouldGetAll() throws Exception {
-        when(service.getAll()).thenReturn(entityList);
-        mockMvc.perform(get("/sabores/")).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    void shouldGetByCategoria() throws Exception {
+        when(service.getByCategoria(Categoria.TRADICIONAL)).thenReturn(entity);
+        mockMvc.perform(get("/sabores/categoria/{categoria}", Categoria.TRADICIONAL)).andExpect(status().isOk());
     }
 
     @Test

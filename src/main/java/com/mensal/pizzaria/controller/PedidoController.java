@@ -42,6 +42,33 @@ public class PedidoController {
         return new ResponseEntity<>(modelMapper.map(service.getById(id), PedidoDTO.class), HttpStatus.OK);
     }
 
+    @GetMapping("/cliente/{nomeCliente}")
+    public ResponseEntity<List<PedidoEntity>> getPedidosByNomeCliente(@PathVariable String nomeCliente) {
+        List<PedidoEntity> list = service.getPedidosByNomeCliente(nomeCliente);
+        if (list.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @GetMapping("/funcionario/{nomeFuncionario}")
+    public ResponseEntity<List<PedidoEntity>> getPedidosByNomeFuncionario(@PathVariable String nomeFuncionario) {
+        List<PedidoEntity> list = service.getPedidosByNomeFuncionario(nomeFuncionario);
+        if (list.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @GetMapping("/delivery/{delivery}")
+    public ResponseEntity<List<PedidoEntity>> getByDelivery(@PathVariable boolean delivery) {
+        List<PedidoEntity> list = service.getByDelivery(delivery);
+        if (list.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<PedidoDTO> update(@PathVariable("id") Long id, @RequestBody @Validated PedidoDTO dto) {
         return new ResponseEntity<>(modelMapper.map(service.update(id, modelMapper.map(dto, PedidoEntity.class)), PedidoDTO.class), HttpStatus.OK);
