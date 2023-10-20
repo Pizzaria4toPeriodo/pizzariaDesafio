@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class EnderecoDTOTest {
     @Test
-    void entityTest() {
+    void testDTO() {
         ClienteDTO cliente = new ClienteDTO();
         EnderecoDTO endereco = new EnderecoDTO(1L, "Rua Guarani", 11, cliente);
 
@@ -20,7 +20,7 @@ class EnderecoDTOTest {
     }
 
     @Test
-    void entitySetterTest() {
+    void testDTOSetter() {
         ClienteDTO cliente = new ClienteDTO();
         EnderecoDTO endereco = new EnderecoDTO();
 

@@ -1,11 +1,11 @@
 package com.mensal.pizzaria.controllerTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mensal.pizzaria.controller.PedidoController;
-import com.mensal.pizzaria.dto.*;
-import com.mensal.pizzaria.entity.enums.Forma_Pagamento;
-import com.mensal.pizzaria.entity.PedidoEntity;
-import com.mensal.pizzaria.service.PedidoService;
+import com.mensal.pizzaria.controller.SaborController;
+import com.mensal.pizzaria.dto.SaborDTO;
+import com.mensal.pizzaria.entity.SaborEntity;
+import com.mensal.pizzaria.entity.enums.Categoria;
+import com.mensal.pizzaria.service.SaborService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -29,19 +29,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
-class PedidoControllerTest {
+class SaborControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @InjectMocks
-    private PedidoController controller;
+    private SaborController controller;
     @Mock
-    private PedidoService service;
+    private SaborService service;
     @Mock
     private ModelMapper modelMapper;
     private final Long id = 1L;
-    private PedidoDTO dto;
-    private PedidoEntity entity;
-    private List<PedidoEntity> entityList;
+    private SaborDTO dto;
+    private SaborEntity entity;
+    private List<SaborEntity> entityList;
     private ObjectMapper objectMapper;
 
     @BeforeEach
@@ -50,20 +50,15 @@ class PedidoControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
         objectMapper = new ObjectMapper();
 
-        dto = new PedidoDTO();
+        dto = new SaborDTO();
         dto.setId(id);
+        dto.setNomeSabor("Calabresa");
+        dto.setCategoria(Categoria.TRADICIONAL);
 
-        ClienteDTO clienteDTO = new ClienteDTO();
-        dto.setCliente(clienteDTO);
-
-        FuncionarioDTO funcionarioDTO = new FuncionarioDTO();
-        dto.setFuncionario(funcionarioDTO);
-        dto.setDelivery(true);
-        dto.setFormaPagamento(Forma_Pagamento.CARTAO);
-        dto.setTotal(65.0);
-
-        entity = new PedidoEntity();
+        entity = new SaborEntity();
         entity.setId(id);
+        entity.setNomeSabor("Calabresa");
+        entity.setCategoria(Categoria.TRADICIONAL);
 
         entityList = new ArrayList<>();
         entityList.add(entity);
@@ -73,30 +68,36 @@ class PedidoControllerTest {
     void shouldCreate() throws Exception {
         String dtoJson = objectMapper.writeValueAsString(dto);
 
-        mockMvc.perform(post("/pedidos/").content(dtoJson).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated());
+        mockMvc.perform(post("/sabores/").content(dtoJson).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated());
     }
 
     @Test
     void shouldGetById() throws Exception {
         when(service.getById(id)).thenReturn(entity);
-        mockMvc.perform(get("/pedidos/{id}", id)).andExpect(status().isOk());
+        mockMvc.perform(get("/sabores/{id}", id)).andExpect(status().isOk());
+    }
+
+    @Test
+    void shouldGetByNomeSabor() throws Exception {
+        when(service.getByNomeSabor("Calabresa")).thenReturn(entity);
+        mockMvc.perform(get("/sabores/nome/{nome}", "Calabresa")).andExpect(status().isOk());
     }
 
     @Test
     void shouldGetAll() throws Exception {
         when(service.getAll()).thenReturn(entityList);
-        mockMvc.perform(get("/pedidos/")).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON));
+        mockMvc.perform(get("/sabores/")).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
     void shouldUpdate() throws Exception {
         String dtoJson = objectMapper.writeValueAsString(dto);
 
-        mockMvc.perform(put("/pedidos/{id}", id).content(dtoJson).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+        mockMvc.perform(put("/sabores/{id}", id).content(dtoJson).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 
     @Test
     void shouldDelete() throws Exception {
-        mockMvc.perform(delete("/pedidos/{id}", id)).andExpect(status().isOk());
+        mockMvc.perform(delete("/sabores/{id}", id)).andExpect(status().isOk());
     }
 }

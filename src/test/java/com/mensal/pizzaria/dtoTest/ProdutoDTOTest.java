@@ -8,27 +8,24 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class ProdutoDTOTest {
     @Test
-    void entityTest() {
-        ProdutoDTO produto = new ProdutoDTO(1L, "Pizza Calabreza", 25.0, null);
+    void testDTO() {
+        ProdutoDTO produto = new ProdutoDTO(1L, "Refrigerante", 25.0);
 
         Assertions.assertEquals(1L, produto.getId());
-        Assertions.assertEquals("Pizza Calabreza", produto.getNomeProduto());
+        Assertions.assertEquals("Refrigerante", produto.getNomeProduto());
         Assertions.assertEquals(25.0, produto.getPreco());
-        Assertions.assertNull(produto.getPedidoList());
     }
 
     @Test
-    void entitySetterTest() {
+    void testDTOSetter() {
         ProdutoDTO produto = new ProdutoDTO();
 
         produto.setId(1L);
-        produto.setNomeProduto("Pizza Calabreza");
+        produto.setNomeProduto("Refrigerante");
         produto.setPreco(25.0);
-        produto.setPedidoList(null);
 
         Assertions.assertEquals(1L, produto.getId());
-        Assertions.assertEquals("Pizza Calabreza", produto.getNomeProduto());
+        Assertions.assertEquals("Refrigerante", produto.getNomeProduto());
         Assertions.assertEquals(25.0, produto.getPreco());
-        Assertions.assertNull(produto.getPedidoList());
     }
 }

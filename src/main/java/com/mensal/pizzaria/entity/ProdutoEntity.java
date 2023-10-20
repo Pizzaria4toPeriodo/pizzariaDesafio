@@ -1,7 +1,5 @@
 package com.mensal.pizzaria.entity;
 
-import com.mensal.pizzaria.entity.enums.Categoria;
-import com.mensal.pizzaria.entity.enums.Tamanho;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,19 +19,9 @@ public class ProdutoEntity {
     @Column(nullable = false, length = 30)
     private String nomeProduto;
 
-    @Enumerated(EnumType.STRING)
-    private Tamanho tamanho;
-
-    @Enumerated(EnumType.STRING)
-    private Categoria categoria;
-
-    @Column(nullable = false)
-    private boolean isPizza;
-
-    @ManyToMany(mappedBy = "produtoList")
-    @JoinTable(name = "produto_sabor", schema = "pizzaria", joinColumns = @JoinColumn(name = "produto_id"), inverseJoinColumns = @JoinColumn(name = "sabor_id"))
-    private List<SaborEntity> saborList;
-
     @Column(nullable = false)
     private Double preco;
+
+    @ManyToMany(mappedBy = "produtoList")
+    private List<PedidoEntity> pedidoList;
 }

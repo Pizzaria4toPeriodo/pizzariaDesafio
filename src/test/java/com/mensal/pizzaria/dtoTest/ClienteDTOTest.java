@@ -9,13 +9,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 class ClienteDTOTest {
     @Test
     void testDTO() {
-        ClienteDTO cliente = new ClienteDTO(1L, "Gustavo", "36126170601", "+55 45 99988-7766", null);
+        ClienteDTO cliente = new ClienteDTO(1L, "Gustavo", "36126170601", "+55 45 99988-7766", null, null);
 
         Assertions.assertEquals(1L, cliente.getId());
         Assertions.assertEquals("Gustavo", cliente.getNomeCliente());
         Assertions.assertEquals("36126170601", cliente.getCpf());
-        Assertions.assertNull(cliente.getEnderecoList());
         Assertions.assertEquals("+55 45 99988-7766", cliente.getTelefone());
+        Assertions.assertNull(cliente.getEnderecoList());
+        Assertions.assertNull(cliente.getPedidoList());
     }
 
     @Test
@@ -25,13 +26,15 @@ class ClienteDTOTest {
         cliente.setId(1L);
         cliente.setNomeCliente("Gustavo");
         cliente.setCpf("36126170601");
-        cliente.setEnderecoList(null);
         cliente.setTelefone("+55 45 99988-7766");
+        cliente.setEnderecoList(null);
+        cliente.setPedidoList(null);
 
         Assertions.assertEquals(1L, cliente.getId());
         Assertions.assertEquals("Gustavo", cliente.getNomeCliente());
         Assertions.assertEquals("36126170601", cliente.getCpf());
-        Assertions.assertNull(cliente.getEnderecoList());
         Assertions.assertEquals("+55 45 99988-7766", cliente.getTelefone());
+        Assertions.assertNull(cliente.getEnderecoList());
+        Assertions.assertNull(cliente.getPedidoList());
     }
 }

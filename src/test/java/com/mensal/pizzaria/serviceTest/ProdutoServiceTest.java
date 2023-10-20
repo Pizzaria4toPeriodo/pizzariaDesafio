@@ -94,7 +94,7 @@ class ProdutoServiceTest {
     }
 
     @Test
-    void testGetByNomeFuncionario() {
+    void testGetByNomeProduto() {
         ProdutoEntity database = service.getByNomeProduto("Pizza");
 
         assertEquals("Pizza", database.getNomeProduto());

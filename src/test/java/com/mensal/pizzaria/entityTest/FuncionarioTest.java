@@ -14,9 +14,11 @@ class FuncionarioTest {
         funcionario.setId(1L);
         funcionario.setNomeFuncionario("Gustavo");
         funcionario.setCargo("Entregador");
+        funcionario.setPedidoList(null);
 
         Assertions.assertEquals(1L, funcionario.getId());
         Assertions.assertEquals("Gustavo", funcionario.getNomeFuncionario());
         Assertions.assertEquals("Entregador", funcionario.getCargo());
+        Assertions.assertNull(funcionario.getPedidoList());
     }
 }

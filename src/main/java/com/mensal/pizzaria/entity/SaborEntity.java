@@ -24,5 +24,5 @@ public class SaborEntity {
     private Categoria categoria;
 
     @ManyToMany(mappedBy = "saborList")
-    private List<ProdutoEntity> produtoList;
+    private List<PizzaEntity> pizzaList;
 }

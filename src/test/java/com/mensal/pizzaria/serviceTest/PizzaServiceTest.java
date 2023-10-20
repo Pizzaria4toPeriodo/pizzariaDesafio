@@ -1,11 +1,9 @@
 package com.mensal.pizzaria.serviceTest;
 
-import com.mensal.pizzaria.dto.PedidoDTO;
-import com.mensal.pizzaria.entity.PedidoEntity;
-import com.mensal.pizzaria.entity.PizzaEntity;
+import com.mensal.pizzaria.dto.ProdutoDTO;
 import com.mensal.pizzaria.entity.ProdutoEntity;
-import com.mensal.pizzaria.repository.PedidoRepository;
-import com.mensal.pizzaria.service.PedidoService;
+import com.mensal.pizzaria.repository.ProdutoRepository;
+import com.mensal.pizzaria.service.ProdutoService;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,26 +13,28 @@ import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 
 @SpringBootTest
-class PedidoServiceTest {
+public class PizzaServiceTest {
     @InjectMocks
-    private PedidoService service;
+    private ProdutoService service;
     @Mock
-    private PedidoRepository repository;
+    private ProdutoRepository repository;
     @Mock
     private ModelMapper modelMapper;
     private final Long id = 1L;
     private final Long idNaoExistente = 2L;
-    private PedidoEntity entity;
-    private PedidoEntity updatedEntity;
+    private ProdutoEntity entity;
+    private ProdutoEntity updatedEntity;
 
     @BeforeEach
     void setUp() {
@@ -42,22 +42,27 @@ class PedidoServiceTest {
 
         modelMapper = new ModelMapper();
 
-        PedidoDTO dto = new PedidoDTO();
+        ProdutoDTO dto = new ProdutoDTO();
         dto.setId(id);
+        dto.setNomeProduto("Pizza");
 
-        entity = new PedidoEntity();
+        entity = new ProdutoEntity();
         entity.setId(id);
+        entity.setNomeProduto("Pizza");
 
-        PedidoEntity entity2 = new PedidoEntity();
+        ProdutoEntity entity2 = new ProdutoEntity();
         entity2.setId(2L);
+        entity.setNomeProduto("Pizza");
 
-        List<PedidoEntity> entityList = Arrays.asList(entity, entity2);
+        List<ProdutoEntity> entityList = Arrays.asList(entity, entity2);
 
-        updatedEntity = new PedidoEntity();
+        updatedEntity = new ProdutoEntity();
         updatedEntity.setId(id);
+        updatedEntity.setNomeProduto("Coca-cola");
 
         when(repository.findById(id)).thenReturn(Optional.of(entity));
         when(repository.findById(idNaoExistente)).thenReturn(Optional.empty());
+        when(repository.findByNomeProduto("Pizza")).thenReturn(entity);
         when(repository.findAll()).thenReturn(entityList);
         when(repository.findById(id)).thenReturn(Optional.of(entity));
     }
@@ -66,16 +71,17 @@ class PedidoServiceTest {
     void testCreate() {
         when(repository.save(any())).thenReturn(entity);
 
-        PedidoEntity createdEntity = service.create(entity);
+        ProdutoEntity createdEntity = service.create(entity);
 
         assertNotNull(createdEntity);
+        assertEquals("Pizza", createdEntity.getNomeProduto());
 
         verify(repository, times(1)).save(entity);
     }
 
     @Test
     void testGetByIdExistente() {
-        PedidoEntity database = service.getById(id);
+        ProdutoEntity database = service.getById(id);
 
         assertNotNull(database);
         assertEquals(id, database.getId());
@@ -91,8 +97,15 @@ class PedidoServiceTest {
     }
 
     @Test
+    void testGetByNomeProduto() {
+        ProdutoEntity database = service.getByNomeProduto("Pizza");
+
+        assertEquals("Pizza", database.getNomeProduto());
+    }
+
+    @Test
     void testFindAll() {
-        List<PedidoEntity> database = service.getAll();
+        List<ProdutoEntity> database = service.getAll();
 
         assertEquals(2, database.size());
 
@@ -103,10 +116,11 @@ class PedidoServiceTest {
     void testUpdate() {
         when(repository.save(any())).thenReturn(updatedEntity);
 
-        PedidoEntity result = service.update(id, updatedEntity);
+        ProdutoEntity result = service.update(id, updatedEntity);
 
         assertNotNull(result);
         assertEquals(id, result.getId());
+        assertEquals("Coca-cola", result.getNomeProduto());
 
         verify(repository, times(1)).save(any());
     }

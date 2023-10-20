@@ -14,11 +14,13 @@ class PedidoTest {
     void entitySetterTest() {
         ProdutoEntity produto = new ProdutoEntity();
         ClienteEntity cliente = new ClienteEntity();
+        FuncionarioEntity funcionario = new FuncionarioEntity();
         PedidoEntity pedido = new PedidoEntity();
 
         pedido.setId(1L);
         pedido.setProdutoList(Collections.singletonList(produto));
         pedido.setCliente(cliente);
+        pedido.setFuncionario(funcionario);
         pedido.setDelivery(true);
         pedido.setFormaPagamento(Forma_Pagamento.PIX);
         pedido.setTotal(25.0);
@@ -26,6 +28,7 @@ class PedidoTest {
         Assertions.assertEquals(1L, pedido.getId());
         Assertions.assertEquals(Collections.singletonList(produto), pedido.getProdutoList());
         Assertions.assertEquals(cliente, pedido.getCliente());
+        Assertions.assertEquals(funcionario, pedido.getFuncionario());
         Assertions.assertEquals(Forma_Pagamento.PIX, pedido.getFormaPagamento());
         Assertions.assertEquals(25.0, pedido.getTotal());
     }

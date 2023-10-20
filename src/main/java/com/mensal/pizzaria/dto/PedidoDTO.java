@@ -18,8 +18,9 @@ import java.util.List;
 public class PedidoDTO {
     private Long id;
 
-    @NotEmpty(message = "É necessário conter ao menos um produto")
     private List<ProdutoDTO> produtoList;
+
+    private List<PizzaDTO> pizzaList;
 
     @JsonIgnoreProperties("pedidoList")
     @NotNull(message = "É necessário conter um cliente")

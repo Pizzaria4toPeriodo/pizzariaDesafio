@@ -26,6 +26,15 @@ public class PedidoEntity {
     )
     private List<ProdutoEntity> produtoList;
 
+    @ManyToMany
+    @JoinTable(
+            name = "pedido_pizza",
+            schema = "pizzaria",
+            joinColumns = @JoinColumn(name = "pedido_id"),
+            inverseJoinColumns = @JoinColumn(name = "pizza_id")
+    )
+    private List<PizzaEntity> pizzaList;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_cliente", referencedColumnName = "id", nullable = false)
     private ClienteEntity cliente;

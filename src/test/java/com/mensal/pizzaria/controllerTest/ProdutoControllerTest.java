@@ -51,11 +51,13 @@ class ProdutoControllerTest {
 
         dto = new ProdutoDTO();
         dto.setId(id);
-        dto.setNomeProduto("Pizza");
+        dto.setNomeProduto("Refrigerante");
+        dto.setPreco(25.0);
 
         entity = new ProdutoEntity();
         entity.setId(id);
-        entity.setNomeProduto("Pizza");
+        entity.setNomeProduto("Refrigerante");
+        entity.setPreco(25.0);
 
         entityList = new ArrayList<>();
         entityList.add(entity);
@@ -76,8 +78,8 @@ class ProdutoControllerTest {
 
     @Test
     void shouldGetByNomeProduto() throws Exception {
-        when(service.getByNomeProduto("Pizza")).thenReturn(entity);
-        mockMvc.perform(get("/produtos/nome/{nome}", "Pizza")).andExpect(status().isOk());
+        when(service.getByNomeProduto("Refrigerante")).thenReturn(entity);
+        mockMvc.perform(get("/produtos/nome/{nome}", "Refrigerante")).andExpect(status().isOk());
     }
 
     @Test
