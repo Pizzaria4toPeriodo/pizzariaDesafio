@@ -2,7 +2,6 @@ package com.mensal.pizzaria.serviceTest;
 
 import com.mensal.pizzaria.dto.PedidoDTO;
 import com.mensal.pizzaria.entity.PedidoEntity;
-import com.mensal.pizzaria.entity.PizzaEntity;
 import com.mensal.pizzaria.entity.ProdutoEntity;
 import com.mensal.pizzaria.repository.PedidoRepository;
 import com.mensal.pizzaria.service.PedidoService;
@@ -45,8 +44,14 @@ class PedidoServiceTest {
         PedidoDTO dto = new PedidoDTO();
         dto.setId(id);
 
+        ProdutoEntity produtoEntity = new ProdutoEntity();
+        produtoEntity.setPreco(5.0);
+        List<ProdutoEntity> produtoEntityList = new ArrayList<>();
+        produtoEntityList.add(produtoEntity);
+
         entity = new PedidoEntity();
         entity.setId(id);
+        entity.setProdutoList(produtoEntityList);
 
         PedidoEntity entity2 = new PedidoEntity();
         entity2.setId(2L);
@@ -55,6 +60,7 @@ class PedidoServiceTest {
 
         updatedEntity = new PedidoEntity();
         updatedEntity.setId(id);
+        updatedEntity.setProdutoList(produtoEntityList);
 
         when(repository.findById(id)).thenReturn(Optional.of(entity));
         when(repository.findById(idNaoExistente)).thenReturn(Optional.empty());
