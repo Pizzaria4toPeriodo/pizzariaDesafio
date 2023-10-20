@@ -1,11 +1,9 @@
 package com.mensal.pizzaria.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mensal.pizzaria.entity.PedidoEntity;
-import com.mensal.pizzaria.entity.SaborEntity;
 import com.mensal.pizzaria.entity.enums.Categoria;
 import com.mensal.pizzaria.entity.enums.Tamanho;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

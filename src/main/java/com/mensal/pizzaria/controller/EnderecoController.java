@@ -43,8 +43,17 @@ public class EnderecoController {
     }
 
     @GetMapping("/rua/{rua}")
-    public ResponseEntity<EnderecoDTO> getByRua(@PathVariable("rua") String rua) {
+    public ResponseEntity<EnderecoDTO> getByRua(@PathVariable String rua) {
         return new ResponseEntity<>(modelMapper.map(service.getByRua(rua), EnderecoDTO.class), HttpStatus.OK);
+    }
+
+    @GetMapping("/cliente/{nomeCliente}")
+    public ResponseEntity<List<EnderecoEntity>> getEnderecosByNomeCliente(@PathVariable String nomeCliente) {
+        List<EnderecoEntity> list = service.getEnderecosByNomeCliente(nomeCliente);
+        if (list.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")

@@ -1,8 +1,6 @@
 package com.mensal.pizzaria.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mensal.pizzaria.entity.EnderecoEntity;
-import com.mensal.pizzaria.entity.PedidoEntity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;

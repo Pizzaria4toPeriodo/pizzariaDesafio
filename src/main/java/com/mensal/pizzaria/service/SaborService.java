@@ -1,8 +1,7 @@
 package com.mensal.pizzaria.service;
 
-import com.mensal.pizzaria.entity.ProdutoEntity;
 import com.mensal.pizzaria.entity.SaborEntity;
-import com.mensal.pizzaria.repository.ProdutoRepository;
+import com.mensal.pizzaria.entity.enums.Categoria;
 import com.mensal.pizzaria.repository.SaborRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -37,13 +36,18 @@ public class SaborService {
     }
 
     @Transactional
+    public List<SaborEntity> getAll() {
+        return repository.findAll();
+    }
+
+    @Transactional
     public SaborEntity getByNomeSabor(String nome) {
         return repository.findByNomeSabor(nome);
     }
 
     @Transactional
-    public List<SaborEntity> getAll() {
-        return repository.findAll();
+    public SaborEntity getByCategoria(Categoria categoria) {
+        return repository.findByCategoria(categoria);
     }
 
     @Transactional

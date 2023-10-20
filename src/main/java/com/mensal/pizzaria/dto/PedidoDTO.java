@@ -2,13 +2,14 @@ package com.mensal.pizzaria.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mensal.pizzaria.entity.enums.Forma_Pagamento;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -35,6 +36,9 @@ public class PedidoDTO {
 
     @NotNull(message = "É necessário conter uma forma de pagamento")
     private Forma_Pagamento formaPagamento;
+
+    @CreationTimestamp
+    private LocalDateTime criadoEm;
 
     private Double total;
 }

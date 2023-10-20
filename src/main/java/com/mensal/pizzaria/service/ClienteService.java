@@ -41,6 +41,16 @@ public class ClienteService {
     }
 
     @Transactional
+    public ClienteEntity getByNomeCliente(String nome) {
+        Optional<ClienteEntity> optional = repository.findByNomeCliente(nome);
+        if (optional.isPresent()) {
+            return optional.get();
+        } else {
+            throw new EntityNotFoundException("Cliente não encontrada com o Nome: " + nome);
+        }
+    }
+
+    @Transactional
     public List<ClienteEntity> getAll() {
         return repository.findAll();
     }

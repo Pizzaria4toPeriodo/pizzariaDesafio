@@ -1,9 +1,9 @@
 package com.mensal.pizzaria.service;
 
 import com.mensal.pizzaria.entity.PizzaEntity;
-import com.mensal.pizzaria.entity.ProdutoEntity;
+import com.mensal.pizzaria.entity.enums.Categoria;
+import com.mensal.pizzaria.entity.enums.Tamanho;
 import com.mensal.pizzaria.repository.PizzaRepository;
-import com.mensal.pizzaria.repository.ProdutoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -37,19 +37,28 @@ public class PizzaService {
     }
 
     @Transactional
-    public PizzaEntity getByNomePizza(String nome) {
-        return repository.findByNomePizza(nome);
-    }
-
-    @Transactional
     public List<PizzaEntity> getAll() {
         return repository.findAll();
     }
 
     @Transactional
+    public PizzaEntity getByNomePizza(String nome) {
+        return repository.findByNomePizza(nome);
+    }
+
+    @Transactional
+    public PizzaEntity getByTamanho(Tamanho tamanho) {
+        return repository.findByTamanho(tamanho);
+    }
+
+    @Transactional
+    public PizzaEntity getByCategoria(Categoria categoria) {
+        return repository.findByCategoria(categoria);
+    }
+
+    @Transactional
     public PizzaEntity update(Long id, PizzaEntity entity) {
-        PizzaEntity existingEntity = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Pizza não encontrada com o ID: " + id));
+        PizzaEntity existingEntity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Pizza não encontrada com o ID: " + id));
 
         modelMapper.map(entity, existingEntity);
 

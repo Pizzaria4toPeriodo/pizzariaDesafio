@@ -2,6 +2,7 @@ package com.mensal.pizzaria.controller;
 
 import com.mensal.pizzaria.dto.SaborDTO;
 import com.mensal.pizzaria.entity.SaborEntity;
+import com.mensal.pizzaria.entity.enums.Categoria;
 import com.mensal.pizzaria.service.SaborService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +44,13 @@ public class SaborController {
     }
 
     @GetMapping("/nome/{nome}")
-    public ResponseEntity<SaborDTO> getByNomeSabor(@PathVariable("nome") String nome) {
+    public ResponseEntity<SaborDTO> getByNomeSabor(@PathVariable String nome) {
         return new ResponseEntity<>(modelMapper.map(service.getByNomeSabor(nome), SaborDTO.class), HttpStatus.OK);
+    }
+
+    @GetMapping("/categoria/{categoria}")
+    public ResponseEntity<SaborDTO> getByCategoria(@PathVariable Categoria categoria) {
+        return new ResponseEntity<>(modelMapper.map(service.getByCategoria(categoria), SaborDTO.class), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")

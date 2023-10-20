@@ -21,10 +21,6 @@ public class FuncionarioDTO {
     @Size(min = 3, max = 40, message = "O nome do funcionário deve conter entre 3-40 caracteres")
     private String nomeFuncionario;
 
-    @NotBlank(message = "O campo não pode ser vazio")
-    @Size(min = 3, max = 40, message = "O cargo deve conter entre 3-40 caracteres")
-    private String cargo;
-
     @JsonIgnoreProperties("funcionario")
     private List<PedidoDTO> pedidoList;
 }

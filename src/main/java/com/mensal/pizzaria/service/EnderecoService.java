@@ -1,6 +1,5 @@
 package com.mensal.pizzaria.service;
 
-import com.mensal.pizzaria.dto.EnderecoDTO;
 import com.mensal.pizzaria.entity.EnderecoEntity;
 import com.mensal.pizzaria.repository.EnderecoRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -39,6 +38,11 @@ public class EnderecoService {
     @Transactional
     public EnderecoEntity getByRua(String rua) {
         return repository.findByRua(rua);
+    }
+
+    @Transactional
+    public List<EnderecoEntity> getEnderecosByNomeCliente(String nome) {
+        return repository.findEnderecosByNomeCliente(nome);
     }
 
     @Transactional

@@ -9,11 +9,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 class FuncionarioDTOTest {
     @Test
     void testDTO() {
-        FuncionarioDTO funcionario = new FuncionarioDTO(1L, "Gustavo", "Entregador", null);
+        FuncionarioDTO funcionario = new FuncionarioDTO(1L, "Gustavo", null);
 
         Assertions.assertEquals(1L, funcionario.getId());
         Assertions.assertEquals("Gustavo", funcionario.getNomeFuncionario());
-        Assertions.assertEquals("Entregador", funcionario.getCargo());
         Assertions.assertNull(funcionario.getPedidoList());
     }
 
@@ -23,12 +22,10 @@ class FuncionarioDTOTest {
 
         funcionario.setId(1L);
         funcionario.setNomeFuncionario("Gustavo");
-        funcionario.setCargo("Entregador");
         funcionario.setPedidoList(null);
 
         Assertions.assertEquals(1L, funcionario.getId());
         Assertions.assertEquals("Gustavo", funcionario.getNomeFuncionario());
-        Assertions.assertEquals("Entregador", funcionario.getCargo());
         Assertions.assertNull(funcionario.getPedidoList());
 
     }

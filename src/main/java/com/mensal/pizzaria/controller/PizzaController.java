@@ -2,6 +2,8 @@ package com.mensal.pizzaria.controller;
 
 import com.mensal.pizzaria.dto.PizzaDTO;
 import com.mensal.pizzaria.entity.PizzaEntity;
+import com.mensal.pizzaria.entity.enums.Categoria;
+import com.mensal.pizzaria.entity.enums.Tamanho;
 import com.mensal.pizzaria.service.PizzaService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +47,16 @@ public class PizzaController {
     @GetMapping("/nome/{nome}")
     public ResponseEntity<PizzaDTO> getByNomePizza(@PathVariable("nome") String nome) {
         return new ResponseEntity<>(modelMapper.map(service.getByNomePizza(nome), PizzaDTO.class), HttpStatus.OK);
+    }
+
+    @GetMapping("/tamanho/{tamanho}")
+    public ResponseEntity<PizzaDTO> getByTamanho(@PathVariable("tamanho") Tamanho tamanho) {
+        return new ResponseEntity<>(modelMapper.map(service.getByTamanho(tamanho), PizzaDTO.class), HttpStatus.OK);
+    }
+
+    @GetMapping("/categoria/{categoria}")
+    public ResponseEntity<PizzaDTO> getByCategoria(@PathVariable("categoria") Categoria categoria) {
+        return new ResponseEntity<>(modelMapper.map(service.getByCategoria(categoria), PizzaDTO.class), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")

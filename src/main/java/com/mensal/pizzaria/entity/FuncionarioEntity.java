@@ -21,9 +21,6 @@ public class FuncionarioEntity {
     @Column(nullable = false, length = 30)
     private String nomeFuncionario;
 
-    @Column(nullable = false, length = 30)
-    private String cargo;
-
     @OneToMany(mappedBy = "funcionario")
     private List<PedidoEntity> pedidoList;
 }

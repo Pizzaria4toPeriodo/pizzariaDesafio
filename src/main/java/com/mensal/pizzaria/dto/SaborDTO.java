@@ -1,9 +1,8 @@
 package com.mensal.pizzaria.dto;
 
 import com.mensal.pizzaria.entity.enums.Categoria;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,5 +18,6 @@ public class SaborDTO {
     @NotBlank(message = "O nome do sabor não pode ser nulo")
     private String nomeSabor;
 
+    @NotNull(message = "A categoria do sabor não pode ser nula")
     private Categoria categoria;
 }
