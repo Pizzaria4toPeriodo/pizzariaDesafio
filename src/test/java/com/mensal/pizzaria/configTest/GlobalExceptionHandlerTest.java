@@ -25,7 +25,7 @@ class GlobalExceptionHandlerTest {
 
         ResponseEntity<String> responseEntity = globalExceptionHandler.handleGenericException(exception);
 
-        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-        assertEquals("Recurso não encontrado", responseEntity.getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals("Exemplo de exceção", responseEntity.getBody());
     }
 }

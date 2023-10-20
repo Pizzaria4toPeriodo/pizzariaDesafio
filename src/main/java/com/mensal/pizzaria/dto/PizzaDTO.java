@@ -21,13 +21,13 @@ import java.util.List;
 public class PizzaDTO {
     private Long id;
 
-    @NotBlank(message = "O nome da pizza não pode ser nulo")
+    @NotBlank(message = "O campo nomePizza não pode estar em branco")
     private String nomePizza;
 
-    @NotNull(message = "O tamanho da pizza não pode ser nulo")
+    @NotNull(message = "O campo tamanho não pode estar em branco")
     private Tamanho tamanho;
 
-    @NotNull(message = "A categoria da pizza não pode ser nula")
+    @NotNull(message = "O campo categoria não pode estar em branco")
     private Categoria categoria;
 
     @JsonIgnoreProperties("pizzaList")

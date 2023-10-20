@@ -24,7 +24,7 @@ import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
 
 @SpringBootTest
-public class PizzaServiceTest {
+class PizzaServiceTest {
     @InjectMocks
     private ProdutoService service;
     @Mock

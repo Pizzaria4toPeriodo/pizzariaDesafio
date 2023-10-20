@@ -18,14 +18,15 @@ import java.util.List;
 public class ClienteDTO {
     private Long id;
 
-    @NotBlank(message = "O campo não pode ser nulo")
-    @Size(min = 2, max = 50, message = "O nome do cliente deve conter minimo 2 caracteres e maximo 50")
+    @NotBlank(message = "O campo nomeCliente não pode estar em branco")
+    @Size(min = 2, max = 30, message = "O nome do cliente deve conter entre 2-30 caracteres")
     private String nomeCliente;
 
-    @CPF(message = "O CPF deve seguir o formato padrão")
+    @NotBlank(message = "O campo CPF não pode estar em branco")
+    @CPF(message = "O CPF não é válido")
     private String cpf;
 
-    @NotBlank(message = "O campo nao pode ser nulo")
+    @NotBlank(message = "O campo telefone não pode estar em branco")
     private String telefone;
 
     @JsonIgnoreProperties("cliente")

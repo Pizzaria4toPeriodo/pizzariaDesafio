@@ -31,7 +31,7 @@ public class PedidoDTO {
     @NotNull(message = "É necessário conter um funcionário")
     private FuncionarioDTO funcionario;
 
-    @NotNull(message = "É necessário conter se é delivery")
+    @NotNull(message = "É necessário conter um status para delivery")
     private boolean delivery;
 
     @NotNull(message = "É necessário conter uma forma de pagamento")

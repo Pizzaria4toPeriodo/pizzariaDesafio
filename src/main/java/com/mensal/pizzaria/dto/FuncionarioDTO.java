@@ -17,8 +17,8 @@ import java.util.List;
 public class FuncionarioDTO {
     private Long id;
 
-    @NotBlank(message = "O campo não pode ser vazio")
-    @Size(min = 3, max = 40, message = "O nome do funcionário deve conter entre 3-40 caracteres")
+    @NotBlank(message = "O campo nomeFuncionario não pode estar em branco")
+    @Size(min = 3, max = 30, message = "O nome do funcionário deve conter entre 3-30 caracteres")
     private String nomeFuncionario;
 
     @JsonIgnoreProperties("funcionario")

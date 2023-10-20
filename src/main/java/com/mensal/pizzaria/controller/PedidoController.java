@@ -43,29 +43,50 @@ public class PedidoController {
     }
 
     @GetMapping("/cliente/{nomeCliente}")
-    public ResponseEntity<List<PedidoEntity>> getPedidosByNomeCliente(@PathVariable String nomeCliente) {
-        List<PedidoEntity> list = service.getPedidosByNomeCliente(nomeCliente);
-        if (list.isEmpty()) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<List<PedidoDTO>> getPedidosByNomeCliente(@PathVariable String nomeCliente) {
+        List<PedidoDTO> list = new ArrayList<>();
+
+        for (PedidoEntity entity : service.getPedidosByNomeCliente(nomeCliente)) {
+            PedidoDTO dto = modelMapper.map(entity, PedidoDTO.class);
+            list.add(dto);
         }
+
+        /*if (list.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }*/
+
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @GetMapping("/funcionario/{nomeFuncionario}")
-    public ResponseEntity<List<PedidoEntity>> getPedidosByNomeFuncionario(@PathVariable String nomeFuncionario) {
-        List<PedidoEntity> list = service.getPedidosByNomeFuncionario(nomeFuncionario);
-        if (list.isEmpty()) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<List<PedidoDTO>> getPedidosByNomeFuncionario(@PathVariable String nomeFuncionario) {
+        List<PedidoDTO> list = new ArrayList<>();
+
+        for (PedidoEntity entity : service.getPedidosByNomeFuncionario(nomeFuncionario)) {
+            PedidoDTO dto = modelMapper.map(entity, PedidoDTO.class);
+            list.add(dto);
         }
+
+        /*if (list.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }*/
+
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @GetMapping("/delivery/{delivery}")
-    public ResponseEntity<List<PedidoEntity>> getByDelivery(@PathVariable boolean delivery) {
-        List<PedidoEntity> list = service.getByDelivery(delivery);
-        if (list.isEmpty()) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<List<PedidoDTO>> getByDelivery(@PathVariable boolean delivery) {
+        List<PedidoDTO> list = new ArrayList<>();
+
+        for (PedidoEntity entity : service.getByDelivery(delivery)) {
+            PedidoDTO dto = modelMapper.map(entity, PedidoDTO.class);
+            list.add(dto);
         }
+
+        /*if (list.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }*/
+
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 

@@ -15,9 +15,9 @@ import lombok.Setter;
 public class SaborDTO {
     private Long id;
 
-    @NotBlank(message = "O nome do sabor não pode ser nulo")
+    @NotBlank(message = "O campo nomeSabor não pode estar em branco")
     private String nomeSabor;
 
-    @NotNull(message = "A categoria do sabor não pode ser nula")
+    @NotNull(message = "O campo categoria do sabor não pode ser nulo")
     private Categoria categoria;
 }
