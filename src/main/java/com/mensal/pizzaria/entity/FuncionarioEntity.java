@@ -1,17 +1,15 @@
 package com.mensal.pizzaria.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
-@Table(name = "funcionario", schema = "pizzaria")
+@Table(name = "tb_funcionario", schema = "pizzaria")
 public class FuncionarioEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,6 +19,6 @@ public class FuncionarioEntity {
     @Column(nullable = false, length = 30)
     private String nomeFuncionario;
 
-    @Column(nullable = false, length = 30)
-    private String cargo;
+    @OneToMany(mappedBy = "funcionario")
+    private List<PedidoEntity> pedidoList;
 }

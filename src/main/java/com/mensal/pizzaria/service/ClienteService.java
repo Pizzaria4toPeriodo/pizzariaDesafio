@@ -1,17 +1,13 @@
 package com.mensal.pizzaria.service;
 
-import com.mensal.pizzaria.dto.ClienteDTO;
 import com.mensal.pizzaria.entity.ClienteEntity;
 import com.mensal.pizzaria.repository.ClienteRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,35 +19,52 @@ public class ClienteService {
     private ModelMapper modelMapper;
 
     @Transactional
-    public ClienteDTO findCpf(String cpf) {
-        return modelMapper.map(repository.findByCpf(cpf), ClienteDTO.class);
+    public ClienteEntity create(ClienteEntity entity) {
+        return repository.save(entity);
     }
 
     @Transactional
-    public List<ClienteDTO> findAll() {
-        List<ClienteDTO> list = new ArrayList<>();
-        for (ClienteEntity entity : repository.findAll()) {
-            ClienteDTO map = modelMapper.map(entity, ClienteDTO.class);
-            list.add(map);
+    public List<ClienteEntity> getAll() {
+        return repository.findAll();
+    }
+
+    @Transactional
+    public ClienteEntity getById(Long id) {
+        Optional<ClienteEntity> optional = repository.findById(id);
+
+        if (optional.isPresent()) {
+            return optional.get();
+        } else {
+            throw new EntityNotFoundException("Cliente não encontrada com o ID: " + id);
         }
-        return list;
     }
 
     @Transactional
-    public ClienteDTO create(ClienteDTO dto) {
-        if (dto.getId() != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O id do cliente não deve ser inserido");
+    public ClienteEntity getByNomeCliente(String nome) {
+        Optional<ClienteEntity> optional = repository.findByNomeCliente(nome);
+        if (optional.isPresent()) {
+            return optional.get();
+        } else {
+            throw new EntityNotFoundException("Cliente não encontrada com o Nome: " + nome);
         }
-
-        return modelMapper.map(repository.save(modelMapper.map(dto, ClienteEntity.class)), ClienteDTO.class);
     }
 
     @Transactional
-    public ClienteDTO update(Long id, ClienteDTO dto) {
-        ClienteEntity existingEntity = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Não foi possível encontrar o registro informado"));
+    public ClienteEntity getByCpf(String cpf) {
+        return repository.findByCpf(cpf);
+    }
 
-        modelMapper.map(dto, existingEntity);
+    @Transactional
+    public ClienteEntity update(Long id, ClienteEntity entity) {
+        ClienteEntity existingEntity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado com o ID: " + id));
 
-        return modelMapper.map(repository.save(existingEntity), ClienteDTO.class);
+        modelMapper.map(entity, existingEntity);
+
+        return repository.save(existingEntity);
+    }
+
+    @Transactional
+    public void deleteById(Long id) {
+        repository.deleteById(id);
     }
 }

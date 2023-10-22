@@ -4,7 +4,7 @@ import com.mensal.pizzaria.dto.ClienteDTO;
 import com.mensal.pizzaria.entity.ClienteEntity;
 import com.mensal.pizzaria.repository.ClienteRepository;
 import com.mensal.pizzaria.service.ClienteService;
-import org.junit.jupiter.api.Assertions;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -12,69 +12,120 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class ClienteServiceTest {
     @InjectMocks
     private ClienteService service;
-
-    @Mock
-    private ClienteService serviceTest;
-
     @Mock
     private ClienteRepository repository;
-
     @Mock
     private ModelMapper modelMapper;
-
-    private ClienteEntity cliente;
-    private ClienteDTO clienteDTO;
+    private final Long id = 1L;
+    private final Long idNaoExistente = 2L;
+    private ClienteEntity entity;
+    private ClienteEntity updatedEntity;
 
     @BeforeEach
-    void setup(){
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+
         modelMapper = new ModelMapper();
 
-        cliente = new ClienteEntity(1L, "Gustavo", "36126170601", null, "+55 45 99988-7766");
+        ClienteDTO dto = new ClienteDTO();
+        dto.setId(id);
+        dto.setCpf("47917474534");
 
-        clienteDTO = new ClienteDTO(1L, "Gustavo", "36126170601", null, "+55 45 99988-7766");
-        MockitoAnnotations.openMocks(this);
+        entity = new ClienteEntity();
+        entity.setId(id);
+        entity.setCpf("47917474534");
+
+        ClienteEntity entity2 = new ClienteEntity();
+        entity2.setId(2L);
+        entity2.setCpf("47917474534");
+
+        List<ClienteEntity> entityList = Arrays.asList(entity, entity2);
+
+        updatedEntity = new ClienteEntity();
+        updatedEntity.setId(id);
+        updatedEntity.setCpf("60488595037");
+
+        when(repository.findById(id)).thenReturn(Optional.of(entity));
+        when(repository.findById(idNaoExistente)).thenReturn(Optional.empty());
+        when(repository.findByCpf("47917474534")).thenReturn(entity);
+        when(repository.findAll()).thenReturn(entityList);
+        when(repository.findById(id)).thenReturn(Optional.of(entity));
     }
 
     @Test
-    void testList() {
-        List<ClienteEntity> listEntity = new ArrayList<>();
-        listEntity.add(cliente);
+    void testCreate() {
+        when(repository.save(any())).thenReturn(entity);
 
-        when(repository.findAll()).thenReturn(listEntity);
+        ClienteEntity createdEntity = service.create(entity);
 
-        List<ClienteDTO> resultList = service.findAll();
-        Assertions.assertEquals(1, resultList.size());
+        assertNotNull(createdEntity);
+        assertEquals("47917474534", createdEntity.getCpf());
+
+        verify(repository, times(1)).save(entity);
     }
 
     @Test
-    void testCreateException() {
-        clienteDTO.setId(1L);
+    void testGetByIdExistente() {
+        ClienteEntity database = service.getById(id);
 
-        ResponseStatusException exception = Assertions.assertThrows(ResponseStatusException.class, () -> service.create(clienteDTO));
+        assertNotNull(database);
+        assertEquals(id, database.getId());
 
-        Assertions.assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
+        verify(repository, times(1)).findById(id);
     }
 
     @Test
-    void testUpdateException() {
-        Long id = 2L;
+    void testGetByIdNaoExistente() {
+        assertThrows(EntityNotFoundException.class, () -> service.getById(idNaoExistente));
 
-        when(repository.findById(id)).thenReturn(Optional.empty());
+        verify(repository, times(1)).findById(idNaoExistente);
+    }
 
-        ResponseStatusException exception = Assertions.assertThrows(ResponseStatusException.class, () -> service.update(id, clienteDTO));
-        Assertions.assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
+    @Test
+    void testGetByCPF() {
+        ClienteEntity database = service.getByCpf("47917474534");
+
+        assertEquals("47917474534", database.getCpf());
+    }
+
+    @Test
+    void testFindAll() {
+        List<ClienteEntity> database = service.getAll();
+
+        assertEquals(2, database.size());
+
+        verify(repository, times(1)).findAll();
+    }
+
+    @Test
+    void testUpdate() {
+        when(repository.save(any())).thenReturn(updatedEntity);
+
+        ClienteEntity result = service.update(id, updatedEntity);
+
+        assertNotNull(result);
+        assertEquals(id, result.getId());
+        assertEquals("60488595037", result.getCpf());
+
+        verify(repository, times(1)).save(any());
+    }
+
+    @Test
+    void testDeleteById() {
+        service.deleteById(id);
+
+        verify(repository, times(1)).deleteById(id);
     }
 }

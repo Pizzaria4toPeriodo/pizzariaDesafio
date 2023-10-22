@@ -1,17 +1,14 @@
 package com.mensal.pizzaria.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
-@Table(name = "endereco", schema = "pizzaria")
+@Table(name = "tb_endereco", schema = "pizzaria")
 public class EnderecoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,7 +21,8 @@ public class EnderecoEntity {
     @Column(nullable = false)
     private int numero;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"enderecoList", "pedidoList"})
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_cliente", referencedColumnName = "id", nullable = false)
     private ClienteEntity cliente;
 }

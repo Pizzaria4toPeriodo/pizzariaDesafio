@@ -1,19 +1,17 @@
 package com.mensal.pizzaria.entity;
 
+import com.mensal.pizzaria.entity.enums.Forma_Pagamento;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
-@Table(name = "pedido", schema = "pizzaria")
+@Table(name = "tb_pedido", schema = "pizzaria")
 public class PedidoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,17 +27,31 @@ public class PedidoEntity {
     )
     private List<ProdutoEntity> produtoList;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany
+    @JoinTable(
+            name = "pedido_pizza",
+            schema = "pizzaria",
+            joinColumns = @JoinColumn(name = "pedido_id"),
+            inverseJoinColumns = @JoinColumn(name = "pizza_id")
+    )
+    private List<PizzaEntity> pizzaList;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_cliente", referencedColumnName = "id", nullable = false)
     private ClienteEntity cliente;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_funcionario", referencedColumnName = "id", nullable = false)
+    private FuncionarioEntity funcionario;
 
     @Column(nullable = false)
     private boolean delivery;
 
     @Enumerated(EnumType.STRING)
-    @Column
+    @Column(nullable = false)
     private Forma_Pagamento formaPagamento;
 
-    @Column(nullable = false)
+    private LocalDateTime criadoEm;
+
     private Double total;
 }

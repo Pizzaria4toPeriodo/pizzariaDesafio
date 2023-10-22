@@ -4,7 +4,7 @@ import com.mensal.pizzaria.dto.ProdutoDTO;
 import com.mensal.pizzaria.entity.ProdutoEntity;
 import com.mensal.pizzaria.repository.ProdutoRepository;
 import com.mensal.pizzaria.service.ProdutoService;
-import org.junit.jupiter.api.Assertions;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -12,69 +12,120 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class ProdutoServiceTest {
     @InjectMocks
     private ProdutoService service;
-
-    @Mock
-    private ProdutoService serviceTest;
-
     @Mock
     private ProdutoRepository repository;
-
     @Mock
     private ModelMapper modelMapper;
-
-    private ProdutoEntity produto;
-    private ProdutoDTO produtoDTO;
+    private final Long id = 1L;
+    private final Long idNaoExistente = 2L;
+    private ProdutoEntity entity;
+    private ProdutoEntity updatedEntity;
 
     @BeforeEach
-    public void setup() {
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+
         modelMapper = new ModelMapper();
 
-        produto = new ProdutoEntity(1L, "Pizza", 25.5, null);
+        ProdutoDTO dto = new ProdutoDTO();
+        dto.setId(id);
+        dto.setNomeProduto("Pizza");
 
-        produtoDTO = new ProdutoDTO(1L, "Pizza", 25.5, null);
-        MockitoAnnotations.openMocks(this);
+        entity = new ProdutoEntity();
+        entity.setId(id);
+        entity.setNomeProduto("Pizza");
+
+        ProdutoEntity entity2 = new ProdutoEntity();
+        entity2.setId(2L);
+        entity.setNomeProduto("Pizza");
+
+        List<ProdutoEntity> entityList = Arrays.asList(entity, entity2);
+
+        updatedEntity = new ProdutoEntity();
+        updatedEntity.setId(id);
+        updatedEntity.setNomeProduto("Coca-cola");
+
+        when(repository.findById(id)).thenReturn(Optional.of(entity));
+        when(repository.findById(idNaoExistente)).thenReturn(Optional.empty());
+        when(repository.findByNomeProduto("Pizza")).thenReturn(entity);
+        when(repository.findAll()).thenReturn(entityList);
+        when(repository.findById(id)).thenReturn(Optional.of(entity));
     }
 
     @Test
-    void findALlTest() {
-        List<ProdutoEntity> listEntity = new ArrayList<>();
-        listEntity.add(produto);
+    void testCreate() {
+        when(repository.save(any())).thenReturn(entity);
 
-        when(repository.findAll()).thenReturn(listEntity);
+        ProdutoEntity createdEntity = service.create(entity);
 
-        List<ProdutoDTO> resultList = service.findAll();
-        Assertions.assertEquals(1, resultList.size());
+        assertNotNull(createdEntity);
+        assertEquals("Pizza", createdEntity.getNomeProduto());
+
+        verify(repository, times(1)).save(entity);
     }
 
     @Test
-    void createTestException() {
-        produtoDTO.setId(1L);
+    void testGetByIdExistente() {
+        ProdutoEntity database = service.getById(id);
 
-        ResponseStatusException exception = Assertions.assertThrows(ResponseStatusException.class, () -> service.create(produtoDTO));
+        assertNotNull(database);
+        assertEquals(id, database.getId());
 
-        Assertions.assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
+        verify(repository, times(1)).findById(id);
     }
 
     @Test
-    void updateTestException() {
-        Long id = 2L;
+    void testGetByIdNaoExistente() {
+        assertThrows(EntityNotFoundException.class, () -> service.getById(idNaoExistente));
 
-        when(repository.findById(id)).thenReturn(Optional.empty());
+        verify(repository, times(1)).findById(idNaoExistente);
+    }
 
-        ResponseStatusException exception = Assertions.assertThrows(ResponseStatusException.class, () -> service.update(id, produtoDTO));
-        Assertions.assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
+    @Test
+    void testGetByNomeProduto() {
+        ProdutoEntity database = service.getByNomeProduto("Pizza");
+
+        assertEquals("Pizza", database.getNomeProduto());
+    }
+
+    @Test
+    void testFindAll() {
+        List<ProdutoEntity> database = service.getAll();
+
+        assertEquals(2, database.size());
+
+        verify(repository, times(1)).findAll();
+    }
+
+    @Test
+    void testUpdate() {
+        when(repository.save(any())).thenReturn(updatedEntity);
+
+        ProdutoEntity result = service.update(id, updatedEntity);
+
+        assertNotNull(result);
+        assertEquals(id, result.getId());
+        assertEquals("Coca-cola", result.getNomeProduto());
+
+        verify(repository, times(1)).save(any());
+    }
+
+    @Test
+    void testDeleteById() {
+        service.deleteById(id);
+
+        verify(repository, times(1)).deleteById(id);
     }
 }

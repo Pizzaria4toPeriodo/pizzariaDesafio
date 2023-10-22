@@ -1,59 +1,42 @@
 package com.mensal.pizzaria.entityTest;
 
 import com.mensal.pizzaria.entity.*;
+import com.mensal.pizzaria.entity.enums.Forma_Pagamento;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 
 @SpringBootTest
 class PedidoTest {
     @Test
-    void entityTest() {
-        ProdutoEntity produto = new ProdutoEntity(1L, "Pizza Calabreza", 25.0, null);
-        ClienteEntity cliente = new ClienteEntity(1L, "Gustavo", "36126170601", null, "+55 45 99988-7766");
-
-        PedidoEntity pedido = new PedidoEntity(1L, Collections.singletonList(produto), cliente, true, Forma_Pagamento.PIX, 25.0);
-
-        Assertions.assertEquals(1L, pedido.getId());
-        Assertions.assertEquals(Collections.singletonList(produto), pedido.getProdutoList());
-        Assertions.assertEquals(cliente, pedido.getCliente());
-        Assertions.assertEquals(Forma_Pagamento.PIX, pedido.getFormaPagamento());
-        Assertions.assertTrue(pedido.isDelivery());
-        Assertions.assertEquals(25.0, pedido.getTotal());
-
-    }
-
-    @Test
     void entitySetterTest() {
         ProdutoEntity produto = new ProdutoEntity();
+        PizzaEntity pizza = new PizzaEntity();
         ClienteEntity cliente = new ClienteEntity();
-
-        produto.setId(1L);
-        produto.setNomeProduto("Pizza Calabreza");
-        produto.setPreco(25.0);
-        produto.setPedidoList(null);
-
-        cliente.setId(1L);
-        cliente.setNomeCliente("Gustavo");
-        cliente.setCpf("36126170601");
-        cliente.setEnderecoList(null);
-        cliente.setTelefone("+55 45 99988-7766");
-
+        FuncionarioEntity funcionario = new FuncionarioEntity();
         PedidoEntity pedido = new PedidoEntity();
 
         pedido.setId(1L);
         pedido.setProdutoList(Collections.singletonList(produto));
+        pedido.setPizzaList(Collections.singletonList(pizza));
         pedido.setCliente(cliente);
+        pedido.setFuncionario(funcionario);
         pedido.setDelivery(true);
         pedido.setFormaPagamento(Forma_Pagamento.PIX);
+        pedido.setCriadoEm(LocalDateTime.parse("2023-10-20T14:25:52"));
         pedido.setTotal(25.0);
 
         Assertions.assertEquals(1L, pedido.getId());
         Assertions.assertEquals(Collections.singletonList(produto), pedido.getProdutoList());
+        Assertions.assertEquals(Collections.singletonList(pizza), pedido.getPizzaList());
         Assertions.assertEquals(cliente, pedido.getCliente());
+        Assertions.assertEquals(funcionario, pedido.getFuncionario());
         Assertions.assertEquals(Forma_Pagamento.PIX, pedido.getFormaPagamento());
+        Assertions.assertTrue(pedido.isDelivery());
+        Assertions.assertEquals("2023-10-20T14:25:52", pedido.getCriadoEm().toString());
         Assertions.assertEquals(25.0, pedido.getTotal());
     }
 }

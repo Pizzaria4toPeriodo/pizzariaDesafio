@@ -1,18 +1,15 @@
 package com.mensal.pizzaria.service;
 
-import com.mensal.pizzaria.dto.EnderecoDTO;
 import com.mensal.pizzaria.entity.EnderecoEntity;
 import com.mensal.pizzaria.repository.EnderecoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 public class EnderecoService {
@@ -23,38 +20,47 @@ public class EnderecoService {
     private ModelMapper modelMapper;
 
     @Transactional
-    public EnderecoDTO findByRua(String rua) {
-        return modelMapper.map(repository.findByRua(rua), EnderecoDTO.class);
+    public EnderecoEntity create(EnderecoEntity entity) {
+        return repository.save(entity);
     }
 
     @Transactional
-    public List<EnderecoDTO> findAll() {
-        List<EnderecoDTO> list = new ArrayList<>();
-        for (EnderecoEntity entity : repository.findAll()) {
-            EnderecoDTO map = modelMapper.map(entity, EnderecoDTO.class);
-            list.add(map);
+    public List<EnderecoEntity> getAll() {
+        return repository.findAll();
+    }
+
+    @Transactional
+    public EnderecoEntity getById(Long id) {
+        Optional<EnderecoEntity> optional = repository.findById(id);
+
+        if (optional.isPresent()) {
+            return optional.get();
+        } else {
+            throw new EntityNotFoundException("Endereço não encontrado com o ID: " + id);
         }
-        return list;
     }
 
     @Transactional
-    public EnderecoDTO create(EnderecoDTO dto) {
-        EnderecoEntity enderecoEntity = modelMapper.map(dto, EnderecoEntity.class);
-        EnderecoEntity savedEntity = repository.save(enderecoEntity);
-
-        if (dto.getId() != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O id do endereço não deve ser inserido");
-        }
-
-        return modelMapper.map(savedEntity, EnderecoDTO.class);
+    public EnderecoEntity getByRua(String rua) {
+        return repository.findByRua(rua);
     }
 
     @Transactional
-    public EnderecoDTO update(Long id, EnderecoDTO dto) {
-        EnderecoEntity existingEntity = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Não foi possível encontrar o registro informado"));
+    public List<EnderecoEntity> getEnderecosByNomeCliente(String nome) {
+        return repository.findEnderecosByNomeCliente(nome);
+    }
 
-        modelMapper.map(dto, existingEntity);
+    @Transactional
+    public EnderecoEntity update(Long id, EnderecoEntity entity) {
+        EnderecoEntity existingEntity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Endereço não encontrado com o ID: " + id));
 
-        return modelMapper.map(repository.save(existingEntity), EnderecoDTO.class);
+        modelMapper.map(entity, existingEntity);
+
+        return repository.save(existingEntity);
+    }
+
+    @Transactional
+    public void deleteById(Long id) {
+        repository.deleteById(id);
     }
 }
