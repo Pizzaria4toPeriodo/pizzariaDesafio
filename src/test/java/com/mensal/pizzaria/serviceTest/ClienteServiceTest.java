@@ -41,10 +41,12 @@ class ClienteServiceTest {
 
         ClienteDTO dto = new ClienteDTO();
         dto.setId(id);
+        dto.setNomeCliente("Gustavo");
         dto.setCpf("47917474534");
 
         entity = new ClienteEntity();
         entity.setId(id);
+        entity.setNomeCliente("Gustavo");
         entity.setCpf("47917474534");
 
         ClienteEntity entity2 = new ClienteEntity();
@@ -60,6 +62,7 @@ class ClienteServiceTest {
         when(repository.findById(id)).thenReturn(Optional.of(entity));
         when(repository.findById(idNaoExistente)).thenReturn(Optional.empty());
         when(repository.findByCpf("47917474534")).thenReturn(entity);
+        when(repository.findByNomeCliente("Gustavo")).thenReturn(Optional.of(entity));
         when(repository.findAll()).thenReturn(entityList);
         when(repository.findById(id)).thenReturn(Optional.of(entity));
     }
@@ -74,6 +77,15 @@ class ClienteServiceTest {
         assertEquals("47917474534", createdEntity.getCpf());
 
         verify(repository, times(1)).save(entity);
+    }
+
+    @Test
+    void testFindAll() {
+        List<ClienteEntity> database = service.getAll();
+
+        assertEquals(2, database.size());
+
+        verify(repository, times(1)).findAll();
     }
 
     @Test
@@ -98,15 +110,17 @@ class ClienteServiceTest {
         ClienteEntity database = service.getByCpf("47917474534");
 
         assertEquals("47917474534", database.getCpf());
+
+        verify(repository, times(1)).findByCpf("47917474534");
     }
 
     @Test
-    void testFindAll() {
-        List<ClienteEntity> database = service.getAll();
+    void testGetByNomeCliente() {
+        ClienteEntity database = service.getByNomeCliente("Gustavo");
 
-        assertEquals(2, database.size());
+        assertEquals("Gustavo", database.getNomeCliente());
 
-        verify(repository, times(1)).findAll();
+        verify(repository, times(1)).findByNomeCliente("Gustavo");
     }
 
     @Test

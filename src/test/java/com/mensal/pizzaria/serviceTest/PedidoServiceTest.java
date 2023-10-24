@@ -2,7 +2,10 @@ package com.mensal.pizzaria.serviceTest;
 
 import com.mensal.pizzaria.dto.PedidoDTO;
 import com.mensal.pizzaria.entity.PedidoEntity;
+import com.mensal.pizzaria.entity.PizzaEntity;
 import com.mensal.pizzaria.entity.ProdutoEntity;
+import com.mensal.pizzaria.entity.enums.Categoria;
+import com.mensal.pizzaria.entity.enums.Tamanho;
 import com.mensal.pizzaria.repository.PedidoRepository;
 import com.mensal.pizzaria.service.PedidoService;
 import jakarta.persistence.EntityNotFoundException;
@@ -49,9 +52,16 @@ class PedidoServiceTest {
         List<ProdutoEntity> produtoEntityList = new ArrayList<>();
         produtoEntityList.add(produtoEntity);
 
+        PizzaEntity pizzaEntity = new PizzaEntity();
+        pizzaEntity.setCategoria(Categoria.TRADICIONAL);
+        pizzaEntity.setTamanho(Tamanho.M);
+        List<PizzaEntity> pizzaEntityList = new ArrayList<>();
+        pizzaEntityList.add(pizzaEntity);
+
         entity = new PedidoEntity();
         entity.setId(id);
         entity.setProdutoList(produtoEntityList);
+        entity.setPizzaList(pizzaEntityList);
 
         PedidoEntity entity2 = new PedidoEntity();
         entity2.setId(2L);
@@ -61,6 +71,7 @@ class PedidoServiceTest {
         updatedEntity = new PedidoEntity();
         updatedEntity.setId(id);
         updatedEntity.setProdutoList(produtoEntityList);
+        updatedEntity.setPizzaList(pizzaEntityList);
 
         when(repository.findById(id)).thenReturn(Optional.of(entity));
         when(repository.findById(idNaoExistente)).thenReturn(Optional.empty());

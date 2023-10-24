@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -51,7 +51,7 @@ public class PedidoEntity {
     @Column(nullable = false)
     private Forma_Pagamento formaPagamento;
 
-    private LocalDateTime criadoEm;
+    private LocalDate criadoEm;
 
     private Double total;
 }

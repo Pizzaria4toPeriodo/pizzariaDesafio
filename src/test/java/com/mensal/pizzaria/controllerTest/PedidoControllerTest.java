@@ -21,6 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,9 +110,15 @@ class PedidoControllerTest {
     }
 
     @Test
-    void shouldGetByDelivery() throws Exception {
-        when(service.getByDelivery(true)).thenReturn(entityList);
+    void shouldGetPedidosByDelivery() throws Exception {
+        when(service.getPedidosByDelivery(true)).thenReturn(entityList);
         mockMvc.perform(get("/pedidos/delivery/{delivery}", true)).andExpect(status().isOk());
+    }
+
+    @Test
+    void shouldGetPedidosByData() throws Exception {
+        when(service.getPedidosByData(LocalDate.parse("2023-01-01"))).thenReturn(entityList);
+        mockMvc.perform(get("/pedidos/data/{data}", "2023-01-01")).andExpect(status().isOk());
     }
 
     @Test

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 
@@ -26,7 +27,7 @@ class PedidoTest {
         pedido.setFuncionario(funcionario);
         pedido.setDelivery(true);
         pedido.setFormaPagamento(Forma_Pagamento.PIX);
-        pedido.setCriadoEm(LocalDateTime.parse("2023-10-20T14:25:52"));
+        pedido.setCriadoEm(LocalDate.parse("2023-10-20"));
         pedido.setTotal(25.0);
 
         Assertions.assertEquals(1L, pedido.getId());
@@ -36,7 +37,7 @@ class PedidoTest {
         Assertions.assertEquals(funcionario, pedido.getFuncionario());
         Assertions.assertEquals(Forma_Pagamento.PIX, pedido.getFormaPagamento());
         Assertions.assertTrue(pedido.isDelivery());
-        Assertions.assertEquals("2023-10-20T14:25:52", pedido.getCriadoEm().toString());
+        Assertions.assertEquals("2023-10-20", pedido.getCriadoEm().toString());
         Assertions.assertEquals(25.0, pedido.getTotal());
     }
 }

@@ -20,8 +20,27 @@ public class PizzaService {
     @Autowired
     private ModelMapper modelMapper;
 
+    public void calculoPreco(PizzaEntity entity) {
+        double precoCategoria = switch (entity.getCategoria()) {
+            case TRADICIONAL -> 10.0;
+            case ESPECIAL -> 20.0;
+            case DOCE -> 15.0;
+        };
+
+        double precoTamanho = switch (entity.getTamanho()) {
+            case P -> 20.0;
+            case M -> 30.0;
+            case G -> 40.0;
+            case GG -> 50.0;
+        };
+
+        entity.setPreco(precoCategoria + precoTamanho);
+    }
+
     @Transactional
     public PizzaEntity create(PizzaEntity entity) {
+        calculoPreco(entity);
+
         return repository.save(entity);
     }
 
@@ -59,6 +78,8 @@ public class PizzaService {
     @Transactional
     public PizzaEntity update(Long id, PizzaEntity entity) {
         PizzaEntity existingEntity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Pizza não encontrada com o ID: " + id));
+
+        calculoPreco(entity);
 
         modelMapper.map(entity, existingEntity);
 

@@ -46,8 +46,7 @@ public class ProdutoService {
 
     @Transactional
     public ProdutoEntity update(Long id, ProdutoEntity entity) {
-        ProdutoEntity existingEntity = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado com o ID: " + id));
+        ProdutoEntity existingEntity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Produto não encontrado com o ID: " + id));
 
         modelMapper.map(entity, existingEntity);
 

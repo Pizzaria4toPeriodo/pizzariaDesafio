@@ -1,7 +1,9 @@
 package com.mensal.pizzaria.service;
 
 import com.mensal.pizzaria.entity.PedidoEntity;
+import com.mensal.pizzaria.entity.PizzaEntity;
 import com.mensal.pizzaria.entity.ProdutoEntity;
+import com.mensal.pizzaria.entity.enums.Forma_Pagamento;
 import com.mensal.pizzaria.repository.PedidoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -9,17 +11,18 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class  PedidoService {
+public class PedidoService {
     @Autowired
     private PedidoRepository repository;
     @Autowired
     private ModelMapper modelMapper;
 
-    public Double calculoTotal(PedidoEntity entity) {
+    public Double calculoProdutos(PedidoEntity entity) {
         double total = 0.0;
 
         for (ProdutoEntity produto : entity.getProdutoList()) {
@@ -31,12 +34,41 @@ public class  PedidoService {
         return total;
     }
 
+    public Double calculoPizzas(PedidoEntity entity) {
+        double total = 0.0;
+
+        for (PizzaEntity pizza : entity.getPizzaList()) {
+            if (pizza.getPreco() != null) {
+                total += pizza.getPreco();
+            }
+        }
+
+        return total;
+    }
+
+    public void calculoTotal(PedidoEntity entity) {
+        double precoProdutos = 0;
+        double precoPizzas = 0;
+
+        if (!entity.getProdutoList().isEmpty()) {
+            precoProdutos = calculoProdutos(entity);
+        }
+
+        if (!entity.getPizzaList().isEmpty()) {
+            precoPizzas = calculoPizzas(entity);
+        }
+
+        if (entity.getFormaPagamento() == Forma_Pagamento.PIX || entity.getFormaPagamento() == Forma_Pagamento.DINHEIRO) {
+            double desconto = (precoProdutos + precoPizzas) * 0.1;
+            entity.setTotal((precoProdutos + precoPizzas) - desconto); // Aplica o desconto ao total
+        } else {
+            entity.setTotal(precoProdutos + precoPizzas); // Sem desconto
+        }
+    }
+
     @Transactional
     public PedidoEntity create(PedidoEntity entity) {
-        if (!entity.getProdutoList().isEmpty()) {
-            double total = calculoTotal(entity);
-            entity.setTotal(total);
-        }
+        calculoTotal(entity);
 
         return repository.save(entity);
     }
@@ -68,19 +100,20 @@ public class  PedidoService {
     }
 
     @Transactional
-    public List<PedidoEntity> getByDelivery(boolean delivery) {
+    public List<PedidoEntity> getPedidosByDelivery(boolean delivery) {
         return repository.findByDelivery(delivery);
     }
 
     @Transactional
-    public PedidoEntity update(Long id, PedidoEntity entity) {
-        PedidoEntity existingEntity = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado com o ID: " + id));
+    public List<PedidoEntity> getPedidosByData(LocalDate data) {
+        return this.repository.findByData(data.getYear(), data.getMonthValue(), data.getDayOfMonth());
+    }
 
-        if (!entity.getProdutoList().isEmpty()) {
-            double total = calculoTotal(entity);
-            entity.setTotal(total);
-        }
+    @Transactional
+    public PedidoEntity update(Long id, PedidoEntity entity) {
+        PedidoEntity existingEntity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado com o ID: " + id));
+
+        calculoTotal(entity);
 
         modelMapper.map(entity, existingEntity);
 

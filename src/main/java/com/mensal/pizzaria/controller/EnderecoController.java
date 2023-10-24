@@ -56,10 +56,6 @@ public class EnderecoController {
             list.add(dto);
         }
 
-        /*if (list.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }*/
-
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 

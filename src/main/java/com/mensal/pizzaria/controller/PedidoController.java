@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,10 +52,6 @@ public class PedidoController {
             list.add(dto);
         }
 
-        /*if (list.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }*/
-
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
@@ -67,25 +64,29 @@ public class PedidoController {
             list.add(dto);
         }
 
-        /*if (list.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }*/
-
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @GetMapping("/delivery/{delivery}")
-    public ResponseEntity<List<PedidoDTO>> getByDelivery(@PathVariable boolean delivery) {
+    public ResponseEntity<List<PedidoDTO>> getPedidosByDelivery(@PathVariable boolean delivery) {
         List<PedidoDTO> list = new ArrayList<>();
 
-        for (PedidoEntity entity : service.getByDelivery(delivery)) {
+        for (PedidoEntity entity : service.getPedidosByDelivery(delivery)) {
             PedidoDTO dto = modelMapper.map(entity, PedidoDTO.class);
             list.add(dto);
         }
 
-        /*if (list.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }*/
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @GetMapping("/data/{data}")
+    public ResponseEntity<List<PedidoDTO>> getPedidosByData(@PathVariable("data") LocalDate data){
+        List<PedidoDTO> list = new ArrayList<>();
+
+        for (PedidoEntity entity : service.getPedidosByData(data)){
+            PedidoDTO dto = modelMapper.map(entity, PedidoDTO.class);
+            list.add(dto);
+        }
 
         return new ResponseEntity<>(list, HttpStatus.OK);
     }

@@ -52,8 +52,7 @@ public class SaborService {
 
     @Transactional
     public SaborEntity update(Long id, SaborEntity entity) {
-        SaborEntity existingEntity = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado com o ID: " + id));
+        SaborEntity existingEntity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Produto não encontrado com o ID: " + id));
 
         modelMapper.map(entity, existingEntity);
 

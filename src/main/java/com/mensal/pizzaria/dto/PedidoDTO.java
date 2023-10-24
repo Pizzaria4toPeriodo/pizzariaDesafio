@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -38,7 +38,7 @@ public class PedidoDTO {
     private Forma_Pagamento formaPagamento;
 
     @CreationTimestamp
-    private LocalDateTime criadoEm;
+    private LocalDate criadoEm;
 
     private Double total;
 }
