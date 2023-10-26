@@ -8,7 +8,9 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,8 +39,21 @@ public class PizzaService {
         entity.setPreco(precoCategoria + precoTamanho);
     }
 
+    private void qntSaboresPorTamanho(PizzaEntity entity){
+        int qntSabores = 0;
+        switch (entity.getTamanho()) {
+            case P -> qntSabores = 2;
+            case M, G -> qntSabores = 3;
+            case GG -> qntSabores = 4;
+        }
+        if (entity.getSaborList().size()>qntSabores){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Quantidade de sabores excedida");
+        }
+    }
+
     @Transactional
     public PizzaEntity create(PizzaEntity entity) {
+        qntSaboresPorTamanho(entity);
         calculoPreco(entity);
 
         return repository.save(entity);
