@@ -6,20 +6,33 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class FuncionarioService {
+public class FuncionarioService implements UserDetailsService {
     @Autowired
     private FuncionarioRepository repository;
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+
+
+
+
+
     @Transactional
     public FuncionarioEntity create(FuncionarioEntity entity) {
+
+
+
         return repository.save(entity);
     }
 
@@ -56,5 +69,12 @@ public class FuncionarioService {
     @Transactional
     public void deleteById(Long id) {
         repository.deleteById(id);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        var funcioanrio = repository.findByUserName(username);
+
+        return funcioanrio;
     }
 }

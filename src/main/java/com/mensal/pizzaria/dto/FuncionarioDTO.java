@@ -23,4 +23,9 @@ public class FuncionarioDTO {
 
     @JsonIgnoreProperties("funcionario")
     private List<PedidoDTO> pedidoList;
+
+
+    @NotBlank(message = "A senha nao pode estar em branco")
+    private String senha;
+
 }
