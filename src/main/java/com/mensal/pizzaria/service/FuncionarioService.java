@@ -6,35 +6,35 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class FuncionarioService implements UserDetailsService {
+public class FuncionarioService {
     @Autowired
     private FuncionarioRepository repository;
     @Autowired
     private ModelMapper modelMapper;
 
-
-    FuncionarioEntity funcionarioEntity;
-
-
-
-
-
     @Transactional
-    public FuncionarioEntity create(FuncionarioEntity entity) {
+    public ResponseEntity<FuncionarioEntity> create(FuncionarioEntity entity) {
+        if (this.repository.findByUsername(entity.getUsername()) != null) {
+            return ResponseEntity.badRequest().build();
+        }
 
+        String encryptedPassword = new BCryptPasswordEncoder().encode(entity.getPassword());
+        FuncionarioEntity newEntity = new FuncionarioEntity(
+                entity.getNomeFuncionario(),
+                entity.getUsername(),
+                encryptedPassword,
+                entity.getRole());
 
-
-        return repository.save(entity);
+        FuncionarioEntity savedEntity = repository.save(newEntity);
+        return ResponseEntity.ok(savedEntity);
     }
 
     @Transactional
@@ -70,12 +70,5 @@ public class FuncionarioService implements UserDetailsService {
     @Transactional
     public void deleteById(Long id) {
         repository.deleteById(id);
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        var funcioanrio = repository.findByUsername(username);
-
-        return funcioanrio;
     }
 }
