@@ -6,6 +6,8 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,8 +21,20 @@ public class FuncionarioService {
     private ModelMapper modelMapper;
 
     @Transactional
-    public FuncionarioEntity create(FuncionarioEntity entity) {
-        return repository.save(entity);
+    public ResponseEntity<FuncionarioEntity> create(FuncionarioEntity entity) {
+        if (this.repository.findByUsername(entity.getUsername()) != null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        String encryptedPassword = new BCryptPasswordEncoder().encode(entity.getPassword());
+        FuncionarioEntity newEntity = new FuncionarioEntity(
+                entity.getNomeFuncionario(),
+                entity.getUsername(),
+                encryptedPassword,
+                entity.getRole());
+
+        FuncionarioEntity savedEntity = repository.save(newEntity);
+        return ResponseEntity.ok(savedEntity);
     }
 
     @Transactional

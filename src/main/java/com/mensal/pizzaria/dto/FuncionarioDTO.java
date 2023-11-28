@@ -21,6 +21,11 @@ public class FuncionarioDTO {
     @Size(min = 3, max = 30, message = "O nome do funcionário deve conter entre 3-30 caracteres")
     private String nomeFuncionario;
 
+    @NotBlank(message = "Username não informado")
+    private String username;
+    @NotBlank(message = "Password não informada")
+    private String password;
+
     @JsonIgnoreProperties("funcionario")
     private List<PedidoDTO> pedidoList;
 }
