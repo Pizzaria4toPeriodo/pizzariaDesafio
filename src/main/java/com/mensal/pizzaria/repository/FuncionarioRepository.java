@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface FuncionarioRepository extends JpaRepository<FuncionarioEntity, Long> {
     FuncionarioEntity findByNomeFuncionario(String nome);
 
-    FuncionarioEntity findByUserName(String userName);
+    FuncionarioEntity findByUsername(String username);
 
 
 }

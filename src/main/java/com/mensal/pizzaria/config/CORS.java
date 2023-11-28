@@ -1,4 +1,4 @@
-package com.mensal.pizzaria.config;
+/*package com.mensal.pizzaria.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -14,3 +14,4 @@ public class CORS implements WebMvcConfigurer {
                 .allowedHeaders("*");
     }
 }
+*/

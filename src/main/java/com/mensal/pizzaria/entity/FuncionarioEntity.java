@@ -26,7 +26,7 @@ public class FuncionarioEntity  implements UserDetails {
     private String nomeFuncionario;
 
     @Column(nullable = false, unique = true)
-    private String userName;
+    private String username;
 
     @OneToMany(mappedBy = "funcionario")
     private List<PedidoEntity> pedidoList;
@@ -36,6 +36,7 @@ public class FuncionarioEntity  implements UserDetails {
 
     @Column(nullable = false)
     private String role;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -50,12 +51,12 @@ public class FuncionarioEntity  implements UserDetails {
 
     @Override
     public String getPassword() {
-        return this.password;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return this.userName;
+        return username;
     }
 
     @Override
@@ -77,6 +78,8 @@ public class FuncionarioEntity  implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
 
 
 }

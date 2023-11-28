@@ -22,7 +22,8 @@ public class FuncionarioService implements UserDetailsService {
     @Autowired
     private ModelMapper modelMapper;
 
-    @Autowired
+
+    FuncionarioEntity funcionarioEntity;
 
 
 
@@ -73,7 +74,7 @@ public class FuncionarioService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        var funcioanrio = repository.findByUserName(username);
+        var funcioanrio = repository.findByUsername(username);
 
         return funcioanrio;
     }

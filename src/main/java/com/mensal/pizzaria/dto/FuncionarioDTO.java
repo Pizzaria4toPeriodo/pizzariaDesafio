@@ -26,6 +26,14 @@ public class FuncionarioDTO {
 
 
     @NotBlank(message = "A senha nao pode estar em branco")
-    private String senha;
+    private String password;
+
+    private String username;
+
+    private String role;
+
+    private String token;
+
+
 
 }
