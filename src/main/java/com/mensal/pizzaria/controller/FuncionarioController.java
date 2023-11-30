@@ -21,8 +21,6 @@ public class FuncionarioController {
     @Autowired
     private ModelMapper modelMapper;
 
-
-
     @PostMapping("/")
     public ResponseEntity<FuncionarioDTO> create(@RequestBody @Validated FuncionarioDTO dto) {
         return new ResponseEntity<>(modelMapper.map(service.create(modelMapper.map(dto, FuncionarioEntity.class)), FuncionarioDTO.class), HttpStatus.CREATED);
@@ -59,24 +57,4 @@ public class FuncionarioController {
         service.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-
-    @GetMapping("/teste")
-        public String testar(){
-
-
-        return "<h1> Teste Security </h1>";
-    }
-
-    @GetMapping("/list")
-    public ResponseEntity<List<FuncionarioEntity>> getAllUsers(){
-
-        List<FuncionarioEntity> funcionarioEntities = service.getAll();
-
-        return ResponseEntity.ok(funcionarioEntities);
-
-    }
-
-
-
 }
