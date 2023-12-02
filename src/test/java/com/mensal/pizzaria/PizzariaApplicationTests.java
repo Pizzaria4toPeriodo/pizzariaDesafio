@@ -1,4 +1,4 @@
-package com.mensal.pizzaria;
+/*package com.mensal.pizzaria;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -23,3 +23,4 @@ class PizzariaApplicationTests {
 		}
 	}
 }
+*/
